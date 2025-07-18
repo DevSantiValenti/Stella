@@ -1,0 +1,24 @@
+body{
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+.navbar{
+    border: 1px solid rgb(13, 255, 5);
+    margin: 10px;
+}
+
+#icono{
+    margin-left: 12px;
+}
+
+.login{
+    margin-right: 12px;
+}
+
+.login a{
+    margin: 5px;
+    border: 1px solid rgb(59, 57, 57);
+    background-color: grey;
+    border-radius: 5px;
+}

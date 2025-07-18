@@ -1,0 +1,324 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Header */
+.header {
+    background-color: #fff;
+    padding: 15px 0;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header .logo img {
+    height: 40px; /* Adjust as needed */
+}
+
+.header .search-bar {
+    display: flex;
+    align-items: center;
+}
+
+.header .search-bar input {
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px 0 0 4px;
+    font-size: 1rem;
+}
+
+.header .search-bar button {
+    background-color: #ff9900; /* Orange color from image */
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.header .search-bar button i {
+    margin-right: 5px;
+}
+
+.header .user-nav a {
+    text-decoration: none;
+    color: #333;
+    margin-left: 20px;
+    font-size: 0.95rem;
+}
+
+.header .user-nav .cart-icon {
+    display: inline-block;
+    margin-left: 20px;
+    position: relative;
+    cursor: pointer;
+}
+
+.header .user-nav .cart-icon i {
+    font-size: 1.2rem;
+}
+
+.header .user-nav .cart-icon span {
+    background-color: #ff0000;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 0.7rem;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+}
+
+/* Main Content Layout */
+.main-content .container {
+    display: flex;
+    margin-top: 20px;
+    gap: 20px;
+}
+
+/* Sidebar */
+.sidebar {
+    flex: 0 0 200px; /* Fixed width for sidebar */
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.sidebar h2 {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 10px;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #555;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    transition: color 0.2s ease;
+}
+
+.sidebar ul li a:hover {
+    color: #ff9900;
+}
+
+.sidebar ul li a span {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+/* Products Section */
+.products-section {
+    flex-grow: 1;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Responsive grid */
+    gap: 20px;
+}
+
+.product-card {
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product-card .product-title {
+    font-size: 1.1rem;
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.product-card .product-description {
+    font-size: 0.85rem;
+    color: #777;
+    margin-bottom: 10px;
+    height: 30px; /* Fixed height for description to align cards */
+    overflow: hidden;
+}
+
+.product-card .product-image {
+    max-width: 100px;
+    max-height: 100px;
+    margin-bottom: 10px;
+    object-fit: contain;
+}
+
+.product-card .product-price {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.product-card .product-price-per-unit {
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 15px;
+}
+
+.product-card .add-to-cart-btn {
+    background-color: #ff9900;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease;
+    width: 80%; /* Make button wider */
+}
+
+.product-card .add-to-cart-btn:hover {
+    background-color: #e68a00;
+}
+
+/* Cart Summary */
+.cart-summary {
+    flex: 0 0 250px; /* Fixed width for cart summary */
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.cart-summary .cart-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #eee;
+}
+
+.cart-summary .cart-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.cart-summary .company-logo {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: #555;
+    margin-right: 10px;
+    font-size: 0.9rem;
+}
+
+.cart-summary .item-count {
+    flex-grow: 1;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.cart-summary .delivery-cost {
+    font-size: 0.8rem;
+    color: #777;
+    text-align: right;
+}
+
+/* Footer (Optional) */
+.footer {
+    padding: 20px;
+    text-align: center;
+    color: #888;
+    font-size: 0.9rem;
+    margin-top: 30px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .main-content .container {
+        flex-direction: column;
+    }
+
+    .sidebar, .cart-summary {
+        width: 100%;
+        flex: unset; /* Remove fixed width */
+        margin-bottom: 20px;
+    }
+
+    .header .container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .header .search-bar {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .header .search-bar input {
+        flex-grow: 1;
+    }
+
+    .header .user-nav {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    .header .user-nav a, .header .user-nav .cart-icon {
+        margin: 0 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .product-grid {
+        grid-template-columns: 1fr; /* Single column on very small screens */
+    }
+
+    .header .search-bar button {
+        padding: 8px 10px;
+    }
+}
