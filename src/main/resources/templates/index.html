@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" 
+xmlns:th="https://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -170,8 +172,13 @@
                 </aside>
         </div>
     </main>
+    <!-- Esta va a ser la parte que se debe reeemplazar en las demas páginas, el contenido -->
+    <div layout:fragment="contenido">
+        ...
+    </div>
 
     <footer class="footer">
-        </footer>
+        
+    </footer>
 </body>
 </html>
