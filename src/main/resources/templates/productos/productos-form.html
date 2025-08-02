@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plantilla</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('DOM Content Loaded!'); // Add this line
+            const departamentoSelect = document.getElementById('departamentoFiltro');
+            const categoriaSelect = document.getElementById('categoriaSelect');
+
+            // Clonamos las opciones para evitar perderlas al usar innerHTML
+            const allCategorias = Array.from(categoriaSelect.options).map(opt => opt.cloneNode(true));
+            const defaultOption = allCategorias[0];
+
+            departamentoSelect.addEventListener('change', function () {
+                const selectedDepto = this.value;
+
+                // Limpiar y reiniciar el select de categorías
+                categoriaSelect.innerHTML = '';
+                categoriaSelect.appendChild(defaultOption.cloneNode(true));
+
+                allCategorias.forEach(option => {
+                    const depto = option.getAttribute('data-depto');
+                    if (option.value !== '' && depto === selectedDepto) {
+                        categoriaSelect.appendChild(option.cloneNode(true));
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+
+    <div layout:fragment="contenido">
+        <h2 class="text-center mb-4 text-primary mt-2" th:text="${titulo}"></h2>
+
+        <!-- Formulario de Producto con variables de tu entidad -->
+        <form method="post" th:action="@{/productos/guardar}" th:object="${producto}"
+            class="p-4 border rounded bg-light shadow-sm">
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <label class="form-label">Código de Barras</label>
+                    <input type="text" class="form-control" name="codigoBarras" maxlength="13"
+                        th:field="*{codigoBarras}">
+                    <small class="form-label text-danger" th:errors="*{codigoBarras}"></small>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Nombre del Producto</label>
+                    <input type="text" class="form-control" name="nombre" minlength="2" maxlength="50"
+                        th:field="*{nombre}" required>
+                    <small class="form-label text-danger" th:errors="*{nombre}"></small>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Precio Minorista</label>
+                    <input type="number" step="0.01" class="form-control" name="precioMin" th:field="*{precioMin}"
+                        required>
+                    <small class="form-label text-danger" th:errors="*{precioMin}"></small>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Precio por Bulto</label>
+                    <input type="number" step="0.01" class="form-control" name="precioBulto" th:field="*{precioBulto}"
+                        required>
+                    <small class="form-label text-danger" th:errors="*{precioBulto}"></small>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Stock</label>
+                    <input type="number" class="form-control" name="stock" th:field="*{stock}" required>
+                    <small class="form-label text-danger" th:errors="*{stock}"></small>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Fecha de Vencimiento</label>
+                    <input type="date" class="form-control" th:field="*{fechaVen}" name="fechaVen">
+                </div>
+
+                <!-- <div class="col-md-6">
+                    <label class="form-label">Departamento</label>
+                    <select class="form-select" name="departamento">
+                        <option value="">Seleccione...</option>
+                        <option th:each="d : ${departamentos}" th:value="${d.id}" th:text="${d.nombre}"></option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Categoría</label>
+                    <select class="form-select" name="categoria" th:field="*{categoria}" required>
+                        <option value="">Seleccione...</option>
+                        <option th:each="c : ${categorias}" th:value="${c.id}" th:text="${c.nombre}"></option>
+                    </select>
+                </div> -->
+
+                <div class="col-md-6">
+                    <label class="form-label">Departamento</label>
+                    <select class="form-select" id="departamentoFiltro">
+                        <option value="">Seleccione un departamento...</option>
+                        <option th:each="d : ${departamentos}" th:value="${d.nombre}" th:text="${d.nombre}"></option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Categoría</label>
+                    <select class="form-select" id="categoriaSelect" th:field="*{categoria}" required>
+                        <option value="">Seleccione una categoría...</option>
+                        <option th:each="c : ${categorias}" th:value="${c.id}" th:text="${c.nombre}"
+                            th:attr="data-depto=${c.departamento.nombre}">
+                        </option>
+                    </select>
+                </div>
+
+
+
+                <div class="col-12">
+                    <label class="form-label">Imagen del Producto (URL)</label>
+                    <input type="url" class="form-control" name="linkImagen" th:field="*{linkImagen}">
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-success w-100">Guardar Producto</button>
+                </div>
+
+            </div>
+             
+        </form>
+    </div>
+    <script th:fragment="js"></script>
+</body>
+
+</html>

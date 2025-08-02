@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoySuper - Tu Supermercado Online</title>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=account_circle" />
+
+    <!-- BS Icons: -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- BS -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous"> -->
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- DataTables CSS -->
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+
+
+
+
+
+
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a th:href="@{/}"><img src="/img/stella.jpg" alt="SoySuper Logo" width="150px"></a>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="¿Qué buscas?">
+                <button type="submit"><i class="fas fa-search"></i> Buscar</button>
+            </div>
+            <nav class="user-nav">
+                <a href="/login"><svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960"
+                        width="40px" fill="#000000">
+                        <path
+                            d="M226-262q59-42.33 121.33-65.5 62.34-23.17 132.67-23.17 70.33 0 133 23.17T734.67-262q41-49.67 59.83-103.67T813.33-480q0-141-96.16-237.17Q621-813.33 480-813.33t-237.17 96.16Q146.67-621 146.67-480q0 60.33 19.16 114.33Q185-311.67 226-262Zm253.88-184.67q-58.21 0-98.05-39.95Q342-526.58 342-584.79t39.96-98.04q39.95-39.84 98.16-39.84 58.21 0 98.05 39.96Q618-642.75 618-584.54t-39.96 98.04q-39.95 39.83-98.16 39.83ZM480.31-80q-82.64 0-155.64-31.5-73-31.5-127.34-85.83Q143-251.67 111.5-324.51T80-480.18q0-82.82 31.5-155.49 31.5-72.66 85.83-127Q251.67-817 324.51-848.5T480.18-880q82.82 0 155.49 31.5 72.66 31.5 127 85.83Q817-708.33 848.5-635.65 880-562.96 880-480.31q0 82.64-31.5 155.64-31.5 73-85.83 127.34Q708.33-143 635.65-111.5 562.96-80 480.31-80Zm-.31-66.67q54.33 0 105-15.83t97.67-52.17q-47-33.66-98-51.5Q533.67-284 480-284t-104.67 17.83q-51 17.84-98 51.5 47 36.34 97.67 52.17 50.67 15.83 105 15.83Zm0-366.66q31.33 0 51.33-20t20-51.34q0-31.33-20-51.33T480-656q-31.33 0-51.33 20t-20 51.33q0 31.34 20 51.34 20 20 51.33 20Zm0-71.34Zm0 369.34Z" />
+                    </svg></a>
+                <a th:href="@{/productos/listado}">Productos</a>
+                <!-- <div class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>0</span>
+                </div> -->
+            </nav>
+        </div>
+    </header>
+
+    <!-- Mensajes -->
+    <!-- Mensaje al habilitar/deshabilitar productos con Bootstrap -->
+    <div class="alert alert-info alert-dismissible fade show" role="alert" th:if="${info != null}">
+        <i class='bx bx-info-circle bx-tada'></i>
+        &nbsp;
+        <span th:text="${info}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+    <!-- Mensaje al añadir productos -->
+    <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${success != null}">
+        <i class='bx bx-check-double bx-tada'></i>
+        &nbsp;
+        <span th:text="${success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+    <!-- Mensaje al Editar un producto -->
+    <div class="alert alert-warning alert-dismissible fade show" role="alert" th:if="${warning != null}">
+        <i class='bx bx-message-rounded-dots bx-tada'></i>
+        &nbsp;
+        <span th:text="${warning}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+    <!-- Mensaje al borrar un producto -->
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${danger != null}">
+        <i class='bx bx-error-circle bx-tada'></i>
+        &nbsp;
+        <span th:text="${danger}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+
+    <!-- Esta va a ser la parte que se debe reeemplazar en las demas páginas, el contenido -->
+    <div layout:fragment="contenido">
+        ...
+    </div>
+
+    <footer class="bg-dark text-light pt-3 pb-2 mt-3">
+        <div class="container">
+            <div class="row">
+                <!-- Contacto -->
+                <!-- <div class="col-md-3 mb-4">
+                    <h5>Contacto</h5>
+                    <p>📍 Av San Martin 1191, Quitilipi</p>
+                    <p>📞 +34 600 123 456</p>
+                    <p>📧 contacto@tunegocio.com</p>
+                </div> -->
+
+                <!-- Enlaces útiles -->
+                <div class="col-md-4 mb-4">
+                    <h5 style="text-decoration: underline;">Enlaces útiles</h5>
+                    <ul class="">
+                        <li>Av San Martin 1191, Quitilipi</li>
+                        <li><a href="/sobre-nosotros" class="text-light text-decoration-none">Sobre nosotros</a></li>
+                        <li><a href="/productos" class="text-light text-decoration-none">Productos</a></li>
+                        <li><a href="/contacto" class="text-light text-decoration-none">Contacto</a></li>
+                        <li><a href="/faq" class="text-light text-decoration-none">Preguntas frecuentes</a></li>
+                    </ul>
+                </div>
+
+                <!-- Redes Sociales -->
+                <div class="col-md-4 mb-4">
+                    <h5 style="text-decoration: underline;">Redes Sociales</h5>
+                    <a href="#" class="text-light me-2"><i class="bi bi-facebook"></i></a><br>
+                    <a href="#" class="text-light me-2"><i class="bi bi-instagram"></i></a><br>
+                    <a href="#" class="text-light me-2"><i class="bi bi-whatsapp"></i></a><br>
+                </div>
+
+                <!-- Mapa -->
+                <div class="col-md-4 mb-4">
+                    <h5 style="text-decoration: underline;">Ubicación</h5>
+                    <div class="ratio ratio-16x9">
+                        <iframe src="https://www.google.com/maps?q=-26.864216,-60.214329&z=15&output=embed"
+                            style="border:0;" allowfullscreen="" loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-2 border-top pt-3">
+                <small>&copy; 2025 Stella. Todos los derechos reservados |
+                    <a href="/politica-privacidad" class="text-light text-decoration-underline">Política de
+                        privacidad</a>
+                </small>
+            </div>
+        </div>
+    </footer>
+
+
+
+    <!-- Para que se cierren los Alert Bootstrap -->
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script>
+        setInterval("cerrar()", 3000);
+
+        const cerrar = () => {
+            $(".alert").delay(500).slideUp(500, () => {
+                $(this).hide();
+            })
+        }
+    </script>
+
+
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+
+    <script th:replace="~{:: js}"></script>
+    <!-- Esto hace, que en otras paginas se herede estos JS, ademas de agregar el nuestro para esa pag -->
+</body>
+
+</html>
