@@ -129,6 +129,14 @@ body {
     transition: color 0.2s ease;
 }
 
+/* Tacha los productos desactivados en list-admin */
+.tachado {
+    text-decoration: line-through;
+    text-decoration-color: crimson;
+    color: antiquewhite;
+    filter: grayscale(1);
+}
+
 .sidebar ul li a:hover {
     color: #ff9900;
 }

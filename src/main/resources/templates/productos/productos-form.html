@@ -80,24 +80,8 @@
 
                 <div class="col-md-6">
                     <label class="form-label">Fecha de Vencimiento</label>
-                    <input type="date" class="form-control" th:field="*{fechaVen}" name="fechaVen">
+                    <input type="date" class="form-control" th:value="*{fechaVen}" name="fechaVen">
                 </div>
-
-                <!-- <div class="col-md-6">
-                    <label class="form-label">Departamento</label>
-                    <select class="form-select" name="departamento">
-                        <option value="">Seleccione...</option>
-                        <option th:each="d : ${departamentos}" th:value="${d.id}" th:text="${d.nombre}"></option>
-                    </select>
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">Categoría</label>
-                    <select class="form-select" name="categoria" th:field="*{categoria}" required>
-                        <option value="">Seleccione...</option>
-                        <option th:each="c : ${categorias}" th:value="${c.id}" th:text="${c.nombre}"></option>
-                    </select>
-                </div> -->
 
                 <div class="col-md-6">
                     <label class="form-label">Departamento</label>
@@ -109,7 +93,7 @@
 
                 <div class="col-md-6">
                     <label class="form-label">Categoría</label>
-                    <select class="form-select" id="categoriaSelect" th:field="*{categoria}" required>
+                    <select class="form-select" id="categoriaSelect" th:field="*{categoria.id}" required>
                         <option value="">Seleccione una categoría...</option>
                         <option th:each="c : ${categorias}" th:value="${c.id}" th:text="${c.nombre}"
                             th:attr="data-depto=${c.departamento.nombre}">

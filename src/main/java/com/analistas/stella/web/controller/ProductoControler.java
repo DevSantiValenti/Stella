@@ -6,7 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -18,10 +20,13 @@ import com.analistas.stella.model.service.IProductoService;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RequestMapping("/productos")
 @Controller
+@SessionAttributes({"producto"}) //Esto hace que al editar un producto, no se cree otro, sino que se edite 
 public class ProductoControler {
 
     @Autowired
@@ -35,6 +40,9 @@ public class ProductoControler {
 
     @GetMapping("/listado")
     public String listado(Model model) {
+
+        model.addAttribute("productos", productoService.buscarTodo());
+
         return "productos/productos-list";
     }
 
@@ -42,6 +50,7 @@ public class ProductoControler {
     public String listadoAdmin(Model model) {
 
         model.addAttribute("titulo", "Listado de Productos");
+        model.addAttribute("productos", productoService.buscarTodo());
 
         return "/productos/productos-list-admin";
     }
@@ -77,8 +86,55 @@ public class ProductoControler {
         status.setComplete(); // Lo que hace es limpiar la variable "producto" definida en el SessionStatus de
                               // arriba
 
-        return "redirect:/productos/listado";
+        return "redirect:/productos/listadoAdmin";
         // Al usar redirect, se usa el link de los GetMapping, no la dirección del archivo
     }
+
+    @GetMapping("/editar/{id}")
+    public String editarProducto(@PathVariable("id") Long id ,Model model, RedirectAttributes flash) {
+
+        Producto producto = productoService.buscarPorId(id);
+
+        model.addAttribute("categorias", categoriaService.buscarTodo());
+        model.addAttribute("titulo", "Editar Producto");
+        model.addAttribute("producto", producto);
+
+        return "productos/productos-form";
+    }
+
+    @GetMapping("/borrar/{id}")
+    public String borrarProducto(@PathVariable("id") Long id, RedirectAttributes flash) {
+
+        Producto producto = productoService.buscarPorId(id);
+        // Se obtiene el producto antes de borrarlo para mostrar su descripción en el mensaje
+
+        if (producto != null) {
+            productoService.borrarPorId(id);
+            String mensaje = "Producto " + producto.getNombre() + " eliminado.";
+            flash.addFlashAttribute("danger", mensaje);
+        } else {
+            String mensaje = "Producto no encontrado";
+            flash.addFlashAttribute("danger", mensaje);
+        }
+
+        return "redirect:/productos/listadoAdmin";
+    }
+
+    @GetMapping("/deshabilitar/{id}")
+    public String getMethodName(@PathVariable("id") Long id, RedirectAttributes flash) {
+
+        Producto producto = productoService.buscarPorId(id);
+        producto.setActivo(!producto.isActivo());
+        productoService.guardar(producto);
+
+        String mensaje = producto.isActivo() ? "Producto " + producto.getNombre() + " deshabilitado."
+                                            : "Producto " + producto.getNombre() + " habilitado.";
+                                            
+        flash.addFlashAttribute(producto.isActivo() ? "info" : "danger", mensaje);
+
+        return "redirect:/productos/listadoAdmin";
+    }
+    
+    
 
 }

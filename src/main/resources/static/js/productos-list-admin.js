@@ -11,7 +11,10 @@ $(document).ready(() => {
             null,
             null,
             null,
-            null
+            null,
+            null,
+            null,
+            {bSearchable: false, orderable: false}
             // {bSearchable: false},
             // {bSearchable: false},
             // {orderable: false},

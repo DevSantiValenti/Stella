@@ -49,7 +49,7 @@ public class Producto implements Serializable {
     @Column(name = "activo", columnDefinition = "boolean default 1")
     private boolean activo;
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    // @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate fechaVen;
 
     @Column(length = 1000)

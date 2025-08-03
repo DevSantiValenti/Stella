@@ -1,157 +1,204 @@
 <!DOCTYPE html>
-<html lang="en"
-xmlns:th="https://www.thymeleaf.org"
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-layout:decorate="~{index}"
->
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{index}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plantilla</title>
+    <style>
+        .products-section {
+            padding: 2rem;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            /* hasta 6 columnas en pantallas grandes */
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 1200px) {
+            .product-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .product-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+                /* Solo una columna en pantallas muy pequeñas */
+            }
+        }
+
+        .product-card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .product-image {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            margin-bottom: 1rem;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+        }
+
+        .product-description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price,
+        .product-price-per-unit {
+            font-weight: bold;
+            margin: 0.2rem 0;
+        }
+
+        .add-to-cart-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+
 </head>
+
 <body>
     <div layout:fragment="contenido">
         <main class="main-content">
-        <div class="container">
-            <aside class="sidebar">
-                <h2>Categorías</h2>
-                <ul>
-                    <li><a href="#">Bebidas <span>97</span></a></li>
-                    <li><a href="#">Cafés, Cacaos e Infusiones <span>724</span></a></li>
-                    <li><a href="#">Cereales y Galletas <span>332</span></a></li>
-                    <li><a href="#">Chocolates y Dulces <span>48</span></a></li>
-                    <li><a href="#">Congelados <span>13</span></a></li>
-                    <li><a href="#">Conservas, Sopas, Aceites <span>15</span></a></li>
-                    <li><a href="#">Condimentos <span>53</span></a></li>
-                    <li><a href="#">Dietéticos <span>0</span></a></li>
-                    <li><a href="#">Droguería <span>10</span></a></li>
-                    <li><a href="#">Estacionales <span>14</span></a></li>
-                    <li><a href="#">Frescos y Charcutería <span>35</span></a></li>
-                    <li><a href="#">Lácteos y Huevos <span>44</span></a></li>
-                    <li><a href="#">Mascotas <span>637</span></a></li>
-                    <li><a href="#">Ocio y Cultura <span>1</span></a></li>
-                    <li><a href="#">Panadería, Pastelería y Repostería <span>0</span></a></li>
-                    <li><a href="#">Pasta, Arroz y Legumbres <span>0</span></a></li>
-                    <li><a href="#">Perfumería y Parafarmacia <span>0</span></a></li>
-                    <li><a href="#">Salsas <span>0</span></a></li>
-                </ul>
-            </aside>
+            <div class="container">
+                <aside class="sidebar">
+                    <h2>Categorías</h2>
+                    <ul>
+                        <li><a href="#">Bebidas <span>97</span></a></li>
+                        <li><a href="#">Cafés, Cacaos e Infusiones <span>724</span></a></li>
+                        <li><a href="#">Cereales y Galletas <span>332</span></a></li>
+                        <li><a href="#">Chocolates y Dulces <span>48</span></a></li>
+                        <li><a href="#">Congelados <span>13</span></a></li>
+                        <li><a href="#">Conservas, Sopas, Aceites <span>15</span></a></li>
+                        <li><a href="#">Condimentos <span>53</span></a></li>
+                        <li><a href="#">Dietéticos <span>0</span></a></li>
+                        <li><a href="#">Droguería <span>10</span></a></li>
+                        <li><a href="#">Estacionales <span>14</span></a></li>
+                        <li><a href="#">Frescos y Charcutería <span>35</span></a></li>
+                        <li><a href="#">Lácteos y Huevos <span>44</span></a></li>
+                        <li><a href="#">Mascotas <span>637</span></a></li>
+                        <li><a href="#">Ocio y Cultura <span>1</span></a></li>
+                        <li><a href="#">Panadería, Pastelería y Repostería <span>0</span></a></li>
+                        <li><a href="#">Pasta, Arroz y Legumbres <span>0</span></a></li>
+                        <li><a href="#">Perfumería y Parafarmacia <span>0</span></a></li>
+                        <li><a href="#">Salsas <span>0</span></a></li>
+                    </ul>
+                </aside>
 
-            <section class="products-section">
-                <div class="product-grid">
-                    <div class="product-card">
-                        <h3 class="product-title">Coca-Cola Zero</h3>
-                        <p class="product-description">Refresco de cola sin cafeína sin azúcar</p>
-                        <img src="coca-cola-zero.jpg" alt="Coca-Cola Zero" class="product-image">
-                        <p class="product-price">0,57 € /Lata de 33...</p>
-                        <p class="product-price-per-unit">1,73 €/l</p>
-                        <button class="add-to-cart-btn">Añadir</button>
+                <section class="products-section">
+                    <div class="product-grid">
+                        <div class="product-card" th:each="p : ${productos}" th:if="${p.activo and p.stock > 0}">
+                            <h3 class="product-title" th:text="${p.nombre}"></h3>
+                            <!-- <p class="product-description">Refresco de cola sin cafeína sin azúcar</p> -->
+                            <img th:src="@{${p.linkImagen}}" alt="Coca-Cola Zero" class="product-image">
+                            <p class="product-price" th:text="'$' + ${p.precioMin}"></p>
+                            <p class="product-price-per-unit" th:text="'Precio Bulto: $'+${p.precioBulto}"></p>
+                            <!-- <button class="add-to-cart-btn">Añadir</button> -->
+                        </div>
+
+                        <!-- <div class="product-card">
+                            <h3 class="product-title">Fanta</h3>
+                            <p class="product-description">Refresco de limón</p>
+                            <img src="fanta-lemon.jpg" alt="Fanta Limón" class="product-image">
+                            <p class="product-price">1,01 € /Botella 2...</p>
+                            <p class="product-price-per-unit">0,86 €/l</p>
+                            <button class="add-to-cart-btn">Añadir</button>
+                        </div>
+
+                        <div class="product-card">
+                            <h3 class="product-title">Pascual Leche</h3>
+                            <p class="product-description">Semidesnatada</p>
+                            <img src="pascual-milk.jpg" alt="Pascual Leche Semidesnatada" class="product-image">
+                            <p class="product-price">0,95 € /Brik 1 litro</p>
+                            <p class="product-price-per-unit">0,95 €/l</p>
+                            <button class="add-to-cart-btn">Añadir</button>
+                        </div>
+
+                        <div class="product-card">
+                            <h3 class="product-title">Danone Yogur natural</h3>
+                            <p class="product-description">azucarado</p>
+                            <img src="danone-yogurt.jpg" alt="Danone Yogur natural" class="product-image">
+                            <p class="product-price">1,98 € /8 unidades...</p>
+                            <p class="product-price-per-unit">1,98 €/kg</p>
+                            <button class="add-to-cart-btn">Añadir</button>
+                        </div>
+
+                        <div class="product-card">
+                            <h3 class="product-title">Azucarera</h3>
+                            <p class="product-description">Azucar Moreno Brick</p>
+                            <img src="azucarera-moreno.jpg" alt="Azucarera Moreno" class="product-image">
+                            <p class="product-price">1,84 € /750 g</p>
+                            <p class="product-price-per-unit">2,45 €/kg</p>
+                            <button class="add-to-cart-btn">Añadir</button>
+                        </div>
+
+                        <div class="product-card">
+                            <h3 class="product-title">Special K Kellogg's</h3>
+                            <p class="product-description">Cereales Special K</p>
+                            <img src="special-k.jpg" alt="Special K Kellogg's" class="product-image">
+                            <p class="product-price">2,87 € /Caja 500 g</p>
+                            <p class="product-price-per-unit">5,74 €/kg</p>
+                            <button class="add-to-cart-btn">Añadir</button>
+                        </div>
+
+                        <div class="product-card">
+                            <h3 class="product-title">Aquarius</h3>
+                            <p class="product-description">Bebida isotónica de naranja</p>
+                            <img src="aquarius-naranja.jpg" alt="Aquarius Naranja" class="product-image">
+                            <p class="product-price">1,48 € /Botella 1,5...</p>
+                            <p class="product-price-per-unit">0,99 €/l</p>
+                            <button class="add-to-cart-btn">Añadir</button>
+                        </div>
+
+                        <div class="product-card">
+                            <h3 class="product-title">Central Lechera</h3>
+                            <p class="product-description">Leche Semidesnatada</p>
+                            <img src="central-lechera.jpg" alt="Central Lechera" class="product-image">
+                            <p class="product-price">1,27 € /Botella 1,5...</p>
+                            <p class="product-price-per-unit">0,85 €/l</p>
+                            <button class="add-to-cart-btn">Añadir</button>
+                        </div> -->
                     </div>
-
-                    <div class="product-card">
-                        <h3 class="product-title">Fanta</h3>
-                        <p class="product-description">Refresco de limón</p>
-                        <img src="fanta-lemon.jpg" alt="Fanta Limón" class="product-image">
-                        <p class="product-price">1,01 € /Botella 2...</p>
-                        <p class="product-price-per-unit">0,86 €/l</p>
-                        <button class="add-to-cart-btn">Añadir</button>
-                    </div>
-
-                    <div class="product-card">
-                        <h3 class="product-title">Pascual Leche</h3>
-                        <p class="product-description">Semidesnatada</p>
-                        <img src="pascual-milk.jpg" alt="Pascual Leche Semidesnatada" class="product-image">
-                        <p class="product-price">0,95 € /Brik 1 litro</p>
-                        <p class="product-price-per-unit">0,95 €/l</p>
-                        <button class="add-to-cart-btn">Añadir</button>
-                    </div>
-
-                    <div class="product-card">
-                        <h3 class="product-title">Danone Yogur natural</h3>
-                        <p class="product-description">azucarado</p>
-                        <img src="danone-yogurt.jpg" alt="Danone Yogur natural" class="product-image">
-                        <p class="product-price">1,98 € /8 unidades...</p>
-                        <p class="product-price-per-unit">1,98 €/kg</p>
-                        <button class="add-to-cart-btn">Añadir</button>
-                    </div>
-
-                    <div class="product-card">
-                        <h3 class="product-title">Azucarera</h3>
-                        <p class="product-description">Azucar Moreno Brick</p>
-                        <img src="azucarera-moreno.jpg" alt="Azucarera Moreno" class="product-image">
-                        <p class="product-price">1,84 € /750 g</p>
-                        <p class="product-price-per-unit">2,45 €/kg</p>
-                        <button class="add-to-cart-btn">Añadir</button>
-                    </div>
-
-                    <div class="product-card">
-                        <h3 class="product-title">Special K Kellogg's</h3>
-                        <p class="product-description">Cereales Special K</p>
-                        <img src="special-k.jpg" alt="Special K Kellogg's" class="product-image">
-                        <p class="product-price">2,87 € /Caja 500 g</p>
-                        <p class="product-price-per-unit">5,74 €/kg</p>
-                        <button class="add-to-cart-btn">Añadir</button>
-                    </div>
-
-                    <div class="product-card">
-                        <h3 class="product-title">Aquarius</h3>
-                        <p class="product-description">Bebida isotónica de naranja</p>
-                        <img src="aquarius-naranja.jpg" alt="Aquarius Naranja" class="product-image">
-                        <p class="product-price">1,48 € /Botella 1,5...</p>
-                        <p class="product-price-per-unit">0,99 €/l</p>
-                        <button class="add-to-cart-btn">Añadir</button>
-                    </div>
-
-                    <div class="product-card">
-                        <h3 class="product-title">Central Lechera</h3>
-                        <p class="product-description">Leche Semidesnatada</p>
-                        <img src="central-lechera.jpg" alt="Central Lechera" class="product-image">
-                        <p class="product-price">1,27 € /Botella 1,5...</p>
-                        <p class="product-price-per-unit">0,85 €/l</p>
-                        <button class="add-to-cart-btn">Añadir</button>
-                    </div>
-                </div>
-            </section>
-
-            <aside class="cart-summary">
-                <div class="cart-item">
-                    <span class="company-logo">A</span>
-                    <span class="item-count">0 productos</span>
-                    <span class="delivery-cost">Gastos de envío: 0€</span>
-                </div>
-                <div class="cart-item">
-                    <span class="company-logo">G</span>
-                    <span class="item-count">0 productos</span>
-                    <span class="delivery-cost">Gastos de envío: 0€</span>
-                </div>
-                <div class="cart-item">
-                    <span class="company-logo">L</span>
-                    <span class="item-count">0 productos</span>
-                    <span class="delivery-cost">Gastos de envío: Gratis a partir de 120 €</span>
-                </div>
-                <div class="cart-item">
-                    <span class="company-logo">D</span>
-                    <span class="item-count">0 productos</span>
-                    <span class="delivery-cost">Gastos de envío: Gratis a partir de 120 €</span>
-                </div>
-                <div class="cart-item">
-                    <span class="company-logo">S</span>
-                    <span class="item-count">0 productos</span>
-                    <span class="delivery-cost">Gastos de envío: Gratis a partir de 120 €</span>
-                </div>
-                <div class="cart-item">
-                    <span class="company-logo">C</span>
-                    <span class="item-count">0 productos</span>
-                    <span class="delivery-cost">Gastos de envío: Gratis a partir de 60 €</span>
-                </div>
-                <div class="cart-item">
-                    <span class="company-logo">P</span>
-                    <span class="item-count">0 productos</span>
-                    <span class="delivery-cost">Gastos de envío: Gratis a partir de 180 €</span>
-                </div>
-            </aside>
-        </div>
-    </main>
+                </section>
+            </div>
+        </main>
     </div>
 </body>
+
 </html>
