@@ -3,7 +3,6 @@ package com.analistas.stella.model.domain;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

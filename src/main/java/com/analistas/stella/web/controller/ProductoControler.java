@@ -20,7 +20,6 @@ import com.analistas.stella.model.service.IProductoService;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 

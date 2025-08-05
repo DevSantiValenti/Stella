@@ -1,18 +1,71 @@
 <!DOCTYPE html>
-<html lang="en"
-xmlns:th="https://www.thymeleaf.org"
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-layout:decorate="~{layout}"
->
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SoySuper - Tu Supermercado Online</title>
+    <style>
+        .tabla-scroll {
+            max-height: 400px; /* Ajusta según lo que necesites */
+            overflow-y: auto;
+            width: 80vw;
+            margin: 20px auto;
+            border: 2px solid #ccc;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        td {
+            border: 2px solid #ccc;
+            width: 50%;
+            height: 150px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 1.2em;
+            background-color: #fff;
+            padding: 10px;
+        }
+
+        .oferta {
+            background-color: #ffeeba;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
 </head>
+
 <body>
     <div layout:fragment="contenido">
-        <h1>Pagina principal</h1>
+
+        <div class="tabla-scroll">
+            <table>
+                <tr>
+                    <td class="oferta">Oferta 1</td>
+                    <td class="oferta">Oferta 2</td>
+                </tr>
+                <tr>
+                    <td class="oferta">Oferta 3</td>
+                    <td class="oferta">Oferta 4</td>
+                </tr>
+                <tr>
+                    <td class="oferta">Oferta 5</td>
+                    <td class="oferta">Oferta 6</td>
+                </tr>
+                <tr>
+                    <td class="oferta">Oferta 7</td>
+                    <td class="oferta">Oferta 8</td>
+                </tr>
+            </table>
+        </div>
+
     </div>
     <script th:fragment="js"></script>
 </body>
+
 </html>
