@@ -11,10 +11,9 @@ public class DashBController {
     @GetMapping("/")
     public String dashb(Model model) {
 
-        // model.addAttribute("titulo", "Hola cabeza de poronga");
-
         return "productos-list";
     }
     
 
 }
+
