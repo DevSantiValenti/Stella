@@ -170,3 +170,9 @@ INSERT INTO `stella`.`categorias` (`nombre`, `departamento_id`) VALUES ('Utensil
 INSERT INTO `stella`.`categorias` (`nombre`, `departamento_id`) VALUES ('Iluminacion', 10);
 INSERT INTO `stella`.`categorias` (`nombre`, `departamento_id`) VALUES ('Organizacion del Hogar', 10);
 INSERT INTO `stella`.`categorias` (`nombre`, `departamento_id`) VALUES ('Termos y Botellas', 10);
+
+-- Roles
+INSERT INTO `stella`.`roles` (`nombre`) VALUES ("Administrador")
+INSERT INTO `stella`.`roles` (`nombre`) VALUES ("Cajero")
+INSERT INTO `stella`.`roles` (`nombre`) VALUES ("Repositor")
+INSERT INTO `stella`.`roles` (`nombre`) VALUES ("SuperUsuario")
