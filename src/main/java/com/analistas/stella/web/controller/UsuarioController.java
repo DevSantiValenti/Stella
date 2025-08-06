@@ -8,14 +8,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.analistas.stella.model.domain.Producto;
 import com.analistas.stella.model.domain.Usuario;
 import com.analistas.stella.model.service.IUsuarioService;
 
 import jakarta.validation.Valid;
 
 @RequestMapping("/usuarios")
-@SessionAttributes({"usuario"}) //Esto hace que al editar un producto, no se cree otro, sino que se edite 
+@SessionAttributes({"usuario"}) //Esto hace que al editar un usuario, no se cree otro, sino que se edite 
 
 public class UsuarioController {
 
