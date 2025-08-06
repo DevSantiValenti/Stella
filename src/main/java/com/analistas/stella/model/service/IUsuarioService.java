@@ -5,8 +5,8 @@ import com.analistas.stella.model.domain.Usuario;
 
 public interface IUsuarioService {
 
-    List<Usuario> buscarTodo();
-    Usuario buscarPorId(long id);
-    Usuario buscarPorCorreo(String correo);
-    void guardar(Usuario usuario);
+    public List<Usuario> buscarTodo();
+    public Usuario buscarPorId(long id);
+    public Usuario buscarPorCorreo(String correo);
+    public void guardar(Usuario usuario);
 }

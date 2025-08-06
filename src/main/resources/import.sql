@@ -86,8 +86,3 @@ INSERT INTO `stella`.`roles` (`nombre`) VALUES ("Administrador")
 INSERT INTO `stella`.`roles` (`nombre`) VALUES ("Cajero")
 INSERT INTO `stella`.`roles` (`nombre`) VALUES ("Repositor")
 INSERT INTO `stella`.`roles` (`nombre`) VALUES ("SuperUsuario")
-
-INSERT INTO `stella`.`roles` (`nombre`) VALUES ("Administrador");
-INSERT INTO `stella`.`roles` (`nombre`) VALUES ("Repositor");
-INSERT INTO `stella`.`roles` (`nombre`) VALUES ("Cajero");
-INSERT INTO `stella`.`roles` (`nombre`) VALUES ("SuperUser");

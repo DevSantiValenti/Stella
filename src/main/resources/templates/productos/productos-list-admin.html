@@ -1,17 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layout}">
-
+<html lang="en"
+xmlns:th="https://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{layout-dashboard}"
+>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
+    <title>Plantilla</title>
+    <style>
+        .container{
+            margin-left: 20px;
+        }
+    </style>
 </head>
-
 <body>
-    <div layout:fragment="contenido">
-
+    <div layout:fragment="dashboard"> <!--Toda la información va adentro de este div, no afuera -->
         <h1 class="text-primary" align="center" th:text="${titulo}"></h1>
         
         <br>
@@ -71,10 +75,9 @@
                 <a th:href="@{/productos/nuevo}" class="btn btn-outline-primary">Nuevo Producto</a>
             </div>
         </div>
-
     </div>
+
     <!-- Mis JS -->
     <script th:fragment="js" th:src="@{/js/productos-list-admin.js}"></script>
 </body>
-
 </html>
