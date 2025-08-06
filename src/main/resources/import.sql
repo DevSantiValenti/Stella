@@ -1,94 +1,4 @@
 -- --Departamentos:
--- INSERT INTO `stella`.`departamentos` (`nombre`) VALUES ('Alimentos');
--- INSERT INTO `stella`.`departamentos` (`nombre`) VALUES ('Bebidas');
--- INSERT INTO `stella`.`departamentos` (`nombre`) VALUES ('Limpieza');
--- INSERT INTO `stella`.`departamentos` (`nombre`) VALUES ('Higiene Personal');
--- INSERT INTO `stella`.`departamentos` (`nombre`) VALUES ('Frescos');
--- INSERT INTO `stella`.`departamentos` (`nombre`) VALUES ('Congelados');
--- INSERT INTO `stella`.`departamentos` (`nombre`) VALUES ('Panadería');
--- INSERT INTO `stella`.`departamentos` (`nombre`) VALUES ('Lácteos');
--- INSERT INTO `stella`.`departamentos` (`nombre`) VALUES ('Mascotas');
--- INSERT INTO `stella`.`departamentos` (`nombre`) VALUES ('Bazar');
-
--- --Alimentos:
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Sopas y Caldos');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Snacks y Galletitas');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Cereales');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Especias y Condimentos');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Salsas y Aderezos');
-
-
--- --Bebidas
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Energizantes');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Bebidas Deportivas');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Tés e Infusiones');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Café');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Vinos y Espumantes');
-
-
--- --Limpieza
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Suavizantes');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Jabón en Polvo');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Limpiahornos');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Insecticidas');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Desodorantes de Ambiente');
-
-
--- --Higiene Personal
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Papel Higiénico');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Toallas Femeninas');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Cepillos y Pasta Dental');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Afeitado y Depilación');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Cremas y Lociones');
-
-
--- --Frescos
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Pollo');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Pescados y Mariscos');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Embutidos');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Huevos');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Pastas Frescas');
-
-
--- --Congelados
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Pizzas Congeladas');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Postres Congelados');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Pollo Congelado');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Papas Congeladas');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Frutas Congeladas');
-
-
--- --Panaderia
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Pan Dulce y Budines');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Masas Finas');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Pan Integral');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Bizcochuelos');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Medialunas');
-
--- --Lacteos
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Postres Lácteos');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Manteca y Margarina');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Leche Vegetal');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Leche Condensada');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Queso Untable');
-
-
--- --Mascotas
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Snacks para Mascotas');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Higiene de Mascotas');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Juguetes para Mascotas');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Arena para Gatos');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Accesorios de Paseo');
-
-
--- --Bazar
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Contenedores y Tuppers');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Utensilios de Limpieza');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Iluminación');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Organización del Hogar');
--- INSERT INTO `stella`.`categorias` (`nombre`) VALUES ('Termos y Botellas');
-
--- --Departamentos:
 INSERT INTO `stella`.`departamentos` (`nombre`) VALUES ('Alimentos');
 INSERT INTO `stella`.`departamentos` (`nombre`) VALUES ('Bebidas');
 INSERT INTO `stella`.`departamentos` (`nombre`) VALUES ('Limpieza');
@@ -176,3 +86,8 @@ INSERT INTO `stella`.`roles` (`nombre`) VALUES ("Administrador")
 INSERT INTO `stella`.`roles` (`nombre`) VALUES ("Cajero")
 INSERT INTO `stella`.`roles` (`nombre`) VALUES ("Repositor")
 INSERT INTO `stella`.`roles` (`nombre`) VALUES ("SuperUsuario")
+
+INSERT INTO `stella`.`roles` (`nombre`) VALUES ("Administrador");
+INSERT INTO `stella`.`roles` (`nombre`) VALUES ("Repositor");
+INSERT INTO `stella`.`roles` (`nombre`) VALUES ("Cajero");
+INSERT INTO `stella`.`roles` (`nombre`) VALUES ("SuperUser");
