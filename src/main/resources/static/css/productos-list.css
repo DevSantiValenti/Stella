@@ -1,0 +1,96 @@
+        .products-section {
+            padding: 2rem;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            /* hasta 6 columnas en pantallas grandes */
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 1200px) {
+            .product-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .product-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+                /* Solo una columna en pantallas muy pequeñas */
+            }
+        }
+
+        .product-card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .product-image {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            margin-bottom: 1rem;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+        }
+
+        .product-description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price,
+        .product-price-per-unit {
+            font-weight: bold;
+            margin: 0.2rem 0;
+        }
+
+        /* Estilos personalizados para submenu */
+        .sidebar {
+            width: 220px;
+        }
+
+        .sidebar .nav-item {
+            position: relative;
+        }
+
+        .sidebar .submenu {
+            position: absolute;
+            top: 0;
+            left: 100%;
+            display: none;
+            background-color: #eaeaea;
+            min-width: 180px;
+            border-radius: 5px;
+            border-left: 1px solid #dee2e6;
+            z-index: 1000;
+        }
+
+        .sidebar .nav-item:hover .submenu {
+            display: block;
+        }
+
+        .sidebar .submenu a {
+            padding-left: 1.5rem;
+        }
