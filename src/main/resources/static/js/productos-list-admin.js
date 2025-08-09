@@ -2,7 +2,7 @@ $(document).ready(() => {
     $("#tabla-productos").DataTable({
         // retrieve: true,
         responsive: true,
-        order:[[2, "asc"]],
+        order: [[2, "asc"]],
         lengthMenu: [10, 25, 50, 100],
         columns: [
             null,
@@ -14,7 +14,7 @@ $(document).ready(() => {
             null,
             null,
             null,
-            {bSearchable: false, orderable: false}
+            { bSearchable: false, orderable: false }
             // {bSearchable: false},
             // {bSearchable: false},
             // {orderable: false},
@@ -31,5 +31,20 @@ $(document).ready(() => {
             "zeroRecords": "No hay nada aquí...",
             "emptyTable": "No hay nada aquí..."
         }
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const deleteButtons = document.querySelectorAll(".btn-delete");
+    const confirmModal = new bootstrap.Modal(document.getElementById("confirmDeleteModal"));
+    const confirmBtn = document.getElementById("btnConfirmDelete");
+
+    deleteButtons.forEach(btn => {
+        btn.addEventListener("click", function (e) {
+            e.preventDefault(); // Evita la redirección inmediata
+            const href = this.getAttribute("data-href");
+            confirmBtn.setAttribute("href", href);
+            confirmModal.show();
+        });
     });
 });

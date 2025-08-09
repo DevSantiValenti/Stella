@@ -1,23 +1,26 @@
 <!DOCTYPE html>
-<html lang="en"
-xmlns:th="https://www.thymeleaf.org"
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-layout:decorate="~{layout-dashboard}"
->
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout-dashboard}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plantilla</title>
     <style>
-        .container{
+        .container {
             margin-left: 20px;
         }
     </style>
+    <script>
+        
+    </script>
+
 </head>
+
 <body>
     <div layout:fragment="dashboard"> <!--Toda la información va adentro de este div, no afuera -->
         <h1 class="text-primary" align="center" th:text="${titulo}"></h1>
-        
+
         <br>
         <div class="container mt-4">
             <table id="tabla-productos" class="table table-striped table-bordered" style="width:100%">
@@ -51,8 +54,10 @@ layout:decorate="~{layout-dashboard}"
                             <a th:href="@{/productos/deshabilitar/{id}(id=${p.id})}" class="btn btn-sm btn-danger">
                                 <span th:text="${not p.activo} ? 'Habilitar' : 'Deshabilitar'"></span>
                             </a>
-                            <a th:href="@{/productos/borrar/{id}(id=${p.id})}" class="btn btn-sm btn-danger">Borrar</a>
-
+                            <a href="#" class="btn btn-sm btn-danger btn-delete"
+                                th:attr="data-href=@{/productos/borrar/{id}(id=${p.id})}">
+                                Borrar
+                            </a>
                         </td>
                     </tr>
                 </tbody>
@@ -80,4 +85,5 @@ layout:decorate="~{layout-dashboard}"
     <!-- Mis JS -->
     <script th:fragment="js" th:src="@{/js/productos-list-admin.js}"></script>
 </body>
+
 </html>
