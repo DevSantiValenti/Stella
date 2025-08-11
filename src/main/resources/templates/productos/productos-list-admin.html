@@ -11,9 +11,6 @@
             margin-left: 20px;
         }
     </style>
-    <script>
-        
-    </script>
 
 </head>
 
@@ -45,6 +42,8 @@
                         </td>
                         <td th:text="${p.nombre}"></td>
                         <td th:text="'$' + ${p.precioMin}"></td>
+                        <!-- <td th:text="${'$ ' + #numbers.formatDecimal(p.precioMin, 0, 0)}"></td> -->
+                        <!-- <td th:text="${'$ ' + #numbers.formatDecimal(p.precioBulto, 0, 0)}"></td> -->
                         <td th:text="'$' + ${p.precioBulto}"></td>
                         <td th:text="${p.stock}"></td>
                         <td th:text="${p.categoria.nombre}"></td>

@@ -14,7 +14,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -38,10 +37,10 @@ public class Producto implements Serializable {
     private String nombre;
 
     @NotNull(message = "El precio del producto no puede ser nulo")
-    private Float precioMin;
+    private Integer precioMin;
 
     @NotNull(message = "El precio del producto no puede ser nulo")
-    private Float precioBulto;
+    private Integer precioBulto;
 
     @NotNull(message = "El stock del producto no puede ser nulo")
     private Integer stock;

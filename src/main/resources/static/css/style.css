@@ -330,3 +330,18 @@ body {
         padding: 8px 10px;
     }
 }
+/* Los siguientes 3 son para que en el dashboard si la pag
+se hace mas larga, que el nav baje tmb */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.d-flex {
+    min-height: 100%;
+}
+
+nav.bg-dark {
+    min-height: 100vh; /* Ocupa la altura mínima de la pantalla */
+    height: auto;      /* Se expande si el contenido es más largo */
+}

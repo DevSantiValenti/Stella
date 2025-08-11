@@ -86,14 +86,14 @@
 
                 <div class="col-md-6">
                     <label class="form-label">Precio Minorista</label>
-                    <input type="number" class="form-control" name="precioMin" th:field="*{precioMin}" required>
+                    <input type="number" step="1" class="form-control" name="precioMin" th:field="*{precioMin}" required>
                     <div class="invalid-feedback">Debe ingresar un precio válido.</div>
                     <small class="form-label text-danger" th:errors="*{precioMin}"></small>
                 </div>
 
                 <div class="col-md-6">
                     <label class="form-label">Precio por Bulto</label>
-                    <input type="number" class="form-control" name="precioBulto" th:field="*{precioBulto}" required>
+                    <input type="number" step="1" class="form-control" name="precioBulto" th:field="*{precioBulto}" required>
                     <div class="invalid-feedback">Debe ingresar un precio válido.</div>
                     <small class="form-label text-danger" th:errors="*{precioBulto}"></small>
                 </div>

@@ -126,8 +126,8 @@ public class ProductoControler {
         producto.setActivo(!producto.isActivo());
         productoService.guardar(producto);
 
-        String mensaje = producto.isActivo() ? "Producto " + producto.getNombre() + " deshabilitado."
-                                            : "Producto " + producto.getNombre() + " habilitado.";
+        String mensaje = producto.isActivo() ? "Producto " + producto.getNombre() + " habilitado."
+                                            : "Producto " + producto.getNombre() + " deshabilitado.";
                                             
         flash.addFlashAttribute(producto.isActivo() ? "info" : "danger", mensaje);
 
