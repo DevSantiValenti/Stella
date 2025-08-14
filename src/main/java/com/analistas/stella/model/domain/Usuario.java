@@ -42,6 +42,4 @@ public class Usuario implements Serializable {
         fechaAlta = LocalDate.now();
     }
 
-
-
 }

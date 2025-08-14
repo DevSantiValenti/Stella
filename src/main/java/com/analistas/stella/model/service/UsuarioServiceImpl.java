@@ -20,7 +20,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
     }
 
     @Override
-    public Usuario buscarPorId(long id){
+    public Usuario buscarPorId(Long id){
         return usuarioRepository.findById(id).orElse(null);
     }
 
@@ -33,4 +33,11 @@ public class UsuarioServiceImpl implements IUsuarioService {
     public void guardar(Usuario usuario) {
         usuarioRepository.save(usuario);
     }
+
+    @Override
+    public void borrarPorId(Long id) {
+        usuarioRepository.deleteById(id);;
+    }
+
+    
 }

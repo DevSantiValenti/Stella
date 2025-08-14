@@ -46,16 +46,7 @@ public class OfertaController {
 
         return "ofertas/ofertas-form";
     }
-
-    // @GetMapping("/listado")
-    // public String listadoOfertas(Model model) {
-
-    //     model.addAttribute("oferta", ofertaService.buscarTodos());
-
-    //     return "index";
-    // }
-    
-
+  
     @GetMapping("/listadoAdmin")
     public String listadoOfertasAdm(Model model) {
 
