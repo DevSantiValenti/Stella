@@ -34,4 +34,14 @@ public class ProductoServiceImpl implements IProductoService {
         productoRepository.deleteById(id);
     }
 
+    @Override
+    public List<Producto> buscarPorIds(List<Long> ids) {
+        return (List<Producto>) productoRepository.findAllById(ids);
+    }
+
+    @Override
+    public List<Producto> listaProductosActivos() {
+        return productoRepository.findByActivo(true);
+    }
+
 }

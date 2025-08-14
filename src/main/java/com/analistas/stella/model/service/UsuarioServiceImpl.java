@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.analistas.stella.model.domain.Usuario;
 import com.analistas.stella.model.repository.IUsuarioRepository;
 
+@Service
 public class UsuarioServiceImpl implements IUsuarioService {
 
     @Autowired

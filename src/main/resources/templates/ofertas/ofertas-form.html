@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout-dashboard}">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title th:text="${titulo}">Registrar Oferta</title>
+    <style>
+        .container {
+            margin-left: 20px;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <div layout:fragment="dashboard">
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Registrar Nueva Oferta</h4>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/ofertas/guardar}" th:object="${oferta}" method="post" enctype="multipart/form-data">
+
+                    <!-- Descripción -->
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <input type="text" id="descripcion" th:field="*{descripcion}" class="form-control"
+                            placeholder="Ej: Oferta verano 2025" required />
+                        <div class="text-danger" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
+                        </div>
+                    </div>
+
+                    <!-- Productos -->
+                    <div class="mb-3">
+                        <label for="productos" class="form-label">Seleccionar Productos (3 máximo)</label>
+                        <select id="productos" name="productos" class="form-select" multiple="multiple"
+                            style="width: 100%;">
+                            <!-- <option th:each="prod : ${listaProductos}" th:value="${prod.id}" th:text="${prod.nombre}" th:selected="${oferta.productos.contains(prod)}">
+                            </option> -->
+                            <option th:each="prod : ${listaProductos}" th:value="${prod.id}" th:text="${prod.nombre}"
+                                th:selected="${oferta.productos != null and oferta.productos.contains(prod)}">
+                            </option>
+
+                        </select>
+                    </div>
+
+
+
+                    <!-- Precio Promocional -->
+                    <div class="mb-3">
+                        <label for="precioPromocional" class="form-label">Precio Promocional ($)</label>
+                        <input type="number" step="1" id="precioPromocional" th:field="*{precioPromocional}"
+                            class="form-control" placeholder="$" required />
+                    </div>
+
+                    <!-- Descuento Porcentaje -->
+                    <div class="mb-3">
+                        <label for="descuentoPorcentaje" class="form-label">Descuento (%)</label>
+                        <input type="number" step="1" id="descuentoPorcentaje" th:field="*{descuentoPorcentaje}"
+                            class="form-control" placeholder="Ej: 15" />
+                    </div>
+
+                    <!-- Fecha Inicio y Fin -->
+                    <!-- <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
+                            <input type="date" id="fechaInicio" th:field="*{fechaInicio}" class="form-control"
+                                required />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="fechaFin" class="form-label">Fecha de Fin</label>
+                            <input type="date" id="fechaFin" th:field="*{fechaFin}" class="form-control" required />
+                        </div>
+                    </div> -->
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
+                            <input type="date" id="fechaInicio" name="fechaInicio"
+                                th:value="${oferta.fechaInicio != null ? #temporals.format(oferta.fechaInicio, 'yyyy-MM-dd') : ''}"
+                                class="form-control" required />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="fechaFin" class="form-label">Fecha de Fin</label>
+                            <input type="date" id="fechaFin" name="fechaFin"
+                                th:value="${oferta.fechaFin != null ? #temporals.format(oferta.fechaFin, 'yyyy-MM-dd') : ''}"
+                                class="form-control" required />
+                        </div>
+                    </div>
+
+
+                    <!-- Imagen Banner -->
+                    <div class="mb-3">
+                        <label for="imagenBanner" class="form-label">Imagen del Banner</label>
+                        <input type="file" id="imagenBanner" name="imagenBannerFile" class="form-control" />
+                    </div>
+
+                    <!-- Condiciones -->
+                    <div class="mb-3">
+                        <label for="condiciones" class="form-label">Condiciones</label>
+                        <textarea id="condiciones" th:field="*{condiciones}" class="form-control" rows="3"
+                            placeholder="Ej: Oferta válida hasta agotar stock..."></textarea>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="d-flex justify-content-between">
+                        <a th:href="@{/ofertas/listadoAdmin}" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-success">Guardar Oferta</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script th:fragment="js"></script>
+</body>
+
+</html>

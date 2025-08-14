@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layout}">
+    layout:decorate="~{layout-dashboard}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plantilla</title>
+    <title th:text="${titulo}"></title>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             console.log('DOM Content Loaded!'); // Add this line
@@ -32,22 +32,49 @@
             });
         });
     </script>
+
+    <script>
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                // Obtener todos los formularios con la clase .needs-validation
+                var forms = document.getElementsByClassName('needs-validation');
+                // Validar cada uno al hacer submit
+                Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+
+    <style>
+        .container {
+            margin-left: 20px;
+        }
+    </style>
 </head>
 
 <body>
-
-    <div layout:fragment="contenido">
+    
+    <div layout:fragment="dashboard"> <!--Toda la información va adentro de este div, no afuera -->
         <h2 class="text-center mb-4 text-primary mt-2" th:text="${titulo}"></h2>
 
         <!-- Formulario de Producto con variables de tu entidad -->
         <form method="post" th:action="@{/productos/guardar}" th:object="${producto}"
-            class="p-4 border rounded bg-light shadow-sm">
+            class="needs-validation p-4 border rounded bg-light shadow-sm" novalidate enctype="multipart/form-data">
             <div class="row g-3">
 
                 <div class="col-md-6">
                     <label class="form-label">Código de Barras</label>
                     <input type="text" class="form-control" name="codigoBarras" maxlength="13"
                         th:field="*{codigoBarras}">
+                    <div class="invalid-feedback">Debe ingresar un Código de Barras válido (11 caracteres).</div>
                     <small class="form-label text-danger" th:errors="*{codigoBarras}"></small>
                 </div>
 
@@ -55,32 +82,37 @@
                     <label class="form-label">Nombre del Producto</label>
                     <input type="text" class="form-control" name="nombre" minlength="2" maxlength="50"
                         th:field="*{nombre}" required>
+                    <div class="invalid-feedback">Debe ingresar un nombre válido (entre 2 y 50 caracteres).</div>
                     <small class="form-label text-danger" th:errors="*{nombre}"></small>
                 </div>
 
                 <div class="col-md-6">
                     <label class="form-label">Precio Minorista</label>
-                    <input type="number" class="form-control" name="precioMin" th:field="*{precioMin}"
+                    <input type="number" step="1" class="form-control" name="precioMin" th:field="*{precioMin}"
                         required>
+                    <div class="invalid-feedback">Debe ingresar un precio válido.</div>
                     <small class="form-label text-danger" th:errors="*{precioMin}"></small>
                 </div>
 
                 <div class="col-md-6">
                     <label class="form-label">Precio por Bulto</label>
-                    <input type="number" class="form-control" name="precioBulto" th:field="*{precioBulto}"
+                    <input type="number" step="1" class="form-control" name="precioBulto" th:field="*{precioBulto}"
                         required>
+                    <div class="invalid-feedback">Debe ingresar un precio válido.</div>
                     <small class="form-label text-danger" th:errors="*{precioBulto}"></small>
                 </div>
 
                 <div class="col-md-6">
                     <label class="form-label">Stock</label>
                     <input type="number" class="form-control" name="stock" th:field="*{stock}" required>
+                    <div class="invalid-feedback">Debe ingresar un stock válido.</div>
                     <small class="form-label text-danger" th:errors="*{stock}"></small>
                 </div>
 
                 <div class="col-md-6">
                     <label class="form-label">Fecha de Vencimiento</label>
                     <input type="date" class="form-control" th:value="*{fechaVen}" name="fechaVen">
+                    <div class="invalid-feedback">Debe ingresar una fecha válida.</div>
                 </div>
 
                 <div class="col-md-6">
@@ -89,6 +121,7 @@
                         <option value="">Seleccione un departamento...</option>
                         <option th:each="d : ${departamentos}" th:value="${d.nombre}" th:text="${d.nombre}"></option>
                     </select>
+                    <div class="invalid-feedback">Debe ingresar una departamento.</div>
                 </div>
 
                 <div class="col-md-6">
@@ -99,13 +132,14 @@
                             th:attr="data-depto=${c.departamento.nombre}">
                         </option>
                     </select>
+                    <div class="invalid-feedback">Debe ingresar una categoría.</div>
                 </div>
 
 
 
                 <div class="col-12">
-                    <label class="form-label">Imagen del Producto (URL)</label>
-                    <input type="url" class="form-control" name="linkImagen" th:field="*{linkImagen}">
+                    <label class="form-label">Imagen del Producto</label><br>
+                    <input type="file" class="form-control-file" name="file">
                 </div>
 
                 <div class="col-12">
@@ -119,7 +153,10 @@
              
         </form>
     </div>
+
+    <!-- Mis JS -->
     <script th:fragment="js"></script>
+    
 </body>
 
 </html>

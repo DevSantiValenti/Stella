@@ -5,119 +5,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        .products-section {
-            padding: 2rem;
-        }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            /* hasta 6 columnas en pantallas grandes */
-            gap: 1.5rem;
-        }
-
-        @media (max-width: 1200px) {
-            .product-grid {
-                grid-template-columns: repeat(5, 1fr);
-            }
-        }
-
-        @media (max-width: 992px) {
-            .product-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .product-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .product-grid {
-                grid-template-columns: 1fr;
-                /* Solo una columna en pantallas muy pequeñas */
-            }
-        }
-
-        .product-card {
-            background-color: #fff;
-            border-radius: 10px;
-            padding: 1rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .product-image {
-            width: 100%;
-            height: auto;
-            object-fit: contain;
-            margin-bottom: 1rem;
-        }
-
-        .product-title {
-            font-size: 1.2rem;
-            margin: 0.5rem 0;
-        }
-
-        .product-description {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 0.5rem;
-        }
-
-        .product-price,
-        .product-price-per-unit {
-            font-weight: bold;
-            margin: 0.2rem 0;
-        }
-
-        .add-to-cart-btn {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 0.5rem;
-            transition: background-color 0.3s ease;
-        }
-
-        .add-to-cart-btn:hover {
-            background-color: #0056b3;
-        }
-    </style>
-
-
+    <link rel="stylesheet" href="/css/productos-list.css">
 </head>
 
 <body>
     <div layout:fragment="contenido">
         <main class="main-content">
             <div class="container">
-                <aside class="sidebar">
-                    <h2>Categorías</h2>
-                    <ul>
-                        <li><a href="#">Bebidas <span>97</span></a></li>
-                        <li><a href="#">Cafés, Cacaos e Infusiones <span>724</span></a></li>
-                        <li><a href="#">Cereales y Galletas <span>332</span></a></li>
-                        <li><a href="#">Chocolates y Dulces <span>48</span></a></li>
-                        <li><a href="#">Congelados <span>13</span></a></li>
-                        <li><a href="#">Conservas, Sopas, Aceites <span>15</span></a></li>
-                        <li><a href="#">Condimentos <span>53</span></a></li>
-                        <li><a href="#">Dietéticos <span>0</span></a></li>
-                        <li><a href="#">Droguería <span>10</span></a></li>
-                        <li><a href="#">Estacionales <span>14</span></a></li>
-                        <li><a href="#">Frescos y Charcutería <span>35</span></a></li>
-                        <li><a href="#">Lácteos y Huevos <span>44</span></a></li>
-                        <li><a href="#">Mascotas <span>637</span></a></li>
-                        <li><a href="#">Ocio y Cultura <span>1</span></a></li>
-                        <li><a href="#">Panadería, Pastelería y Repostería <span>0</span></a></li>
-                        <li><a href="#">Pasta, Arroz y Legumbres <span>0</span></a></li>
-                        <li><a href="#">Perfumería y Parafarmacia <span>0</span></a></li>
-                        <li><a href="#">Salsas <span>0</span></a></li>
+                <aside class="sidebar bg-light p-3">
+                    <h5 class="mb-3 text-decoration-underline">Departamentos</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Alimentos</a>
+                            <ul class="submenu list-unstyled">
+                                <li><a class="nav-link" href="#">Sopas y Caldos</a></li>
+                                <li><a class="nav-link" href="#">Snacks y Galletitas</a></li>
+                                <li><a class="nav-link" href="#">Cereales</a></li>
+                                <li><a class="nav-link" href="#">Especias y Condimentos</a></li>
+                                <li><a class="nav-link" href="#">Salsas y Aderezos</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Bebidas</a>
+                            <ul class="submenu list-unstyled">
+                                <li><a class="nav-link" href="#">Energizantes</a></li>
+                                <li><a class="nav-link" href="#">Bebidas Deportivas</a></li>
+                                <li><a class="nav-link" href="#">Tes e Infusiones</a></li>
+                                <li><a class="nav-link" href="#">Cafe</a></li>
+                                <li><a class="nav-link" href="#">Vinos y Espumantes</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Limpieza</a>
+                            <ul class="submenu list-unstyled">
+                                <li><a class="nav-link" href="#">Suavizantes</a></li>
+                                <li><a class="nav-link" href="#">Jabon en Polvo</a></li>
+                                <li><a class="nav-link" href="#">Limpiahornos</a></li>
+                                <li><a class="nav-link" href="#">Insecticidas</a></li>
+                                <li><a class="nav-link" href="#">Desodorantes de Ambiente</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Perfumería</a>
+                            <ul class="submenu list-unstyled">
+                                <li><a class="nav-link" href="#">Desodorantes</a></li>
+                                <li><a class="nav-link" href="#">Colonias</a></li>
+                                <li><a class="nav-link" href="#">Lociones</a></li>
+                                <li><a class="nav-link" href="#">Shampoo y Acondicionador</a></li>
+                                <li><a class="nav-link" href="#">Cremas</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Higiene Personal</a>
+                            <ul class="submenu list-unstyled">
+                                <li><a class="nav-link" href="#">Papel Higiénico</a></li>
+                                <li><a class="nav-link" href="#">Pañales para Bebés</a></li>
+                                <li><a class="nav-link" href="#">Pañales para Adultos</a></li>
+                                <li><a class="nav-link" href="#">Toallas Femeninas</a></li>
+                                <li><a class="nav-link" href="#">Jabón de Tocador</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Congelados</a>
+                            <ul class="submenu list-unstyled">
+                                <li><a class="nav-link" href="#">Vegetales Congelados</a></li>
+                                <li><a class="nav-link" href="#">Papas Congeladas</a></li>
+                                <li><a class="nav-link" href="#">Helados</a></li>
+                                <li><a class="nav-link" href="#">Postres Congelados</a></li>
+                                <li><a class="nav-link" href="#">Comidas Listas Congeladas</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Panadería</a>
+                            <ul class="submenu list-unstyled">
+                                <li><a class="nav-link" href="#">Pan de Molde</a></li>
+                                <li><a class="nav-link" href="#">Pan Dulce</a></li>
+                                <li><a class="nav-link" href="#">Galletas</a></li>
+                                <li><a class="nav-link" href="#">Facturas</a></li>
+                                <li><a class="nav-link" href="#">Budines</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Verdulería</a>
+                            <ul class="submenu list-unstyled">
+                                <li><a class="nav-link" href="#">Frutas</a></li>
+                                <li><a class="nav-link" href="#">Verduras</a></li>
+                                <li><a class="nav-link" href="#">Tubérculos</a></li>
+                                <li><a class="nav-link" href="#">Hierbas Frescas</a></li>
+                                <li><a class="nav-link" href="#">Setas</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Carnicería</a>
+                            <ul class="submenu list-unstyled">
+                                <li><a class="nav-link" href="#">Carne Vacuna</a></li>
+                                <li><a class="nav-link" href="#">Carne de Cerdo</a></li>
+                                <li><a class="nav-link" href="#">Carne de Pollo</a></li>
+                                <li><a class="nav-link" href="#">Carne de Cordero</a></li>
+                                <li><a class="nav-link" href="#">Carne Picada</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Lácteos</a>
+                            <ul class="submenu list-unstyled">
+                                <li><a class="nav-link" href="#">Leche</a></li>
+                                <li><a class="nav-link" href="#">Yogures</a></li>
+                                <li><a class="nav-link" href="#">Quesos</a></li>
+                                <li><a class="nav-link" href="#">Manteca</a></li>
+                                <li><a class="nav-link" href="#">Crema</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </aside>
 
@@ -199,6 +205,9 @@
             </div>
         </main>
     </div>
+
+    <!-- Mis JS -->
+    <script th:fragment="js"></script>
 </body>
 
 </html>

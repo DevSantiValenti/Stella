@@ -8,64 +8,56 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.analistas.stella.model.domain.Producto;
 import com.analistas.stella.model.domain.Usuario;
+import com.analistas.stella.model.service.IRolService;
 import com.analistas.stella.model.service.IUsuarioService;
 
 import jakarta.validation.Valid;
 
-@RequestMapping("/usuarios")
-@SessionAttributes({"usuario"}) //Esto hace que al editar un producto, no se cree otro, sino que se edite 
 
+@RequestMapping("/usuarios")
+@SessionAttributes({"usuario"}) //Esto hace que al editar un usuario, no se cree otro, sino que se edite 
+@Controller
 public class UsuarioController {
 
     @Autowired
-    private IUsuarioService usuarioService;
+    IUsuarioService usuarioService;
+
+    @Autowired
+    IRolService rolService;
 
     @GetMapping("/nuevo")
     public String crearFormulario(Model model) {
-        model.addAttribute("titulo", "nuevo usuario");
+
+        model.addAttribute("titulo", "Nuevo Usuario");
         model.addAttribute("usuario", new Usuario());
-        //model.addAttribute(null, model);
-        return "usuarios/form";  // Asegurate de tener esta vista en templates
+        model.addAttribute("roles", rolService.buscarTodos());
+
+        return "usuarios/usuarios-form";  // Asegurate de tener esta vista en templates
     }
     
-    // @PostMapping("/guardar")
-    // public String guardarProducto(@Valid Producto producto, BindingResult result, RedirectAttributes flash,
-    //         SessionStatus status, Model model) {
+    @PostMapping("/guardar")
+    public String guardarUsuario(@Valid Usuario usuario, BindingResult result, RedirectAttributes flash,
+            SessionStatus status, Model model) {
 
-    //     // Verificar si hay errores de validación
-    //     if (result.hasErrors()) {
-    //         model.addAttribute("danger", "Corergir los errores del formulario");
-    //     }
-
-<<<<<<< Updated upstream
-    //     String mensaje = (producto.getId() == null || producto.getId() == 0)
-    //             ? "Producto " + producto.getNombre() + " añadido"
-    //             : "Producto " + producto.getNombre() + " modificado";
-=======
+        // Verificar si hay errores de validación
+        if (result.hasErrors()) {
+            model.addAttribute("danger", "Corergir los errores del formulario");
+        }
         String mensaje = (usuario.getId() == null || usuario.getId() == 0)
                 ? "Usuario " + usuario.getNombrecompleto() + " añadido"
                 : "Usuario " + usuario.getNombrecompleto() + " modificado";
->>>>>>> Stashed changes
 
-    //     flash.addFlashAttribute((producto.getId() == null || producto.getId() == 0) ? "success" : "warning", mensaje);
+        flash.addFlashAttribute((usuario.getId() == null || usuario.getId() == 0) ? "success" : "warning", mensaje);
 
-<<<<<<< Updated upstream
-    //     productoService.guardar(producto);
-    //     status.setComplete(); // Lo que hace es limpiar la variable "producto" definida en el SessionStatus de
-    //                           // arriba
 
-    //     return "redirect:/productos/listadoAdmin";
-=======
         usuarioService.guardar(usuario);
         status.setComplete(); // Lo que hace es limpiar la variable "usuario" definida en el SessionStatus de
                               // arriba
 
         return "redirect:/usuarios/listadoAdmin";
->>>>>>> Stashed changes
         // Al usar redirect, se usa el link de los GetMapping, no la dirección del archivo
-    //}
+    }
 
     @GetMapping("/listadoAdmin")
     public String listarUsuarios(Model model) {

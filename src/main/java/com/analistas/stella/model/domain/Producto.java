@@ -28,7 +28,7 @@ public class Producto implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "El código de barras no puede estar vacío")
+    @NotNull(message = "El código de barras no puede estar vacío")
     @Column(name = "cod_barra", length = 13)
     private String codigoBarras;
 
@@ -37,19 +37,20 @@ public class Producto implements Serializable {
     private String nombre;
 
     @NotNull(message = "El precio del producto no puede ser nulo")
-    private float precioMin;
+    private Integer precioMin;
 
     @NotNull(message = "El precio del producto no puede ser nulo")
-    private float precioBulto;
+    private Integer precioBulto;
 
     @NotNull(message = "El stock del producto no puede ser nulo")
-    private int stock;
+    private Integer stock;
 
     @Column(name = "activo", columnDefinition = "boolean default 1")
     private boolean activo;
 
     // @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate fechaVen;
+
 
     @Column(length = 1000)
     private String linkImagen;

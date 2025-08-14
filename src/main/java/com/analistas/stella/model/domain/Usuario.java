@@ -10,7 +10,6 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "usuarios")
-
 public class Usuario implements Serializable {
 
     @Id
@@ -33,8 +32,8 @@ public class Usuario implements Serializable {
     @Column(name = "fecha_alta")
     private LocalDate fechaAlta;
 
-    @NotEmpty(message = "Debe especificar un rol")
-    @OneToOne(fetch = FetchType.LAZY)
+    @NotNull(message = "Debe especificar un rol")
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rol_id")
     private Rol rol;
 
@@ -43,8 +42,4 @@ public class Usuario implements Serializable {
         fechaAlta = LocalDate.now();
     }
 
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 }

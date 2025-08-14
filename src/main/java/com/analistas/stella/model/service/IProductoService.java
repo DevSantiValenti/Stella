@@ -14,4 +14,8 @@ public interface IProductoService {
 
     public void borrarPorId(Long id);
 
+    public List<Producto> buscarPorIds(List<Long> id);
+
+    public List<Producto> listaProductosActivos();
+
 }
