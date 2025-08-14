@@ -46,7 +46,8 @@
                 </li>
                 <li class="nav-item"><a href="#" class="nav-link text-white">Categorías</a></li>
                 <li class="nav-item"><a th:href="@{/ofertas/listadoAdmin}" class="nav-link text-white">Ofertas</a></li>
-                <li class="nav-item"><a th:href="@{/usuarios/listadoAdmin}" class="nav-link text-white">Usuarios</a></li>
+                <li class="nav-item"><a th:href="@{/usuarios/listadoAdmin}" class="nav-link text-white">Usuarios</a>
+                </li>
                 <li class="nav-item"><a href="#" class="nav-link text-white">Ventas</a></li>
                 <li class="nav-item"><a href="#" class="nav-link text-white">Reportes</a></li>
                 <li class="nav-item"><a href="#" class="nav-link text-white">Configuración</a></li>
@@ -95,7 +96,8 @@
                                 aria-label="Cerrar"></button>
                         </div>
                         <div class="modal-body">
-                            ¿Estás seguro que quieres borrar este producto? Esta acción no se puede deshacer.
+                            <p th:text="${tipo}"></p>
+                            <!-- ¿Estás seguro que quieres borrar este producto? Esta acción no se puede deshacer. -->
                             <!-- O se puede preguntar lo que quieras hacer antes de confirmar la acción -->
                         </div>
                         <div class="modal-footer">
@@ -112,25 +114,6 @@
 
             </div>
         </div>
-        <!-- Content -->
-        <!-- <div class="p-4 w-100">
-            <h2>Panel de Administración</h2>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card p-3">
-                        <h5>Ventas Hoy</h5>
-                        <h3>$1,500</h3>
-                    </div>
-                </div>
-                <div class="col-md-8">
-                    <canvas id="ventasChart"></canvas>
-                </div>
-            </div>
-        </div> -->
-
-
-
-
     </div>
 
 
@@ -156,8 +139,23 @@
         });
     </script>
 
+    <!-- Para que funcione la ventana modal de confirmar borrar -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const deleteButtons = document.querySelectorAll(".btn-delete");
+            const confirmModal = new bootstrap.Modal(document.getElementById("confirmDeleteModal"));
+            const confirmBtn = document.getElementById("btnConfirmDelete");
 
-
+            deleteButtons.forEach(btn => {
+                btn.addEventListener("click", function (e) {
+                    e.preventDefault(); // Evita la redirección inmediata
+                    const href = this.getAttribute("data-href");
+                    confirmBtn.setAttribute("href", href);
+                    confirmModal.show();
+                });
+            });
+        });
+    </script>
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 

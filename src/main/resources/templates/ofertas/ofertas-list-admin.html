@@ -49,14 +49,6 @@
                         <td
                             th:text="${oferta.descuentoPorcentaje != null} ? ${oferta.descuentoPorcentaje} + '%' : '0%'">
                         </td>
-                        <!-- <td th:text="${'$ ' + #numbers.formatDecimal(oferta.precioPromocional, 0, 0)}"></td>
-
-                        <td
-                            th:text="${oferta.descuentoPorcentaje != null ? #numbers.formatDecimal(oferta.descuentoPorcentaje, 0, 0) + '%' : '0%'}">
-                        </td> -->
-
-
-
                         <td>
                             <ul>
                                 <li th:each="prod : ${oferta.productos}" th:text="${prod.nombre}"></li>

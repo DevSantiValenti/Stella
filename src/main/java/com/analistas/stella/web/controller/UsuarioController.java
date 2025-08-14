@@ -61,8 +61,11 @@ public class UsuarioController {
 
     @GetMapping("/listadoAdmin")
     public String listarUsuarios(Model model) {
+
+        model.addAttribute("tipo", "¿Estás seguro que quieres borrar este usuario? Esta acción no se puede deshacer.");
         model.addAttribute("usuarios", usuarioService.buscarTodo());
         model.addAttribute("titulo", "Listado de Usuarios");
+        
         return "usuarios/usuarios-list-admin";
 }
 

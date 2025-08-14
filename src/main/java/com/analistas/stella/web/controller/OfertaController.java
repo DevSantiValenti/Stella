@@ -50,6 +50,7 @@ public class OfertaController {
     @GetMapping("/listadoAdmin")
     public String listadoOfertasAdm(Model model) {
 
+        model.addAttribute("tipo", "¿Estás seguro que quieres borrar esta oferta? Esta acción no se puede deshacer.");
         model.addAttribute("titulo", "Listado de Ofertas");
         model.addAttribute("ofertas", ofertaService.buscarTodos());
 

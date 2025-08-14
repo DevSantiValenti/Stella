@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Usuarios</title>
+    <title th:text="${titulo}"></title>
     <style>
         .container {
             margin-left: 20px;
@@ -29,14 +29,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="u : ${usuarios}">
+                    <tr th:each="u : ${usuarios}" >
                         <td th:text="${u.id}"></td>
                         <td th:text="${u.nombrecompleto}"></td>
                         <td th:text="${u.correo}"></td>
                         <td th:text="${u.rol.nombre}"></td>
                         <td>
                             <a th:href="@{/usuarios/editar/{id}(id=${u.id})}" class="btn btn-sm btn-warning">Editar</a>
-                            <a th:href="@{/usuarios/borrar/{id}(id=${u.id})}" class="btn btn-sm btn-danger">Borrar</a>
+                            <!-- <a th:href="@{/usuarios/borrar/{id}(id=${u.id})}" class="btn btn-sm btn-danger">Borrar</a> -->
+                            <a href="#" class="btn btn-sm btn-danger btn-delete"
+                                th:attr="data-href=@{/usuarios/borrar/{id}(id=${u.id})}">
+                                Borrar
+                            </a>
                         </td>
                     </tr>
                 </tbody>
@@ -57,4 +61,5 @@
     </div>
     <script th:fragment="js" th:src="@{/js/usuarios-list-admin.js}"></script>
 </body>
+
 </html>

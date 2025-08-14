@@ -59,8 +59,9 @@ public class ProductoControler {
     }
 
     @GetMapping("/listadoAdmin")
-    public String listadoAdmin(Model model) {
+    public String listadoAdmin(Model model, RedirectAttributes flash) {
 
+        model.addAttribute("tipo", "¿Estás seguro que quieres borrar este producto? Esta acción no se puede deshacer. Se borrarán también las ofertas asociadas a este producto.");
         model.addAttribute("titulo", "Listado de Productos");
         model.addAttribute("productos", productoService.buscarTodo());
 
@@ -115,6 +116,7 @@ public class ProductoControler {
         }
 
         flash.addFlashAttribute((producto.getId() == null || producto.getId() == 0) ? "success" : "warning", mensaje);
+        
 
         productoService.guardar(producto);
         status.setComplete(); // Lo que hace es limpiar la variable "producto" definida en el SessionStatus de
