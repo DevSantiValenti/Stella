@@ -43,4 +43,8 @@ public class Usuario implements Serializable {
         fechaAlta = LocalDate.now();
     }
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 }

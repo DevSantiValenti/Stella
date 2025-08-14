@@ -39,18 +39,70 @@ public class UsuarioController {
     //         model.addAttribute("danger", "Corergir los errores del formulario");
     //     }
 
+<<<<<<< Updated upstream
     //     String mensaje = (producto.getId() == null || producto.getId() == 0)
     //             ? "Producto " + producto.getNombre() + " añadido"
     //             : "Producto " + producto.getNombre() + " modificado";
+=======
+        String mensaje = (usuario.getId() == null || usuario.getId() == 0)
+                ? "Usuario " + usuario.getNombrecompleto() + " añadido"
+                : "Usuario " + usuario.getNombrecompleto() + " modificado";
+>>>>>>> Stashed changes
 
     //     flash.addFlashAttribute((producto.getId() == null || producto.getId() == 0) ? "success" : "warning", mensaje);
 
+<<<<<<< Updated upstream
     //     productoService.guardar(producto);
     //     status.setComplete(); // Lo que hace es limpiar la variable "producto" definida en el SessionStatus de
     //                           // arriba
 
     //     return "redirect:/productos/listadoAdmin";
+=======
+        usuarioService.guardar(usuario);
+        status.setComplete(); // Lo que hace es limpiar la variable "usuario" definida en el SessionStatus de
+                              // arriba
+
+        return "redirect:/usuarios/listadoAdmin";
+>>>>>>> Stashed changes
         // Al usar redirect, se usa el link de los GetMapping, no la dirección del archivo
     //}
+
+    @GetMapping("/listadoAdmin")
+    public String listarUsuarios(Model model) {
+        model.addAttribute("usuarios", usuarioService.buscarTodo());
+        model.addAttribute("titulo", "Listado de Usuarios");
+        return "usuarios/usuarios-list-admin";
+}
+
+@GetMapping("/editar/{id}")
+    public String editarusuario(@PathVariable("id") Long id ,Model model, RedirectAttributes flash) {
+
+        Usuario usuario = usuarioService.buscarPorId(id);
+
+        model.addAttribute("titulo", "Editar usuario");
+        model.addAttribute("listaUsuarios", usuarioService.buscarTodo());
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("roles", rolService.buscarTodos());
+
+        return "usuarios/usuarios-form";
+    }
+
+    @GetMapping("/borrar/{id}")
+    public String borrarusuario(@PathVariable("id") Long id, RedirectAttributes flash) {
+
+        Usuario usuario = usuarioService.buscarPorId(id);
+        // Se obtiene el usuario antes de borrarlo para mostrar su descripción en el mensaje
+
+        if (usuario != null) {
+            usuarioService.borrarPorId(id);
+            String mensaje = "Usuario " + usuario.getNombrecompleto() + " eliminado.";
+            flash.addFlashAttribute("danger", mensaje);
+        } else {
+            String mensaje = "Usuario no encontrado";
+            flash.addFlashAttribute("danger", mensaje);
+        }
+
+        return "redirect:/usuarios/listadoAdmin";
+    }
 
 }
