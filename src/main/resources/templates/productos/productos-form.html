@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plantilla</title>
+    <title th:text="${titulo}"></title>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             console.log('DOM Content Loaded!'); // Add this line
@@ -32,6 +32,7 @@
             });
         });
     </script>
+
     <script>
         (function () {
             'use strict';
@@ -60,19 +61,20 @@
 </head>
 
 <body>
+    
     <div layout:fragment="dashboard"> <!--Toda la información va adentro de este div, no afuera -->
         <h2 class="text-center mb-4 text-primary mt-2" th:text="${titulo}"></h2>
 
         <!-- Formulario de Producto con variables de tu entidad -->
         <form method="post" th:action="@{/productos/guardar}" th:object="${producto}"
-            class="needs-validation p-4 border rounded bg-light shadow-sm" novalidate>
+            class="needs-validation p-4 border rounded bg-light shadow-sm" novalidate enctype="multipart/form-data">
             <div class="row g-3">
 
                 <div class="col-md-6">
                     <label class="form-label">Código de Barras</label>
                     <input type="text" class="form-control" name="codigoBarras" maxlength="13"
                         th:field="*{codigoBarras}">
-                        <div class="invalid-feedback">Debe ingresar un Código de Barras válido (11 caracteres).</div>
+                    <div class="invalid-feedback">Debe ingresar un Código de Barras válido (11 caracteres).</div>
                     <small class="form-label text-danger" th:errors="*{codigoBarras}"></small>
                 </div>
 
@@ -80,20 +82,22 @@
                     <label class="form-label">Nombre del Producto</label>
                     <input type="text" class="form-control" name="nombre" minlength="2" maxlength="50"
                         th:field="*{nombre}" required>
-                        <div class="invalid-feedback">Debe ingresar un nombre válido (entre 2 y 50 caracteres).</div>
+                    <div class="invalid-feedback">Debe ingresar un nombre válido (entre 2 y 50 caracteres).</div>
                     <small class="form-label text-danger" th:errors="*{nombre}"></small>
                 </div>
 
                 <div class="col-md-6">
                     <label class="form-label">Precio Minorista</label>
-                    <input type="number" step="1" class="form-control" name="precioMin" th:field="*{precioMin}" required>
+                    <input type="number" step="1" class="form-control" name="precioMin" th:field="*{precioMin}"
+                        required>
                     <div class="invalid-feedback">Debe ingresar un precio válido.</div>
                     <small class="form-label text-danger" th:errors="*{precioMin}"></small>
                 </div>
 
                 <div class="col-md-6">
                     <label class="form-label">Precio por Bulto</label>
-                    <input type="number" step="1" class="form-control" name="precioBulto" th:field="*{precioBulto}" required>
+                    <input type="number" step="1" class="form-control" name="precioBulto" th:field="*{precioBulto}"
+                        required>
                     <div class="invalid-feedback">Debe ingresar un precio válido.</div>
                     <small class="form-label text-danger" th:errors="*{precioBulto}"></small>
                 </div>
@@ -127,15 +131,15 @@
                         <option th:each="c : ${categorias}" th:value="${c.id}" th:text="${c.nombre}"
                             th:attr="data-depto=${c.departamento.nombre}">
                         </option>
-                        <div class="invalid-feedback">Debe ingresar una categoría.</div>
                     </select>
+                    <div class="invalid-feedback">Debe ingresar una categoría.</div>
                 </div>
 
 
 
                 <div class="col-12">
-                    <label class="form-label">Imagen del Producto (URL)</label>
-                    <input type="url" class="form-control" name="linkImagen" th:field="*{linkImagen}">
+                    <label class="form-label">Imagen del Producto</label><br>
+                    <input type="file" class="form-control-file" name="file">
                 </div>
 
                 <div class="col-12">
@@ -152,6 +156,7 @@
 
     <!-- Mis JS -->
     <script th:fragment="js"></script>
+    
 </body>
 
 </html>

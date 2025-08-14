@@ -6,49 +6,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SoySuper - Tu Supermercado Online</title>
-    <!-- <style>
-        .tabla-scroll {
-            max-height: 400px;
-            overflow-y: auto;
-            width: 80vw;
-            margin: 20px auto;
-            border: 2px solid #ccc;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-        }
-
-        td {
-            border: 2px solid #ccc;
-            width: 50%;
-            height: auto;
-            text-align: center;
-            vertical-align: top;
-            background-color: #fff;
-            padding: 10px;
-        }
-
-        .oferta-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .oferta-card img {
-            max-width: 100px;
-            max-height: 100px;
-            margin-bottom: 10px;
-        }
-
-        .oferta {
-            background-color: #ffffff;
-            font-weight: bold;
-            color: #333;
-        }
-    </style> -->
     <style>
         .ofertas-grid {
             display: grid;
@@ -148,7 +105,7 @@
 <body>
     <div layout:fragment="contenido">
         <div class="ofertas-grid">
-            <div class="oferta-card" th:each="oferta : ${ofertas}">
+            <div class="oferta-card" th:each="oferta : ${ofertas}" th:if="${oferta.activo}">
                 <!-- Imagen principal: la primera del primer producto -->
                 <div class="banner">
                     <!-- <img th:if="${oferta.imagenBanner != null}" th:src="@{${oferta.imagenBanner}}" alt="Banner Oferta"
@@ -162,7 +119,9 @@
                 <div class="imagenes-productos">
                     <div class="producto-img" th:each="prod : ${oferta.productos}">
                         <img th:src="@{${prod.linkImagen}}" th:alt="${prod.nombre}" />
+                        <span th:text="${prod.nombre}"></span>
                     </div>
+                    
                 </div>
                 <div class="info">
                     <h3 class="descripcion" th:text="${oferta.descripcion}"></h3>
