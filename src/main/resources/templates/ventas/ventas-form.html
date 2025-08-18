@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Venta - Stella POS</title>
+  <link rel="stylesheet" href="/css/ventas-form.css" />
+</head>
+
+<body>
+  <form id="ventaForm" method="post">
+    <div id="alertas"></div>
+    <!-- TODO: todos tus campos e inputs -->
+
+    <header class="app-header">
+      <h1><a th:href="@{/}">Stella POS</a> — Nueva Venta</h1>
+      <div class="sale-info">
+        <div>
+          <label>Tipo cliente</label>
+          <select id="tipoCliente">
+            <option value="MINORISTA">Minorista</option>
+            <option value="MAYORISTA">Mayorista</option>
+          </select>
+        </div>
+        <div>
+          <label>Fecha</label>
+          <input type="datetime-local" id="fechaVenta" />
+        </div>
+        <div>
+          <label>Nro. Doc. Cliente (opcional)</label>
+          <input type="text" id="docCliente" placeholder="CUIT/DNI" />
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="add-item">
+        <div class="row">
+          <div class="col" style="position:relative;">
+            <label>Código / Barras</label>
+            <input type="text" id="codigo" placeholder="Escanear o escribir" autocomplete="off" />
+            <div id="sugerencias" class="autocomplete-list"></div>
+          </div>
+          <div class="col flex-2">
+            <label>Descripción</label>
+            <input type="text" id="descripcion" placeholder="Nombre del producto" />
+          </div>
+          <div class="col">
+            <label>Cant.</label>
+            <input type="number" id="cantidad" min="1" value="1" />
+          </div>
+          <div class="col">
+            <label>Precio</label>
+            <input type="number" id="precio" min="0" step="0.01" />
+          </div>
+          <div class="col">
+            <label>IVA</label>
+            <select id="iva">
+              <option value="21" selected>21%</option>
+              <option value="10.5">10.5%</option>
+              <option value="0">Exento</option>
+            </select>
+          </div>
+          <div class="col">
+            <label>Desc. %</label>
+            <input type="number" id="descItem" min="0" max="100" value="0" />
+          </div>
+          <div class="col">
+            <button type="button" id="btnAgregar" class="primary">Agregar</button>
+          </div>
+        </div>
+        <small class="hint">Tip: si tenés tabla de productos, podés autocompletar por código y traer precio
+          mayorista/minorista.</small>
+      </section>
+
+      <section class="cart">
+        <table id="tablaCarrito">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Descripción</th>
+              <th class="num">Cant.</th>
+              <th class="num">Precio</th>
+              <th class="num">Desc. %</th>
+              <th class="num">IVA</th>
+              <th class="num">Subtotal</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody><!-- filas dinámicas --></tbody>
+        </table>
+      </section>
+
+      <section class="totals">
+        <div class="left">
+          <label>Descuento global %</label>
+          <input type="number" id="descGlobal" min="0" max="100" value="0" />
+          <label>Observaciones</label>
+          <textarea id="observaciones" rows="2" placeholder="Notas de la venta"></textarea>
+        </div>
+        <div class="right">
+          <div class="line">
+            <span>Subtotal (sin IVA)</span><strong id="subTotal">0.00</strong>
+          </div>
+          <div class="line">
+            <span>IVA</span><strong id="montoIVA">0.00</strong>
+          </div>
+          <div class="line">
+            <span>Descuento</span><strong id="montoDesc">0.00</strong>
+          </div>
+          <div class="line total">
+            <span>Total</span><strong id="total">0.00</strong>
+          </div>
+          <div class="pay">
+            <label>Método de pago</label>
+            <select id="metodoPago">
+              <option value="EFECTIVO">Efectivo</option>
+              <option value="DEBITO">Débito</option>
+              <option value="CREDITO">Crédito</option>
+              <option value="TRANSFERENCIA">Transferencia</option>
+              <option value="CTA_CORRIENTE">Cuenta corriente</option>
+            </select>
+            <label>Recibido</label>
+            <input type="number" id="montoRecibido" min="0" step="0.01" />
+            <div class="line">
+              <span>Vuelto</span><strong id="vuelto">0.00</strong>
+            </div>
+          </div>
+          <div class="actions">
+            <button id="btnHold" class="ghost" type="button">Poner en espera</button>
+            <button id="btnCancelar" class="danger" type="button">Cancelar</button>
+            <button id="btnFinalizar" class="success" type="button">Finalizar venta</button>
+          </div>
+          <small class="hint">“Finalizar venta” guarda en la base y devuelve el N° de venta.</small>
+        </div>
+      </section>
+    </main>
+  </form>
+  <script th:src="@{/js/ventas-form.js}"></script>
+</body>
+
+</html>

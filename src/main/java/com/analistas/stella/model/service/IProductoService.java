@@ -18,4 +18,6 @@ public interface IProductoService {
 
     public List<Producto> listaProductosActivos();
 
+    public List<Producto> buscarPorCodigoODescripcion(String q);
+
 }

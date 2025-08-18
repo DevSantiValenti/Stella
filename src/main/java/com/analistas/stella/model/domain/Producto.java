@@ -30,6 +30,7 @@ public class Producto implements Serializable {
 
     @NotNull(message = "El código de barras no puede estar vacío")
     @Column(name = "cod_barra", length = 13)
+    // @Max(13)
     private String codigoBarras;
 
     @NotEmpty(message = "El nombre del producto no puede estar vacío")

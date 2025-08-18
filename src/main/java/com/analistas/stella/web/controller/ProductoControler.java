@@ -64,6 +64,7 @@ public class ProductoControler {
         model.addAttribute("tipo", "¿Estás seguro que quieres borrar este producto? Esta acción no se puede deshacer. Se borrarán también las ofertas asociadas a este producto.");
         model.addAttribute("titulo", "Listado de Productos");
         model.addAttribute("productos", productoService.buscarTodo());
+        
 
         return "/productos/productos-list-admin";
     }

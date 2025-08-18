@@ -1,5 +1,6 @@
 package com.analistas.stella.model.service;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,14 @@ public class ProductoServiceImpl implements IProductoService {
     @Override
     public List<Producto> listaProductosActivos() {
         return productoRepository.findByActivo(true);
+    }
+
+    @Override
+    public List<Producto> buscarPorCodigoODescripcion(String q) {
+        if (q == null || q.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
+        return productoRepository.buscarPorCodigoODescripcion(q);
     }
 
 }
