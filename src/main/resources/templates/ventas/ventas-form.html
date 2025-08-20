@@ -12,9 +12,20 @@
     <div id="alertas"></div>
     <!-- TODO: todos tus campos e inputs -->
 
+    <!-- Campo para que registre el usuario y pueda imprimirlo en el ticket -->
+    <!-- <input type="hidden" id="usuario" value="Nombre del Cajero"> -->
+
     <header class="app-header">
       <h1><a th:href="@{/}">Stella POS</a> — Nueva Venta</h1>
       <div class="sale-info">
+        <div>
+          <label>Caja: </label>
+          <input disabled value="X">
+        </div>
+        <div>
+          <label>Cajero:</label>
+          <input disabled th:value="${cajero}" id="usuario">
+        </div>
         <div>
           <label>Tipo cliente</label>
           <select id="tipoCliente">
@@ -136,6 +147,9 @@
       </section>
     </main>
   </form>
+
+  <!-- Para que funcionen los reportes -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script th:src="@{/js/ventas-form.js}"></script>
 </body>
 

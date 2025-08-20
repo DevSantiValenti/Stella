@@ -163,8 +163,29 @@ function finalizarVenta(){
     return r.json();
   })
   .then(data=>{
-    // alert(`Venta registrada. N°: ${data.numero} | ID: ${data.id}`);
     mostrarAlerta('Venta registrada. N°: ' + data.numero + ' - ID: ' + data.id, 'success');
+    // Construye el objeto venta con los datos necesarios para el ticket
+    const ventaParaTicket = {
+      fecha: $('fechaVenta').value,
+      numero: data.numero,
+      vuelto: parseFloat(($('vuelto').textContent||'0').replace(',','.')),
+      total: parseFloat(($('total').textContent||'0').replace(',','.')),
+      recibido: parseFloat(($('montoRecibido').value||'0').replace(',','.')),
+      usuario: $('usuario').value || 'Cajero',
+      items: carrito.map(it => ({
+        cantidad: it.cantidad,
+        descripcion: it.descripcion,
+        precioUnitaFrio: it.precio
+      }))
+    };
+    // Datos del supermercado (puedes personalizarlos)
+    const datosSuper = {
+      nombre: "DISTRIBUIDORA STELLA",
+      direccion: "SAN MARTIN 1191",
+      localidad: "QUITILIPI - Chaco",
+      cuit: "20341614584"
+    };
+    imprimirTicket(ventaParaTicket, datosSuper);
     cancelarVenta();
   })
   .catch(err=>{
@@ -313,6 +334,89 @@ function mostrarAlerta(mensaje, tipo = 'success', tiempo = 4000) {
   setTimeout(() => {
     if (wrapper.parentElement) wrapper.remove();
   }, tiempo);
+}
+
+function formatearFecha(fechaIso) {
+  // fechaIso puede ser "2025-08-19T18:59" o similar
+  const d = new Date(fechaIso);
+  const pad = n => n.toString().padStart(2, '0');
+  return `${pad(d.getDate())}-${pad(d.getMonth()+1)}-${pad(d.getFullYear())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+// Para que funcione los reportes
+function imprimirTicket(venta, supermercado) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: [80, 120 + venta.items.length * 8]
+  });
+
+  let y = 8;
+  doc.setFont('courier', 'normal');
+  doc.setFontSize(10);
+
+  // Comercio
+  doc.text(supermercado.nombre, 5, y);
+  y += 5;
+  doc.setFontSize(8);
+  doc.text(supermercado.direccion, 5, y);
+  y += 4;
+  doc.text(supermercado.localidad, 5, y);
+  y += 4;
+  doc.text('Cuit: ' + supermercado.cuit, 5, y);
+  y += 4;
+  doc.text('----------------------------------------', 5, y);
+  y += 4;
+
+  // Fecha y venta
+  doc.text('Fecha: ' + formatearFecha(venta.fecha) , 5, y);
+  y += 4;
+  doc.text('Venta N°: ' + venta.numero, 5, y);
+  y += 4;
+  doc.text('CAJA X : ' + (venta.usuario || 'Cajero'), 5, y);
+  y += 4;
+  doc.text('----------------------------------------', 5, y);
+  y += 4;
+
+  // Encabezado de tabla
+  doc.setFontSize(8);
+  doc.text('Can  Producto', 5, y);
+  doc.text('$Unit', 48, y);
+  doc.text('$Subt', 75, y, { align: 'right' });
+  y += 3;
+  doc.text('----------------------------------------', 5, y);
+  y += 4;
+
+  // Detalle de productos
+  venta.items.forEach(item => {
+    let nombre = item.descripcion.length > 12 ? item.descripcion.substring(0,12) : item.descripcion;
+    doc.text(String(item.cantidad), 5, y);
+    doc.text(nombre, 13, y);
+    doc.text(fmt(item.precioUnitaFrio), 60, y, { align: 'right' });
+    doc.text(fmt(item.cantidad * item.precioUnitaFrio), 75, y, { align: 'right' });
+    y += 4;
+  });
+
+  doc.text('----------------------------------------', 5, y);
+  y += 4;
+
+  // Totales
+  doc.setFontSize(9);
+  doc.text('TOTAL:'.padEnd(18) + '$' + fmt(venta.total), 5, y);
+  y += 5;
+  doc.text('PAGO:'.padEnd(19) + '$' + fmt(venta.recibido), 5, y);
+  y += 5;
+  doc.text('SU VUELTO:'.padEnd(16) + '$' + fmt(venta.vuelto), 5, y);
+  y += 5;
+  doc.text('----------------------------------------', 5, y);
+  y += 5;
+
+  // Mensaje final
+  doc.setFontSize(8);
+  doc.text('¡Gracias por su compra!', 5, y);
+
+  doc.save('ticket.pdf');
 }
 
 

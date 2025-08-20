@@ -43,6 +43,7 @@ public class VentaController {
     public String nuevaVenta(Model model) {
         model.addAttribute("venta", new Venta());
         model.addAttribute("productos", productoService.buscarTodo());
+        model.addAttribute("cajero", usuarioService.buscarPorId(1L));
         return "ventas/ventas-form";
     }
 
@@ -58,6 +59,8 @@ public class VentaController {
         venta.setSubtotalSinIVA(ventaDTO.getSubtotalSinIVA());
         venta.setIvaTotal(ventaDTO.getIvaTotal());
         venta.setTotal(ventaDTO.getTotal());
+        venta.setVuelto(ventaDTO.getVuelto());
+        venta.setRecibido(ventaDTO.getRecibido());
         venta.setUsuario(usuarioService.buscarPorId(1L)); //Cambiar esto para cuando los USUARIOS puedan loguearse
         venta.setFechaVenta(LocalDateTime.parse(
             ventaDTO.getFecha().length() == 16 ? ventaDTO.getFecha() + ":00" : ventaDTO.getFecha(),

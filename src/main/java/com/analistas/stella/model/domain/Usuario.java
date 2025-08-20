@@ -42,4 +42,10 @@ public class Usuario implements Serializable {
         fechaAlta = LocalDate.now();
     }
 
+    @Override
+    public String toString(){
+        return nombrecompleto;
+    }
+    
+
 }
