@@ -2,11 +2,14 @@ package com.analistas.stella.web.controller;
 
 import com.analistas.stella.model.domain.Producto;
 import com.analistas.stella.model.domain.ProductoDTO;
+import com.analistas.stella.model.domain.Usuario;
 import com.analistas.stella.model.domain.Venta;
 import com.analistas.stella.model.service.IProductoService;
 import com.analistas.stella.model.service.IUsuarioService;
 import com.analistas.stella.model.service.IVentaService;
+import com.analistas.stella.config.SecurityUtils;
 import com.analistas.stella.model.domain.DetalleVenta;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -16,11 +19,13 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@PreAuthorize("isAuthenticated()")
 @RequestMapping("/ventas")
 public class VentaController {
 
@@ -43,7 +48,7 @@ public class VentaController {
     public String nuevaVenta(Model model) {
         model.addAttribute("venta", new Venta());
         model.addAttribute("productos", productoService.buscarTodo());
-        model.addAttribute("cajero", usuarioService.buscarPorId(1L));
+        // model.addAttribute("cajero", usuarioService.buscarPorId(3L));
         return "ventas/ventas-form";
     }
 
@@ -51,6 +56,12 @@ public class VentaController {
     @ResponseBody
     public ResponseEntity<?> guardar(@RequestBody com.analistas.stella.model.domain.VentaDTO ventaDTO) {
         Venta venta = new Venta();
+
+
+        String username = SecurityUtils.getCurrentUsername();
+        Usuario usuario = usuarioService.findByNombrecompleto(username);
+        System.out.println("Username from authentication: " + username);
+
         venta.setTipoCliente(ventaDTO.getTipoCliente());
         venta.setDocCliente(ventaDTO.getDocCliente());
         venta.setMetodoPago(ventaDTO.getMetodoPago());
@@ -61,7 +72,8 @@ public class VentaController {
         venta.setTotal(ventaDTO.getTotal());
         venta.setVuelto(ventaDTO.getVuelto());
         venta.setRecibido(ventaDTO.getRecibido());
-        venta.setUsuario(usuarioService.buscarPorId(1L)); //Cambiar esto para cuando los USUARIOS puedan loguearse
+        // venta.setUsuario(usuarioService.buscarPorId(3L));
+        venta.setUsuario(usuario); //Cambiar esto para cuando los USUARIOS puedan loguearse
         venta.setFechaVenta(LocalDateTime.parse(
             ventaDTO.getFecha().length() == 16 ? ventaDTO.getFecha() + ":00" : ventaDTO.getFecha(),
             DateTimeFormatter.ISO_LOCAL_DATE_TIME

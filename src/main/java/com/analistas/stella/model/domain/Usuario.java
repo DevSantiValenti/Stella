@@ -27,7 +27,8 @@ public class Usuario implements Serializable {
 
     @NotEmpty(message = "Ingrese una Contraseña")
     @Size(min = 6, message = "la contraseña debe tener al menos 6 caracteres")
-    private String contraseña;
+    @Column(name = "contrasena")
+    private String contrasena;
 
     @Column(name = "fecha_alta")
     private LocalDate fechaAlta;

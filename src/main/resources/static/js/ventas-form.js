@@ -1,13 +1,13 @@
 // === Estado ===
 let carrito = []; // {codigo, descripcion, cantidad, precio, iva, descPorc}
 const $ = (id) => document.getElementById(id);
-const fmt = (n) => (Number(n||0)).toFixed(2);
+const fmt = (n) => (Number(n || 0)).toFixed(2);
 
 // === Inicialización ===
 window.addEventListener('DOMContentLoaded', () => {
   const now = new Date();
-  $('fechaVenta').value = new Date(now.getTime() - now.getTimezoneOffset()*60000)
-    .toISOString().slice(0,16);
+  $('fechaVenta').value = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+    .toISOString().slice(0, 16);
 
   $('btnAgregar').addEventListener('click', agregarItem);
   $('tablaCarrito').addEventListener('click', onTablaClick);
@@ -37,18 +37,18 @@ function agregarItem() {
   const iva = parseFloat($('iva').value || '21');
   const descPorc = parseFloat($('descItem').value || '0');
 
-  if(!descripcion || precio<=0 || cantidad<=0){
+  if (!descripcion || precio <= 0 || cantidad <= 0) {
     // alert('Completá descripción, precio y cantidad válidos.');
     mostrarAlerta('Completá descripción, precio y cantidad válidos', 'warning');
     return;
   }
 
   // Merge por código + precio + iva + desc (para no fusionar distintos)
-  const idx = carrito.findIndex(i => i.codigo===codigo && i.precio===precio && i.iva===iva && i.descPorc===descPorc);
-  if(idx>=0){
+  const idx = carrito.findIndex(i => i.codigo === codigo && i.precio === precio && i.iva === iva && i.descPorc === descPorc);
+  if (idx >= 0) {
     carrito[idx].cantidad += cantidad;
-  }else{
-    carrito.push({codigo, descripcion, cantidad, precio, iva, descPorc});
+  } else {
+    carrito.push({ codigo, descripcion, cantidad, precio, iva, descPorc });
   }
 
   limpiarInputsItem();
@@ -56,28 +56,28 @@ function agregarItem() {
   recalcular();
 }
 
-function limpiarInputsItem(){
-  $('codigo').value=''; $('descripcion').value=''; $('cantidad').value='1';
-  $('precio').value=''; $('descItem').value='0'; $('iva').value='21';
+function limpiarInputsItem() {
+  $('codigo').value = ''; $('descripcion').value = ''; $('cantidad').value = '1';
+  $('precio').value = ''; $('descItem').value = '0'; $('iva').value = '21';
   $('codigo').focus();
 }
 
-function onTablaClick(e){
-  if(e.target.classList.contains('rm')){
-    const i = parseInt(e.target.dataset.i,10);
-    carrito.splice(i,1);
+function onTablaClick(e) {
+  if (e.target.classList.contains('rm')) {
+    const i = parseInt(e.target.dataset.i, 10);
+    carrito.splice(i, 1);
     renderTabla(); recalcular();
   }
 }
 
-function renderTabla(){
+function renderTabla() {
   const tbody = $('tablaCarrito').querySelector('tbody');
   tbody.innerHTML = '';
-  carrito.forEach((it, i)=>{
+  carrito.forEach((it, i) => {
     const base = it.cantidad * it.precio;
-    const desc = base * (it.descPorc/100);
+    const desc = base * (it.descPorc / 100);
     const neto = base - desc;
-    const ivaMonto = neto * (it.iva/100);
+    const ivaMonto = neto * (it.iva / 100);
     const subtotal = neto + ivaMonto;
 
     const tr = document.createElement('tr');
@@ -95,22 +95,22 @@ function renderTabla(){
   });
 }
 
-function recalcular(){
+function recalcular() {
   let subSinIVA = 0, totalIVA = 0, total = 0, totalDescItems = 0;
 
-  carrito.forEach(it=>{
+  carrito.forEach(it => {
     const base = it.cantidad * it.precio;
-    const desc = base * (it.descPorc/100);
+    const desc = base * (it.descPorc / 100);
     const neto = base - desc;
-    const ivaMonto = neto * (it.iva/100);
+    const ivaMonto = neto * (it.iva / 100);
 
     subSinIVA += neto;
     totalIVA += ivaMonto;
     totalDescItems += desc;
   });
 
-  const descGlobalPorc = parseFloat($('descGlobal').value||'0');
-  const descGlobalMonto = (subSinIVA + totalIVA) * (descGlobalPorc/100);
+  const descGlobalPorc = parseFloat($('descGlobal').value || '0');
+  const descGlobalMonto = (subSinIVA + totalIVA) * (descGlobalPorc / 100);
   const totalFinal = subSinIVA + totalIVA - descGlobalMonto;
 
   $('subTotal').textContent = fmt(subSinIVA);
@@ -121,27 +121,27 @@ function recalcular(){
   calcVuelto();
 }
 
-function calcVuelto(){
-  const recibido = parseFloat($('montoRecibido').value||'0');
-  const total = parseFloat(($('total').textContent||'0').replace(',','.'));
+function calcVuelto() {
+  const recibido = parseFloat($('montoRecibido').value || '0');
+  const total = parseFloat(($('total').textContent || '0').replace(',', '.'));
   const v = Math.max(0, recibido - total);
   $('vuelto').textContent = fmt(v);
 }
 
-function cancelarVenta(){
-  if(!confirm('¿Cancelar la venta actual?')) return;
+function cancelarVenta() {
+  if (!confirm('¿Cancelar la venta actual?')) return;
   carrito = [];
   renderTabla(); recalcular();
-  $('observaciones').value=''; $('montoRecibido').value='';
+  $('observaciones').value = ''; $('montoRecibido').value = '';
 }
 
-function holdVenta(){
-  if(carrito.length===0){ mostrarAlerta('No hay items para poner en espera', 'warning');; return; }
+function holdVenta() {
+  if (carrito.length === 0) { mostrarAlerta('No hay items para poner en espera', 'warning');; return; }
   const snapshot = {
     fecha: $('fechaVenta').value,
     tipoCliente: $('tipoCliente').value,
     docCliente: $('docCliente').value,
-    descGlobal: parseFloat($('descGlobal').value||'0'),
+    descGlobal: parseFloat($('descGlobal').value || '0'),
     observaciones: $('observaciones').value,
     carrito
   };
@@ -149,67 +149,110 @@ function holdVenta(){
   mostrarAlerta('Venta guardada en espera.', 'info');;
 }
 
-function finalizarVenta(){
-  if(carrito.length===0){ mostrarAlerta('Agregá al menos un ítem.', 'warning');; return; }
+function finalizarVenta() {
+  if (carrito.length === 0) { mostrarAlerta('Agregá al menos un ítem.', 'warning');; return; }
+  // ✅ VALIDAR MONTO RECIBIDO
+  const montoRecibido = parseFloat($('montoRecibido').value || '0');
+  const total = parseFloat(($('total').textContent || '0').replace(',', '.'));
 
+  if (montoRecibido <= 0) {
+    mostrarAlerta('Ingrese el monto recibido.', 'warning');
+    $('montoRecibido').focus();
+    return;
+  }
+  // Por si ingresa un monto menor a el total de la venta
+  if (montoRecibido < total) {
+    const confirmar = confirm(`El monto recibido ($${fmt(montoRecibido)}) es menor al total ($${fmt(total)}). ¿Desea continuar igual?`);
+    if (!confirmar) {
+      $('montoRecibido').focus();
+      return;
+    }
+  }
+
+  // Confirmación de envío
+  if (!confirm('¿Desea finalizar la venta?')) return;
   const payload = buildPayload();
+  // console.log("Enviando payload:", payload); // DEBUG
+
+  // Obtener token CSRF
+  const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+  const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+
   fetch('/ventas/guardar', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', [csrfHeader]: csrfToken },
     body: JSON.stringify(payload)
   })
-  .then(r => {
-    if(!r.ok) throw new Error('Error al guardar la venta');
-    return r.json();
-  })
-  .then(data=>{
-    mostrarAlerta('Venta registrada. N°: ' + data.numero + ' - ID: ' + data.id, 'success');
-    // Construye el objeto venta con los datos necesarios para el ticket
-    const ventaParaTicket = {
-      fecha: $('fechaVenta').value,
-      numero: data.numero,
-      vuelto: parseFloat(($('vuelto').textContent||'0').replace(',','.')),
-      total: parseFloat(($('total').textContent||'0').replace(',','.')),
-      recibido: parseFloat(($('montoRecibido').value||'0').replace(',','.')),
-      usuario: $('usuario').value || 'Cajero',
-      items: carrito.map(it => ({
-        cantidad: it.cantidad,
-        descripcion: it.descripcion,
-        precioUnitaFrio: it.precio
-      }))
-    };
-    // Datos del supermercado (puedes personalizarlos)
-    const datosSuper = {
-      nombre: "DISTRIBUIDORA STELLA",
-      direccion: "SAN MARTIN 1191",
-      localidad: "QUITILIPI - Chaco",
-      cuit: "20341614584"
-    };
-    imprimirTicket(ventaParaTicket, datosSuper);
-    cancelarVenta();
-  })
-  .catch(err=>{
-    console.error(err);
-    mostrarAlerta('No se pudo registrar la venta.', 'danger');
-  });
+    .then(r => {
+      // if(!r.ok){
+      //   return r.text().then(text => {
+      //     console.error("Error response text:", text);
+      //     throw new Error(`Error ${r.status}: ${r.statusText} - ${text}`);
+      //   });
+      // }
+      // return r.json();
+
+      if (!r.ok) throw new Error('Error al guardar la venta');
+      return r.json();
+    })
+    .then(data => {
+      mostrarAlerta('Venta registrada. N°: ' + data.numero + ' - ID: ' + data.id, 'success');
+      // Construye el objeto venta con los datos necesarios para el ticket
+      const ventaParaTicket = {
+        fecha: $('fechaVenta').value,
+        numero: data.numero,
+        vuelto: parseFloat(($('vuelto').textContent || '0').replace(',', '.')),
+        total: parseFloat(($('total').textContent || '0').replace(',', '.')),
+        recibido: parseFloat(($('montoRecibido').value || '0').replace(',', '.')),
+        usuario: $('nombreCajero').value || 'Cajero',
+        items: carrito.map(it => ({
+          cantidad: it.cantidad,
+          descripcion: it.descripcion,
+          precioUnitaFrio: it.precio
+        }))
+      };
+      // Datos del supermercado (puedes personalizarlos)
+      const datosSuper = {
+        nombre: "DISTRIBUIDORA STELLA",
+        direccion: "SAN MARTIN 1191",
+        localidad: "QUITILIPI - Chaco",
+        cuit: "20341614584"
+      };
+      imprimirTicket(ventaParaTicket, datosSuper);
+      // cancelarVenta();
+      carrito = [];
+      renderTabla(); recalcular();
+      $('observaciones').value = ''; $('montoRecibido').value = '';
+      $('codigo').focus();
+    })
+    .catch(err => {
+      console.error(err);
+      mostrarAlerta('No se pudo registrar la venta.', 'danger');
+      mostrarAlerta("Error: " + err.message, 'danger');
+    });
+
+  // carrito = [];
+  // renderTabla(); recalcular();
+  // $('observaciones').value=''; $('montoRecibido').value='';
+  // $('codigo').focus();
 }
 
-function buildPayload(){
-  const total = parseFloat(($('total').textContent||'0').replace(',','.'));
-  const recibido = parseFloat($('montoRecibido').value||'0');
-  const descGlobalPorc = parseFloat($('descGlobal').value||'0');
+function buildPayload() {
+  const total = parseFloat(($('total').textContent || '0').replace(',', '.'));
+  const recibido = parseFloat($('montoRecibido').value || '0');
+  const descGlobalPorc = parseFloat($('descGlobal').value || '0');
 
   // Descomponer totales
   let subSinIVA = 0, ivaTotal = 0;
-  carrito.forEach(it=>{
-    const base = it.cantidad*it.precio;
-    const desc = base*(it.descPorc/100);
+  carrito.forEach(it => {
+    const base = it.cantidad * it.precio;
+    const desc = base * (it.descPorc / 100);
     const neto = base - desc;
-    const ivaMonto = neto*(it.iva/100);
+    const ivaMonto = neto * (it.iva / 100);
     subSinIVA += neto;
     ivaTotal += ivaMonto;
   });
-  const descGlobalMonto = (subSinIVA+ivaTotal)*(descGlobalPorc/100);
+  const descGlobalMonto = (subSinIVA + ivaTotal) * (descGlobalPorc / 100);
 
   return {
     fecha: $('fechaVenta').value,
@@ -222,7 +265,7 @@ function buildPayload(){
     ivaTotal: Number(ivaTotal.toFixed(2)),
     total: Number(total.toFixed(2)),
     recibido: Number(recibido.toFixed(2)),
-    vuelto: Number(Math.max(0, recibido-total).toFixed(2)),
+    vuelto: Number(Math.max(0, recibido - total).toFixed(2)),
     observaciones: $('observaciones').value || null,
     items: carrito.map(it => ({
       codigo: it.codigo || null,
@@ -236,7 +279,7 @@ function buildPayload(){
 }
 
 // === Autocompletado de productos ===
-(function(){
+(function () {
   const input = $('codigo');
   const sugerencias = $('sugerencias');
   let productosEncontrados = [];
@@ -266,7 +309,7 @@ function buildPayload(){
     }
 
     sugerencias.innerHTML = productosEncontrados.map((p, i) =>
-      `<div class="sug${i===selectedIdx?' active':''}" data-i="${i}">${p.codigo || ''} - ${p.nombre} <span class="precio">$${fmt(p.precioMin)}</span></div>`
+      `<div class="sug${i === selectedIdx ? ' active' : ''}" data-i="${i}">${p.codigo || ''} - ${p.nombre} <span class="precio">$${fmt(p.precioMin)}</span></div>`
     ).join('');
     selectedIdx = -1;
   });
@@ -304,7 +347,7 @@ function buildPayload(){
 
   function renderSugs() {
     sugerencias.innerHTML = productosEncontrados.map((p, i) =>
-      `<div class="sug${i===selectedIdx?' active':''}" data-i="${i}">${p.codigo || ''} - ${p.nombre} <span class="precio">$${fmt(p.precioMin)}</span></div>`
+      `<div class="sug${i === selectedIdx ? ' active' : ''}" data-i="${i}">${p.codigo || ''} - ${p.nombre} <span class="precio">$${fmt(p.precioMin)}</span></div>`
     ).join('');
   }
 
@@ -340,7 +383,7 @@ function formatearFecha(fechaIso) {
   // fechaIso puede ser "2025-08-19T18:59" o similar
   const d = new Date(fechaIso);
   const pad = n => n.toString().padStart(2, '0');
-  return `${pad(d.getDate())}-${pad(d.getMonth()+1)}-${pad(d.getFullYear())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  return `${pad(d.getDate())}-${pad(d.getMonth() + 1)}-${pad(d.getFullYear())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
 // Para que funcione los reportes
@@ -370,7 +413,7 @@ function imprimirTicket(venta, supermercado) {
   y += 4;
 
   // Fecha y venta
-  doc.text('Fecha: ' + formatearFecha(venta.fecha) , 5, y);
+  doc.text('Fecha: ' + formatearFecha(venta.fecha), 5, y);
   y += 4;
   doc.text('Venta N°: ' + venta.numero, 5, y);
   y += 4;
@@ -390,7 +433,7 @@ function imprimirTicket(venta, supermercado) {
 
   // Detalle de productos
   venta.items.forEach(item => {
-    let nombre = item.descripcion.length > 12 ? item.descripcion.substring(0,12) : item.descripcion;
+    let nombre = item.descripcion.length > 12 ? item.descripcion.substring(0, 12) : item.descripcion;
     doc.text(String(item.cantidad), 5, y);
     doc.text(nombre, 13, y);
     doc.text(fmt(item.precioUnitaFrio), 60, y, { align: 'right' });

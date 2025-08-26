@@ -5,6 +5,8 @@
   <meta charset="UTF-8" />
   <title>Venta - Stella POS</title>
   <link rel="stylesheet" href="/css/ventas-form.css" />
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 
 <body>
@@ -24,7 +26,9 @@
         </div>
         <div>
           <label>Cajero:</label>
-          <input disabled th:value="${cajero}" id="usuario">
+          <input disabled th:value="${nombreUsuario}" id="usuario">
+          <input type="hidden" id="nombreCajero" th:value="${nombreUsuario}">
+          <!-- <p th:value="${nombreUsuario}" id="usuario"></p> -->
         </div>
         <div>
           <label>Tipo cliente</label>
@@ -132,7 +136,8 @@
               <option value="CTA_CORRIENTE">Cuenta corriente</option>
             </select>
             <label>Recibido</label>
-            <input type="number" id="montoRecibido" min="0" step="0.01" />
+            <input type="number" class="form-control" required id="montoRecibido" min="0" step="0.01" />
+
             <div class="line">
               <span>Vuelto</span><strong id="vuelto">0.00</strong>
             </div>

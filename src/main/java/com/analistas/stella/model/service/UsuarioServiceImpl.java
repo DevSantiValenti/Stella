@@ -39,5 +39,10 @@ public class UsuarioServiceImpl implements IUsuarioService {
         usuarioRepository.deleteById(id);;
     }
 
+    @Override
+    public Usuario findByNombrecompleto(String nombreCompleto) {
+        return usuarioRepository.findByNombrecompleto(nombreCompleto);
+    }
+
     
 }

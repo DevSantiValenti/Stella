@@ -1,21 +1,306 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html lang="es-AR" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="~{layout-dashboard}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${titulo}"></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .container {
             margin-left: 20px;
+        }
+
+        /* Contenedor centrado */
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+        }
+
+        /* Canvas responsive */
+        canvas {
+            max-width: 800px;
+            max-height: 500px;
+            width: 100%;
+            height: auto;
+        }
+
+        /* Cards KPIs */
+        .card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
 
 <body>
     <div class="container" layout:fragment="dashboard">
-        
+
+        <!-- KPIs principales -->
+        <h1 class="text-center text-decoration-underline text-bg-light rounded-3 p-2">Ventas en General</h1>
+        <div class="row text-center mb-4 mt-3">
+            <div class="col-md-3">
+                <div class="card shadow-sm border-success">
+                    <div class="card-body">
+                        <h5 class="card-title text-success">Ticket Promedio:</h5>
+                        <!-- <p class="card-text fs-4" th:text="'$' + ${averTicket}"></p> -->
+                        <p class="card-text fs-4" th:text="'$' + ${#numbers.formatDecimal(averTicket, 1, 2)}"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm border-info">
+                    <div class="card-body">
+                        <h5 class="card-title text-info">Total Ventas:</h5>
+                        <p class="card-text fs-5" th:text="${totalVentas}"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm border-warning">
+                    <div class="card-body">
+                        <h5 class="card-title text-warning">Categoría Top:</h5>
+                        <p class="card-text fs-5" th:text="${categoriaTop}"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm border-danger">
+                    <div class="card-body">
+                        <h5 class="card-title text-danger">Ganancia Neta:</h5>
+                        <p class="card-text fs-4" th:text="'$' + ${#numbers.formatDecimal(ganNeta, 1, 2)}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h1 class="text-center text-decoration-underline text-bg-light rounded-3 p-2">Ventas del Día</h1>
+        <div class="row text-center mb-4 mt-3">
+            <div class="col-md-4">
+                <div class="card shadow-sm border-success">
+                    <div class="card-body">
+                        <h5 class="card-title text-success">Ticket Promedio hoy:</h5>
+                        <p class="card-text fs-4" th:text="'$' + ${#numbers.formatDecimal(ticketPromedioHoy, 1, 2)}">
+                        </p>
+                        <!-- <p th:text="${#numbers.formatDecimal(averTicket, 1, 2)}"></p> -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm border-info">
+                    <div class="card-body">
+                        <h5 class="card-title text-info">Ventas hoy:</h5>
+                        <p class="card-text fs-5" th:text="${ventasHoy}"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm border-danger">
+                    <div class="card-body">
+                        <h5 class="card-title text-danger">Ganancia Neta hoy:</h5>
+                        <p class="card-text fs-4" th:text="'$' + ${#numbers.formatDecimal(totalHoy,1,2)}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <h2 class="text-center text-bg-light rounded-3 p-1">Estadísticas de Ventas
+                </h2>
+                <div class="chart-container">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+            <div class="col">
+                <h2 class="text-center  text-bg-light rounded-3 p-1">Tendencia de Ventas</h2>
+                <div class="chart-container">
+                    <canvas id="ventasXDia"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h2 class="text-center text-bg-light rounded-3 p-1 section-title">Ventas vs Gastos</h2>
+                <div class="chart-container">
+                    <canvas id="compareChart"></canvas>
+                </div>
+            </div>
+            <div class="col">
+                <h2 class="text-center text-bg-light rounded-3 p-1 section-title">Estadísticas de Ganancias
+                </h2>
+                <div class="chart-container">
+                    <canvas id="earnStats"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <!-- Cantidad en $ de ventas por meses -->
+        <div id="ventasData" th:data-ventas="${ventasMeses}"></div>
+
+        <!-- Cantiada en numero de ventas por mes -->
+        <div id="ventasxMes" th:data-ventas="${nVentasMes}"></div>
+        <script>
+            // === Ventas por mes ===
+            // Lo recuperas en JS
+            const ventasData = document.getElementById("ventasData").dataset.ventas;
+            const ventas = JSON.parse(ventasData); // ahora es un array JS
+
+            const chart = document.getElementById('myChart');
+            new Chart(chart, {
+                type: 'bar',
+                data: {
+                    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                    datasets: [{
+                        label: 'Ventas',
+                        data: ventas,
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgb(54, 162, 235)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Ventas Mensuales (2025)',
+                            font: { size: 18, weight: 'bold' }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return '$' + context.formattedValue;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value) {
+                                    return '$' + value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // === Tendencia de Ventas ===
+            const ventasXMes = document.getElementById("ventasxMes").dataset.ventas;
+            const ventasMes = JSON.parse(ventasXMes);
+
+            const vent = document.getElementById('ventasXDia');
+            new Chart(vent, {
+                type: 'line',
+                data: {
+                    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                    datasets: [{
+                        label: 'Ventas',
+                        data: ventasMes,
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Tendencia de Ventas (2025)',
+                            font: { size: 18, weight: 'bold' }
+                        }
+                    }
+                }
+            });
+
+            // === Comparativa Ventas vs Gastos ===
+            const comp = document.getElementById('compareChart');
+            new Chart(comp, {
+                type: 'bar',
+                data: {
+                    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'],
+                    datasets: [
+                        {
+                            label: 'Ventas',
+                            data: [1200, 1500, 1800, 1300, 2000, 2500],
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                            borderColor: 'rgb(54, 162, 235)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Gastos',
+                            data: [800, 1000, 1200, 1100, 1400, 1600],
+                            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Comparativa Ventas vs Gastos',
+                            font: { size: 18, weight: 'bold' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value) {
+                                    return '$' + value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // === Ganancias (Pie) ===
+            const earn = document.getElementById('earnStats');
+            new Chart(earn, {
+                type: 'pie',
+                data: {
+                    labels: ['Suplementos', 'Bebidas', 'Snacks'],
+                    datasets: [{
+                        label: 'Distribución de Ganancias',
+                        data: [5000, 2500, 1250],
+                        backgroundColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(54, 162, 235)',
+                            'rgb(255, 205, 86)'
+                        ],
+                        hoverOffset: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Ganancias por Categoría',
+                            font: { size: 18, weight: 'bold' }
+                        }
+                    }
+                }
+            });
+        </script>
     </div>
 
     <!-- Mis JS -->

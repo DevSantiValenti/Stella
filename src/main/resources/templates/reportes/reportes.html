@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout-dashboard}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo}"></title>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+
+    <style>
+        body {
+            background: #f7f8fb;
+        }
+
+        .section-title {
+            margin: 24px 0 12px;
+        }
+
+        .kpi-card {
+            transition: transform .15s ease, box-shadow .15s;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
+        }
+
+        .chart-container {
+            position: relative;
+            margin: 16px auto;
+            max-width: 900px;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: auto !important;
+        }
+
+        .table thead th {
+            background: #f1f3f8;
+        }
+
+        .btn-ghost {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+        }
+
+        .container {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div layout:fragment="dashboard"> <!--Toda la información va adentro de este div, no afuera -->
+
+        <div class="container py-4">
+
+            <!-- Filtros -->
+            <!-- <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-3">
+                            <label class="form-label">Desde</label>
+                            <input id="desde" type="date" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Hasta</label>
+                            <input id="hasta" type="date" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Sucursal</label>
+                            <select id="sucursal" class="form-select">
+                                <option value="todas">Todas</option>
+                                <option value="central">Central</option>
+                                <option value="barrio">Barrio</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 d-flex gap-2">
+                            <button id="btnAplicar" class="btn btn-primary w-100">Aplicar</button>
+                            <button id="btnHoy" class="btn btn-outline-secondary w-100">Hoy</button>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- KPIs -->
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="card kpi-card border-0 shadow-sm">
+                        <div class="card-body border border-primary">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="text-muted small">Total vendido</div>
+                                    <div class="fs-3 fw-bold" th:text="'$' + ${#numbers.formatDecimal(ganNeta, 1, 2)}"></div>
+                                </div>
+                                <!-- <span class="badge text-bg-success">+5.3%</span> -->
+                            </div>
+                            <div class="text-muted small mt-2">vs período anterior</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card kpi-card border-0 shadow-sm">
+                        <div class="card-body border border-primary">
+                            <div class="text-muted small">Tickets</div>
+                            <div class="fs-3 fw-bold" th:text="${totalVentas}"></div>
+                            <div class="text-muted small mt-2">Cantidad de ventas</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card kpi-card border-1 shadow-sm">
+                        <div class="card-body border border-primary">
+                            <div class="text-muted small">Ticket promedio</div>
+                            <div class="fs-3 fw-bold" th:text="'$' + ${#numbers.formatDecimal(averTicket, 1, 2)}"></div>
+                            <div class="text-muted small mt-2">Total / Tickets</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráficos fila 1 -->
+            <h5 class="section-title">Ventas</h5>
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fw-semibold">Ventas diarias</span>
+                                <button id="dlVentas" class="btn btn-sm btn-ghost">Descargar PNG</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="ventasDiarias"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fw-semibold">Método de pago</span>
+                                <button id="dlPago" class="btn btn-sm btn-ghost">Descargar PNG</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container" style="max-width: 380px;">
+                                <canvas id="metodoPago"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráficos fila 2 -->
+            <h5 class="section-title">Rendimiento de productos</h5>
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <span class="fw-semibold">Top 10 productos (unidades)</span>
+                            <button id="dlTopProd" class="btn btn-sm btn-ghost">Descargar PNG</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="topProductos"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <span class="fw-semibold">Top categorías (importe)</span>
+                            <button id="dlCategorias" class="btn btn-sm btn-ghost">Descargar PNG</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="topCategorias"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tablas -->
+            <h5 class="section-title">Tablas</h5>
+            <div class="row g-4">
+                <div class="col-lg-7">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <span class="fw-semibold">Productos más vendidos</span>
+                            <button id="csvTop" class="btn btn-sm btn-ghost">Exportar CSV</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="tblTop" class="table table-hover align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Producto</th>
+                                            <th>Unidades</th>
+                                            <th>Importe</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody><!-- se llena por JS --></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <span class="fw-semibold">Stock crítico</span>
+                            <button id="csvStock" class="btn btn-sm btn-ghost">Exportar CSV</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="tblStock" class="table table-hover align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Stock</th>
+                                            <th>Mínimo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody><!-- se llena por JS --></tbody>
+                                </table>
+                            </div>
+                            <small class="text-muted">*Datos demo: reemplazar con tu consulta de inventario.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center text-muted small mt-4">Reporte demo · reemplaza los arrays por tus endpoints</div>
+        </div>
+
+
+
+        <!-- Ventas por dia en un rango de 10 dias -->
+        <!-- <div id="ventasDiariasData" th:data-labels="${labels}" th:data-data="${data}"></div> -->
+        <div id="ventasDiariasData" th:attr="data-labels=${labels}, data-data=${data}"></div>
+
+
+        <script>
+            // ======== Helpers ========
+            const $ = s => document.querySelector(s);
+            const fmt = (n) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(n);
+            const downloadPNG = (chart, filename) => {
+                const link = document.createElement('a');
+                link.href = chart.toBase64Image();
+                link.download = filename;
+                link.click();
+            };
+            const csvFromRows = (rows) => rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+            const exportTableCSV = (table, filename) => {
+                const rows = [...table.querySelectorAll('tr')].map(tr => [...tr.children].map(td => td.innerText));
+                const blob = new Blob([csvFromRows(rows)], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = filename;
+                link.click();
+            };
+
+            // ======== Datos DEMO (reemplazar) ========
+            // Supón que estos llegan desde tu backend según el rango de fechas
+            // const demo = {
+            //     ventasDiarias: [
+            //         { fecha: '2025-08-01', total: 185000, tickets: 120 },
+            //         { fecha: '2025-08-02', total: 210000, tickets: 138 },
+            //         { fecha: '2025-08-03', total: 165000, tickets: 101 },
+            //         { fecha: '2025-08-04', total: 224000, tickets: 150 },
+            //         { fecha: '2025-08-05', total: 260000, tickets: 167 },
+            //         { fecha: '2025-08-06', total: 199000, tickets: 132 },
+            //         { fecha: '2025-08-07', total: 275000, tickets: 172 },
+            //     ],
+            //     metodoPago: [
+            //         { metodo: 'Efectivo', total: 620000 },
+            //         { metodo: 'Débito', total: 355000 },
+            //         { metodo: 'Crédito', total: 280000 },
+            //         { metodo: 'QR/Billetera', total: 215000 },
+            //     ],
+            //     topProductos: [
+            //         { nombre: 'Leche x1L', unidades: 420, importe: 252000 },
+            //         { nombre: 'Pan Lactal', unidades: 380, importe: 228000 },
+            //         { nombre: 'Gaseosa 2.25L', unidades: 350, importe: 315000 },
+            //         { nombre: 'Fideos x500g', unidades: 310, importe: 124000 },
+            //         { nombre: 'Aceite 900ml', unidades: 290, importe: 232000 },
+            //         { nombre: 'Yerba 1Kg', unidades: 270, importe: 432000 },
+            //         { nombre: 'Detergente 750ml', unidades: 245, importe: 122500 },
+            //         { nombre: 'Arroz 1Kg', unidades: 230, importe: 92000 },
+            //         { nombre: 'Azúcar 1Kg', unidades: 220, importe: 88000 },
+            //         { nombre: 'Galletitas 3x', unidades: 210, importe: 147000 },
+            //     ],
+            //     categorias: [
+            //         { categoria: 'Bebidas', importe: 540000 },
+            //         { categoria: 'Almacén', importe: 480000 },
+            //         { categoria: 'Limpieza', importe: 260000 },
+            //         { categoria: 'Lácteos', importe: 300000 },
+            //         { categoria: 'Frescos', importe: 210000 }
+            //     ],
+            //     stockCritico: [
+            //         { producto: 'Harina 1Kg', stock: 8, minimo: 20 },
+            //         { producto: 'Lavandina 1L', stock: 5, minimo: 15 },
+            //         { producto: 'Yerba 1Kg', stock: 9, minimo: 25 },
+            //         { producto: 'Mermelada 454g', stock: 12, minimo: 30 },
+            //     ]
+            // };
+
+            // ======== Poblar KPIs ========
+            // function refrescarKPIs() {
+                // const total = demo.ventasDiarias.reduce((a, b) => a + b.total, 0);
+                // const tickets = demo.ventasDiarias.reduce((a, b) => a + b.tickets, 0);
+                // const promedio = tickets ? total / tickets : 0;
+                // $('#kpiTotal').textContent = fmt(total);
+                // $('#kpiTickets').textContent = tickets;
+                // $('#kpiPromedio').textContent = fmt(promedio);
+            // }
+
+            // ======== Gráficos ========
+            let chartPago, chartTopProd, chartCats;
+
+            function renderCharts() {
+                const ventasDiv = document.getElementById("ventasDiariasData");
+                const labels = JSON.parse(ventasDiv.dataset.labels);
+                const data = JSON.parse(ventasDiv.dataset.data);
+
+                const chartVentas = document.getElementById('ventasDiarias');
+                // chartVentas?.destroy()
+                new Chart(chartVentas, {
+                    type: 'line',
+                    data: {
+                        labels: labels.map(f => new Date(f).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit' })),
+                        datasets: [{
+                            label: 'Total vendido',
+                            data: data,
+                            fill: true,
+                            borderWidth: 2,
+                            tension: .3,
+                            backgroundColor: 'rgba(54,162,235,.15)',
+                            borderColor: 'rgb(54,162,235)',
+                            pointRadius: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            tooltip: { callbacks: { label: ctx => `$${ctx.parsed.y.toFixed(2)}` } },
+                            legend: { display: false },
+                            title: { display: true, text: 'Ventas diarias ($)' }
+                        },
+                        scales: {
+                            y: { ticks: { callback: v => `$${v}` } }
+                        }
+                    }
+                });
+
+                // Método de pago (doughnut)
+                // chartPago?.destroy();
+                // chartPago = new Chart($('#metodoPago'), {
+                //     type: 'doughnut',
+                //     data: {
+                //         labels: demo.metodoPago.map(m => m.metodo),
+                //         datasets: [{ data: demo.metodoPago.map(m => m.total) }]
+                //     },
+                //     options: {
+                //         plugins: {
+                //             tooltip: { callbacks: { label: ctx => `${ctx.label}: ${fmt(ctx.parsed)}` } },
+                //             title: { display: true, text: 'Distribución por método de pago' }
+                //         },
+                //         cutout: '60%'
+                //     }
+                // });
+
+                // Top productos (barra horizontal)
+                // chartTopProd?.destroy();
+                // chartTopProd = new Chart($('#topProductos'), {
+                //     type: 'bar',
+                //     data: {
+                //         labels: demo.topProductos.map(p => p.nombre),
+                //         datasets: [{
+                //             label: 'Unidades',
+                //             data: demo.topProductos.map(p => p.unidades),
+                //             borderWidth: 1
+                //         }]
+                //     },
+                //     options: {
+                //         indexAxis: 'y',
+                //         plugins: {
+                //             legend: { display: false },
+                //             title: { display: true, text: 'Top 10 productos por unidades' },
+                //             tooltip: { callbacks: { label: ctx => `${ctx.parsed.x} u.` } }
+                //         }
+                //     }
+                // });
+
+                // Categorías (barra)
+                // chartCats?.destroy();
+                // chartCats = new Chart($('#topCategorias'), {
+                //     type: 'bar',
+                //     data: {
+                //         labels: demo.categorias.map(c => c.categoria),
+                //         datasets: [{
+                //             label: 'Importe',
+                //             data: demo.categorias.map(c => c.importe),
+                //             borderWidth: 1
+                //         }]
+                //     },
+                //     options: {
+                //         plugins: {
+                //             title: { display: true, text: 'Importe por categoría' },
+                //             tooltip: { callbacks: { label: ctx => fmt(ctx.parsed.y) } }
+                //         },
+                //         scales: { y: { ticks: { callback: v => fmt(v) } } }
+                //     }
+                // });
+            }
+
+            // ======== Tablas ========
+            // function renderTablas() {
+            // Top vendidos
+            //         const tbTop = $('#tblTop tbody');
+            //         tbTop.innerHTML = '';
+            //         demo.topProductos.forEach((p, i) => {
+            //             const tr = document.createElement('tr');
+            //             tr.innerHTML = `
+            //   <td>${i + 1}</td>
+            //   <td>${p.nombre}</td>
+            //   <td>${p.unidades}</td>
+            //   <td>${fmt(p.importe)}</td>`;
+            //             tbTop.appendChild(tr);
+            //         });
+
+            // Stock crítico
+            //         const tbSt = $('#tblStock tbody');
+            //         tbSt.innerHTML = '';
+            //         demo.stockCritico.forEach(s => {
+            //             const tr = document.createElement('tr');
+            //             tr.innerHTML = `
+            //   <td>${s.producto}</td>
+            //   <td><span class="badge text-bg-danger">${s.stock}</span></td>
+            //   <td>${s.minimo}</td>`;
+            //             tbSt.appendChild(tr);
+            //         });
+            //     }
+
+            // ======== Acciones UI ========
+            // $('#btnHoy').addEventListener('click', () => {
+            //     const d = new Date();
+            //     const yyyy = d.getFullYear();
+            //     const mm = String(d.getMonth() + 1).padStart(2, '0');
+            //     const dd = String(d.getDate()).padStart(2, '0');
+            //     $('#desde').value = `${yyyy}-${mm}-${dd}`;
+            //     $('#hasta').value = `${yyyy}-${mm}-${dd}`;
+            // });
+
+            // En tu integración real, acá llamás a tu backend con los filtros y
+            // refrescás los arrays `demo.*` con la respuesta:
+            // $('#btnAplicar').addEventListener('click', () => {
+                // fetch('/reportes?desde=...&hasta=...').then(r=>r.json()).then(updateDemo);
+                // Por ahora, solo re-renderizamos:
+                // refrescarKPIs();
+                // renderCharts();
+                // renderTablas();
+            // });
+
+            // Descargar PNG de los gráficos
+            $('#dlVentas').addEventListener('click', () => downloadPNG(chartVentas, 'ventas-diarias.png'));
+            $('#dlPago').addEventListener('click', () => downloadPNG(chartPago, 'metodo-pago.png'));
+            $('#dlTopProd').addEventListener('click', () => downloadPNG(chartTopProd, 'top-productos.png'));
+            $('#dlCategorias').addEventListener('click', () => downloadPNG(chartCats, 'categorias.png'));
+
+            // Exportar CSV de tablas
+            $('#csvTop').addEventListener('click', () => exportTableCSV($('#tblTop'), 'top_productos.csv'));
+            $('#csvStock').addEventListener('click', () => exportTableCSV($('#tblStock'), 'stock_critico.csv'));
+
+            // Init
+            (function init() {
+                // set rango por defecto a la semana del demo
+                // $('#desde').value = '2025-08-01';
+                // $('#hasta').value = '2025-08-07';
+                // refrescarKPIs();
+                renderCharts();
+                renderTablas();
+            })();
+        </script>
+
+
+    </div>
+
+    <!-- Mis JS -->
+    <script th:fragment="js"></script>
+</body>
+
+</html>

@@ -2,6 +2,7 @@ package com.analistas.stella.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +22,14 @@ import jakarta.validation.Valid;
 public class UsuarioController {
 
     @Autowired
+    BCryptPasswordEncoder passwordEncoder;
+    @Autowired
     IUsuarioService usuarioService;
 
     @Autowired
     IRolService rolService;
+
+    
 
     @GetMapping("/nuevo")
     public String crearFormulario(Model model) {
@@ -50,6 +55,8 @@ public class UsuarioController {
 
         flash.addFlashAttribute((usuario.getId() == null || usuario.getId() == 0) ? "success" : "warning", mensaje);
 
+        //Encriptar la contraseña:
+        usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
 
         usuarioService.guardar(usuario);
         status.setComplete(); // Lo que hace es limpiar la variable "usuario" definida en el SessionStatus de
