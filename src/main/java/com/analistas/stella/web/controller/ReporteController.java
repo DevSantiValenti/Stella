@@ -6,12 +6,19 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.analistas.stella.model.domain.MetodoPagoDTO;
+import com.analistas.stella.model.domain.Producto;
+import com.analistas.stella.model.domain.TopProductoDTO;
 import com.analistas.stella.model.domain.Venta;
+import com.analistas.stella.model.repository.IDetalleVentaRepository;
 import com.analistas.stella.model.repository.IVentaRepository;
+import com.analistas.stella.model.service.ICategoriaService;
+import com.analistas.stella.model.service.IProductoService;
 import com.analistas.stella.model.service.IVentaService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,6 +32,15 @@ public class ReporteController {
 
     @Autowired
     IVentaRepository ventaRepository;
+
+    @Autowired
+    IDetalleVentaRepository detalleVentaRepository;
+
+    @Autowired
+    ICategoriaService categoriaService;
+
+    @Autowired
+    IProductoService productoService;
 
     @GetMapping("/reportes")
     public String reportes(Model model) throws JsonProcessingException {
@@ -61,6 +77,22 @@ public class ReporteController {
         // model.addAttribute("data", data);
         model.addAttribute("labels", new ObjectMapper().writeValueAsString(labels));
         model.addAttribute("data", new ObjectMapper().writeValueAsString(data));
+
+
+        // Encontrar los top 10 productos más vendidos:
+        List<TopProductoDTO> top10 = detalleVentaRepository.findTopProductos(PageRequest.of(0, 10));
+        model.addAttribute("topProductos", new ObjectMapper().writeValueAsString(top10));
+
+        // Encontrar top 10 categorias:
+        model.addAttribute("top10Categorias", categoriaService.obtenerTop10Categorias());
+
+        // Métodos de pago por importe para CHART
+        List<MetodoPagoDTO> metodoPago = ventaService.obtenerTotalesPorMetodoPago();
+        model.addAttribute("metodoPago", new ObjectMapper().writeValueAsString(metodoPago));
+
+        // Productos con bajo stock:
+        List<Producto> bajoStock = productoService.obtenerProductosCercanosAlMinimo();
+        model.addAttribute("bajoStock", bajoStock);
 
         return "reportes/reportes";
     }

@@ -27,4 +27,7 @@ public interface IProductoRepository extends CrudRepository<Producto, Long> {
     // Búsqueda exacta por código de barras (para el escáner)
     Optional<Producto> findByCodigoBarras(String codigoBarras);
 
+    // Encontrar productos con bajo stock
+    @Query("SELECT p FROM Producto p WHERE p.stock <= p.stockMin * 1.2") 
+    List<Producto> findProductosCercanosAlMinimo();
 }

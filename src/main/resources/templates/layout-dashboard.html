@@ -123,13 +123,23 @@
 
 
     <!-- Para que se cierren los Alert Bootstrap -->
-    <script>
+    <!-- <script>
         setInterval("cerrar()", 3000);
 
         const cerrar = () => {
             $(".alert").delay(500).slideUp(500, () => {
                 $(this).hide();
             })
+        }
+    </script> -->
+    <script>
+        // Mejor pasar la función directamente
+        setInterval(cerrar, 3000);
+
+        function cerrar() {
+            $(".alert").delay(500).slideUp(500, function () {
+                $(this).hide(); // acá sí funciona "this" porque usamos function normal
+            });
         }
     </script>
 

@@ -94,7 +94,8 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     <div class="text-muted small">Total vendido</div>
-                                    <div class="fs-3 fw-bold" th:text="'$' + ${#numbers.formatDecimal(ganNeta, 1, 2)}"></div>
+                                    <div class="fs-3 fw-bold" th:text="'$' + ${#numbers.formatDecimal(ganNeta, 1, 2)}">
+                                    </div>
                                 </div>
                                 <!-- <span class="badge text-bg-success">+5.3%</span> -->
                             </div>
@@ -180,13 +181,33 @@
                             <button id="dlCategorias" class="btn btn-sm btn-ghost">Descargar PNG</button>
                         </div>
                         <div class="card-body">
-                            <div class="chart-container">
-                                <canvas id="topCategorias"></canvas>
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Categoria</th>
+                                            <th>Importe Total ($)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="categoria, iterStat : ${top10Categorias}">
+                                            <td th:text="${iterStat.index + 1}"></td>
+                                            <td th:text="${categoria.nombre}"></td>
+                                            <!-- <td
+                                                td:text="${#numbers.formatDecimal(categoria.total, 1, 'COMMA', 2, 'POINT')}">
+                                            </td> -->
+                                            <td th:text="'$'+${categoria.total}"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+
 
             <!-- Tablas -->
             <h5 class="section-title">Tablas</h5>
@@ -230,10 +251,16 @@
                                             <th>Mínimo</th>
                                         </tr>
                                     </thead>
-                                    <tbody><!-- se llena por JS --></tbody>
+                                    <tbody>
+                                        <tr th:each="p : ${bajoStock}">
+                                            <td th:text="${p.nombre}"></td>
+                                            <td th:text="${p.stock}"></td>
+                                            <td th:text="${p.stockMin}"></td>
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </div>
-                            <small class="text-muted">*Datos demo: reemplazar con tu consulta de inventario.</small>
+                            <!-- <small class="text-muted">*Datos demo: reemplazar con tu consulta de inventario.</small> -->
                         </div>
                     </div>
                 </div>
@@ -242,14 +269,37 @@
             <div class="text-center text-muted small mt-4">Reporte demo · reemplaza los arrays por tus endpoints</div>
         </div>
 
-
+        <!-- Top productos vendidos -->
+        <div id="topProductosData" th:attr="data-top=${topProductos}"></div>
 
         <!-- Ventas por dia en un rango de 10 dias -->
-        <!-- <div id="ventasDiariasData" th:data-labels="${labels}" th:data-data="${data}"></div> -->
         <div id="ventasDiariasData" th:attr="data-labels=${labels}, data-data=${data}"></div>
 
-
+        <!-- Metodos de pago por importe -->
+        <div id="metodoPagoData" th:attr="data-metodo-pago=${metodoPago}"></div>
         <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                // Obtenemos los datos embebidos en el HTML
+                const div = document.getElementById("topProductosData");
+                const topProductos = JSON.parse(div.dataset.top);
+
+                const tbody = document.querySelector("#tblTop tbody");
+                tbody.innerHTML = "";
+
+                topProductos.forEach((p, i) => {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td>${i + 1}</td>
+                        <td>${p.nombre}</td>
+                        <td>${p.totalUnidades}</td>
+                        <td>$${p.totalImporte.toFixed(2)}</td>
+                        `;
+                    tbody.appendChild(tr);
+                });
+            });
+
+
+
             // ======== Helpers ========
             const $ = s => document.querySelector(s);
             const fmt = (n) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(n);
@@ -314,18 +364,7 @@
             //     ]
             // };
 
-            // ======== Poblar KPIs ========
-            // function refrescarKPIs() {
-                // const total = demo.ventasDiarias.reduce((a, b) => a + b.total, 0);
-                // const tickets = demo.ventasDiarias.reduce((a, b) => a + b.tickets, 0);
-                // const promedio = tickets ? total / tickets : 0;
-                // $('#kpiTotal').textContent = fmt(total);
-                // $('#kpiTickets').textContent = tickets;
-                // $('#kpiPromedio').textContent = fmt(promedio);
-            // }
-
             // ======== Gráficos ========
-            let chartPago, chartTopProd, chartCats;
 
             function renderCharts() {
                 const ventasDiv = document.getElementById("ventasDiariasData");
@@ -333,7 +372,6 @@
                 const data = JSON.parse(ventasDiv.dataset.data);
 
                 const chartVentas = document.getElementById('ventasDiarias');
-                // chartVentas?.destroy()
                 new Chart(chartVentas, {
                     type: 'line',
                     data: {
@@ -363,21 +401,36 @@
                 });
 
                 // Método de pago (doughnut)
-                // chartPago?.destroy();
-                // chartPago = new Chart($('#metodoPago'), {
-                //     type: 'doughnut',
-                //     data: {
-                //         labels: demo.metodoPago.map(m => m.metodo),
-                //         datasets: [{ data: demo.metodoPago.map(m => m.total) }]
-                //     },
-                //     options: {
-                //         plugins: {
-                //             tooltip: { callbacks: { label: ctx => `${ctx.label}: ${fmt(ctx.parsed)}` } },
-                //             title: { display: true, text: 'Distribución por método de pago' }
-                //         },
-                //         cutout: '60%'
-                //     }
-                // });
+                const metodoPagoDiv = document.getElementById("metodoPagoData");
+                const metodoPago = JSON.parse(metodoPagoDiv.dataset.metodoPago);
+
+                const chartPago = new Chart(document.getElementById('metodoPago'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: metodoPago.map(m => m.metodo), // 👈 SIN .metodoPago
+                        datasets: [{
+                            data: metodoPago.map(m => m.total)
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: ctx =>
+                                        `${ctx.label}: ${ctx.parsed.toLocaleString('es-ES', {
+                                            style: 'currency',
+                                            currency: 'ARS'
+                                        })}`
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Distribución por método de pago'
+                            }
+                        },
+                        cutout: '60%'
+                    }
+                });
 
                 // Top productos (barra horizontal)
                 // chartTopProd?.destroy();
@@ -398,27 +451,6 @@
                 //             title: { display: true, text: 'Top 10 productos por unidades' },
                 //             tooltip: { callbacks: { label: ctx => `${ctx.parsed.x} u.` } }
                 //         }
-                //     }
-                // });
-
-                // Categorías (barra)
-                // chartCats?.destroy();
-                // chartCats = new Chart($('#topCategorias'), {
-                //     type: 'bar',
-                //     data: {
-                //         labels: demo.categorias.map(c => c.categoria),
-                //         datasets: [{
-                //             label: 'Importe',
-                //             data: demo.categorias.map(c => c.importe),
-                //             borderWidth: 1
-                //         }]
-                //     },
-                //     options: {
-                //         plugins: {
-                //             title: { display: true, text: 'Importe por categoría' },
-                //             tooltip: { callbacks: { label: ctx => fmt(ctx.parsed.y) } }
-                //         },
-                //         scales: { y: { ticks: { callback: v => fmt(v) } } }
                 //     }
                 // });
             }
@@ -451,25 +483,6 @@
             //         });
             //     }
 
-            // ======== Acciones UI ========
-            // $('#btnHoy').addEventListener('click', () => {
-            //     const d = new Date();
-            //     const yyyy = d.getFullYear();
-            //     const mm = String(d.getMonth() + 1).padStart(2, '0');
-            //     const dd = String(d.getDate()).padStart(2, '0');
-            //     $('#desde').value = `${yyyy}-${mm}-${dd}`;
-            //     $('#hasta').value = `${yyyy}-${mm}-${dd}`;
-            // });
-
-            // En tu integración real, acá llamás a tu backend con los filtros y
-            // refrescás los arrays `demo.*` con la respuesta:
-            // $('#btnAplicar').addEventListener('click', () => {
-                // fetch('/reportes?desde=...&hasta=...').then(r=>r.json()).then(updateDemo);
-                // Por ahora, solo re-renderizamos:
-                // refrescarKPIs();
-                // renderCharts();
-                // renderTablas();
-            // });
 
             // Descargar PNG de los gráficos
             $('#dlVentas').addEventListener('click', () => downloadPNG(chartVentas, 'ventas-diarias.png'));
@@ -488,7 +501,7 @@
                 // $('#hasta').value = '2025-08-07';
                 // refrescarKPIs();
                 renderCharts();
-                renderTablas();
+                // renderTablas();
             })();
         </script>
 

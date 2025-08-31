@@ -46,6 +46,9 @@ public class Producto implements Serializable {
     @NotNull(message = "El stock del producto no puede ser nulo")
     private Integer stock;
 
+    @NotNull(message ="El stock minimo no puede ser nulo")
+    private Integer stockMin;
+
     @Column(name = "activo", columnDefinition = "boolean default 1")
     private boolean activo;
 

@@ -65,6 +65,13 @@
                 </div>
 
                 <div class="col-md-6">
+                    <label class="form-label">Stock Mínimo</label>
+                    <input type="number" class="form-control" name="stockMin" th:field="*{stockMin}" required>
+                    <div class="invalid-feedback">Debe ingresar un stock mínimo válido.</div>
+                    <small class="form-label text-danger" th:errors="*{stockMin}"></small>
+                </div>
+
+                <div class="col-md-6">
                     <label class="form-label">Fecha de Vencimiento</label>
                     <input type="date" class="form-control" th:value="*{fechaVen}" name="fechaVen">
                     <div class="invalid-feedback">Debe ingresar una fecha válida.</div>

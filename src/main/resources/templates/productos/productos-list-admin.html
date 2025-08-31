@@ -29,6 +29,7 @@
                         <th>Precio Minorista</th>
                         <th>Precio Bulto</th>
                         <th>Stock</th>
+                        <th>Stock Mínimo</th>
                         <th>Categoria</th>
                         <th>Fecha de Vencimiento</th>
                         <th>Opciones</th>
@@ -46,6 +47,7 @@
                         <!-- <td th:text="${'$ ' + #numbers.formatDecimal(p.precioBulto, 0, 0)}"></td> -->
                         <td th:text="'$' + ${p.precioBulto}"></td>
                         <td th:text="${p.stock}"></td>
+                        <td th:text="${p.stockMin}"></td>
                         <td th:text="${p.categoria.nombre}"></td>
                         <td th:text="${#temporals.format(p.fechaVen, 'dd/MM/yyyy')}"></td>
                         <td>
@@ -68,6 +70,7 @@
                         <th>Precio Minorista</th>
                         <th>Precio Bulto</th>
                         <th>Stock</th>
+                        <th>Stock Mínimo</th>
                         <th>Categoria</th>
                         <th>Fecha de Vencimiento</th>
                         <th>Opciones</th>

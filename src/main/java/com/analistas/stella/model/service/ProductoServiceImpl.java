@@ -4,9 +4,12 @@ import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.analistas.stella.model.domain.Producto;
+import com.analistas.stella.model.domain.TopProductoDTO;
+import com.analistas.stella.model.repository.IDetalleVentaRepository;
 import com.analistas.stella.model.repository.IProductoRepository;
 
 @Service
@@ -14,6 +17,9 @@ public class ProductoServiceImpl implements IProductoService {
 
     @Autowired
     IProductoRepository productoRepository;
+
+    @Autowired
+    IDetalleVentaRepository detalleVentaRepository;
 
     @Override
     public void guardar(Producto producto) {
@@ -51,6 +57,16 @@ public class ProductoServiceImpl implements IProductoService {
             return Collections.emptyList();
         }
         return productoRepository.buscarPorCodigoODescripcion(q);
+    }
+
+    @Override
+    public List<TopProductoDTO> obtenerTopProductos(int limite) {
+       return detalleVentaRepository.findTopProductos(PageRequest.of(0, limite));
+    }
+
+    @Override
+    public List<Producto> obtenerProductosCercanosAlMinimo() {
+        return productoRepository.findProductosCercanosAlMinimo();
     }
 
 }

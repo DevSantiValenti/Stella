@@ -1,5 +1,6 @@
 package com.analistas.stella.model.service;
 
+import com.analistas.stella.model.domain.MetodoPagoDTO;
 import com.analistas.stella.model.domain.Venta;
 import com.analistas.stella.model.repository.IVentaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,10 +105,10 @@ public class VentaServiceImpl implements IVentaService {
         return ganNeta;
     }
 
-    
-
-    
-
-    
+    // Importe por metodo de pago
+    @Override
+    public List<MetodoPagoDTO> obtenerTotalesPorMetodoPago() {
+        return ventaRepo.obtenerTotalesPorMetodoPago();
+    }
 
 }

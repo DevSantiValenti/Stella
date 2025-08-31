@@ -30,6 +30,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // === Lógica de carrito ===
 function agregarItem() {
+
+
   const codigo = $('codigo').value.trim();
   const descripcion = $('descripcion').value.trim();
   const cantidad = parseFloat($('cantidad').value || '1');
@@ -52,6 +54,7 @@ function agregarItem() {
   }
 
   limpiarInputsItem();
+  $('cantidad').value = 1;
   renderTabla();
   recalcular();
 }
@@ -223,14 +226,14 @@ function finalizarVenta() {
       carrito = [];
       renderTabla(); recalcular();
       $('observaciones').value = ''; $('montoRecibido').value = '';
-      $('codigo').focus();
+
     })
     .catch(err => {
       console.error(err);
       mostrarAlerta('No se pudo registrar la venta.', 'danger');
       mostrarAlerta("Error: " + err.message, 'danger');
     });
-
+  $('codigo').focus();
   // carrito = [];
   // renderTabla(); recalcular();
   // $('observaciones').value=''; $('montoRecibido').value='';
@@ -352,10 +355,13 @@ function buildPayload() {
   }
 
   function seleccionarProducto(p) {
+
+    // const uniSelec = parseFloat($('cantidad').value()) || 1;
+
     $('codigo').value = p.codigo || '';
     $('descripcion').value = p.nombre;
     $('precio').value = p.precioMin;
-    $('cantidad').value = 1; // Siempre 1 al escanear
+    // $('cantidad').value = 1;
     sugerencias.innerHTML = '';
     productosEncontrados = [];
     selectedIdx = -1;

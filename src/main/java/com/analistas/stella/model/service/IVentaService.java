@@ -1,5 +1,6 @@
 package com.analistas.stella.model.service;
 
+import com.analistas.stella.model.domain.MetodoPagoDTO;
 import com.analistas.stella.model.domain.Venta;
 
 import java.time.LocalDate;
@@ -31,5 +32,6 @@ public interface IVentaService {
 
     public Double gananciaNetaTotal();
 
-    
+    // Importe por metodos de pago
+    public List<MetodoPagoDTO> obtenerTotalesPorMetodoPago();
 }
