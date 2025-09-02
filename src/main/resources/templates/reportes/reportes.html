@@ -319,53 +319,6 @@
                 link.click();
             };
 
-            // ======== Datos DEMO (reemplazar) ========
-            // Supón que estos llegan desde tu backend según el rango de fechas
-            // const demo = {
-            //     ventasDiarias: [
-            //         { fecha: '2025-08-01', total: 185000, tickets: 120 },
-            //         { fecha: '2025-08-02', total: 210000, tickets: 138 },
-            //         { fecha: '2025-08-03', total: 165000, tickets: 101 },
-            //         { fecha: '2025-08-04', total: 224000, tickets: 150 },
-            //         { fecha: '2025-08-05', total: 260000, tickets: 167 },
-            //         { fecha: '2025-08-06', total: 199000, tickets: 132 },
-            //         { fecha: '2025-08-07', total: 275000, tickets: 172 },
-            //     ],
-            //     metodoPago: [
-            //         { metodo: 'Efectivo', total: 620000 },
-            //         { metodo: 'Débito', total: 355000 },
-            //         { metodo: 'Crédito', total: 280000 },
-            //         { metodo: 'QR/Billetera', total: 215000 },
-            //     ],
-            //     topProductos: [
-            //         { nombre: 'Leche x1L', unidades: 420, importe: 252000 },
-            //         { nombre: 'Pan Lactal', unidades: 380, importe: 228000 },
-            //         { nombre: 'Gaseosa 2.25L', unidades: 350, importe: 315000 },
-            //         { nombre: 'Fideos x500g', unidades: 310, importe: 124000 },
-            //         { nombre: 'Aceite 900ml', unidades: 290, importe: 232000 },
-            //         { nombre: 'Yerba 1Kg', unidades: 270, importe: 432000 },
-            //         { nombre: 'Detergente 750ml', unidades: 245, importe: 122500 },
-            //         { nombre: 'Arroz 1Kg', unidades: 230, importe: 92000 },
-            //         { nombre: 'Azúcar 1Kg', unidades: 220, importe: 88000 },
-            //         { nombre: 'Galletitas 3x', unidades: 210, importe: 147000 },
-            //     ],
-            //     categorias: [
-            //         { categoria: 'Bebidas', importe: 540000 },
-            //         { categoria: 'Almacén', importe: 480000 },
-            //         { categoria: 'Limpieza', importe: 260000 },
-            //         { categoria: 'Lácteos', importe: 300000 },
-            //         { categoria: 'Frescos', importe: 210000 }
-            //     ],
-            //     stockCritico: [
-            //         { producto: 'Harina 1Kg', stock: 8, minimo: 20 },
-            //         { producto: 'Lavandina 1L', stock: 5, minimo: 15 },
-            //         { producto: 'Yerba 1Kg', stock: 9, minimo: 25 },
-            //         { producto: 'Mermelada 454g', stock: 12, minimo: 30 },
-            //     ]
-            // };
-
-            // ======== Gráficos ========
-
             function renderCharts() {
                 const ventasDiv = document.getElementById("ventasDiariasData");
                 const labels = JSON.parse(ventasDiv.dataset.labels);

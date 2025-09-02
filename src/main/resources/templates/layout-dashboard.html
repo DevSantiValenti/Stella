@@ -31,6 +31,44 @@
 
     <!-- DataTables CSS -->
     <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+
+    <style>
+        ul .nav-item {
+
+            margin-bottom: 5px;
+            border-radius: 5px;
+            transition: 0.4s ease;
+
+        }
+
+        ul .nav-item:hover {
+            background: #363380;
+            background: linear-gradient(45deg, rgba(54, 51, 128, 1) 0%, rgba(9, 84, 171, 1) 24%, rgba(8, 122, 209, 1) 43%, rgba(4, 144, 224, 1) 58%, rgba(2, 161, 240, 1) 73%, rgba(0, 212, 255, 1) 85%);
+            transform: scale(1.05);
+        }
+
+        #salir {
+            transition: .4s ease;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        #salir:hover {
+            background: #f00202;
+            background: linear-gradient(45deg, rgba(240, 2, 2, 1) 20%, rgba(126, 1, 1, 1) 52%, rgba(0, 0, 0, 1) 84%);
+            transform: scale(1.05);
+        }
+
+        nav {
+            background: #020024;
+            background: radial-gradient(circle, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 46%, rgba(0, 212, 255, 1) 100%);
+        }
+
+        #hijo {
+            background: #ebebeb;
+            background: linear-gradient(66deg, rgba(235, 235, 235, 1) 30%, rgba(134, 144, 158, 1) 100%);
+        }
+    </style>
 </head>
 
 <body>
@@ -38,10 +76,10 @@
         <!-- Sidebar -->
 
 
-        <nav class="bg-dark text-white p-3" style="width:230px; min-height: 100vh; height: auto;">
-            <h4 class="mb-4">Administración</h4>
+        <nav class="text-white p-3" style="width:230px; min-height: 100vh; height: auto;">
+            <h4 class="mb-4 fw-bold">Administración</h4>
             <ul class="nav flex-column">
-                <li class="nav-item"><a th:href="@{/dashboard}" class="nav-link text-white">Dashboard</a></li>
+                <li class="nav-item rounded"><a th:href="@{/dashboard}" class="nav-link text-white">Dashboard</a></li>
                 <li class="nav-item"><a th:href="@{/productos/listadoAdmin}" class="nav-link text-white">Productos</a>
                 </li>
                 <li class="nav-item"><a href="#" class="nav-link text-white">Categorías</a></li>
@@ -52,14 +90,14 @@
                 <li class="nav-item"><a th:href="@{/reportes}" class="nav-link text-white">Reportes</a></li>
                 <li class="nav-item"><a href="#" class="nav-link text-white">Configuración</a></li>
                 <li class="nav-item"><a th:href="@{/}" class="nav-link text-white">Stella</a></li>
-                <form id="frmSalir" th:action="@{/logout}" method="post" class="text-bg-danger mt-5">
-                    <a class="dropdown-item" href="#" onclick="$('#frmSalir').submit();">Cerrar
+                <form id="frmSalir" th:action="@{/logout}" method="post" class="mt-5">
+                    <a id="salir" class="dropdown-item" href="#" onclick="$('#frmSalir').submit();">Cerrar
                         Sesión</a>
                 </form>
             </ul>
         </nav>
 
-        <div class="flex-grow-1 p-4">
+        <div id="hijo" class="flex-grow-1 p-4">
             <!-- Mensajes -->
             <!-- Mensaje al habilitar/deshabilitar productos con Bootstrap -->
             <div class="alert alert-info alert-dismissible fade show" role="alert" th:if="${info != null}">
@@ -120,18 +158,7 @@
         </div>
     </div>
 
-
-
     <!-- Para que se cierren los Alert Bootstrap -->
-    <!-- <script>
-        setInterval("cerrar()", 3000);
-
-        const cerrar = () => {
-            $(".alert").delay(500).slideUp(500, () => {
-                $(this).hide();
-            })
-        }
-    </script> -->
     <script>
         // Mejor pasar la función directamente
         setInterval(cerrar, 3000);

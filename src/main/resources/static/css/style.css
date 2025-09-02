@@ -335,6 +335,10 @@ se hace mas larga, que el nav baje tmb */
 html, body {
     height: 100%;
     margin: 0;
+    /* min-height: 100%;
+    margin: 0;
+    overflow-x: auto;
+    overflow-y: auto; */
 }
 
 .d-flex {
