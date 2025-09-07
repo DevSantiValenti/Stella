@@ -3,10 +3,12 @@ package com.analistas.stella.model.repository;
 import com.analistas.stella.model.domain.MetodoPagoDTO;
 import com.analistas.stella.model.domain.Venta;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 public interface IVentaRepository extends CrudRepository<Venta, Long> {
 
@@ -31,8 +33,14 @@ public interface IVentaRepository extends CrudRepository<Venta, Long> {
 
     // Importe total por categoria:
     @Query("SELECT v.metodoPago AS metodo, SUM(v.total) AS total " +
-           "FROM Venta v " +
-           "GROUP BY v.metodoPago")
+            "FROM Venta v " +
+            "GROUP BY v.metodoPago")
     List<MetodoPagoDTO> obtenerTotalesPorMetodoPago();
+
+    // Calcular por caja
+    @Query("SELECT COALESCE(SUM(v.total), 0)" +
+            "FROM Venta " +
+            " v WHERE v.caja.id=:cajaId")
+    BigDecimal calcularTotalPorCaja(@Param("cajaId") Long cajaId);
 
 }

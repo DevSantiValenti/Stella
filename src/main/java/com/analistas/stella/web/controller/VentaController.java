@@ -4,10 +4,15 @@ import com.analistas.stella.model.domain.Producto;
 import com.analistas.stella.model.domain.ProductoDTO;
 import com.analistas.stella.model.domain.Usuario;
 import com.analistas.stella.model.domain.Venta;
+import com.analistas.stella.model.repository.ICajaRepository;
 import com.analistas.stella.model.service.IProductoService;
 import com.analistas.stella.model.service.IUsuarioService;
 import com.analistas.stella.model.service.IVentaService;
+
+import jakarta.servlet.http.HttpSession;
+
 import com.analistas.stella.config.SecurityUtils;
+import com.analistas.stella.model.domain.Caja;
 import com.analistas.stella.model.domain.DetalleVenta;
 
 import java.time.LocalDateTime;
@@ -30,6 +35,9 @@ import org.springframework.web.bind.annotation.*;
 public class VentaController {
 
     @Autowired
+    ICajaRepository cajaRepository;
+
+    @Autowired
     IVentaService ventaService;
 
     @Autowired
@@ -41,22 +49,23 @@ public class VentaController {
     @GetMapping("/lista")
     public String listar(Model model) {
         model.addAttribute("ventas", ventaService.listar());
-        return "ventas/lista"; // Vista Thymeleaf o JSP
+        return "ventas/lista";
     }
 
     @GetMapping("/nuevo")
-    public String nuevaVenta(Model model) {
+    public String nuevaVenta(Model model, @RequestParam(required = false) Long CajaId) {
+        model.addAttribute("cajaId", CajaId);
         model.addAttribute("venta", new Venta());
         model.addAttribute("productos", productoService.buscarTodo());
-        // model.addAttribute("cajero", usuarioService.buscarPorId(3L));
+
         return "ventas/ventas-form";
     }
 
     @PostMapping("/guardar")
     @ResponseBody
-    public ResponseEntity<?> guardar(@RequestBody com.analistas.stella.model.domain.VentaDTO ventaDTO) {
+    public ResponseEntity<?> guardar(@RequestBody com.analistas.stella.model.domain.VentaDTO ventaDTO,
+            HttpSession session) {
         Venta venta = new Venta();
-
 
         String username = SecurityUtils.getCurrentUsername();
         Usuario usuario = usuarioService.findByNombrecompleto(username);
@@ -73,18 +82,23 @@ public class VentaController {
         venta.setVuelto(ventaDTO.getVuelto());
         venta.setRecibido(ventaDTO.getRecibido());
         // venta.setUsuario(usuarioService.buscarPorId(3L));
-        venta.setUsuario(usuario); //Cambiar esto para cuando los USUARIOS puedan loguearse
+        venta.setUsuario(usuario); // Cambiar esto para cuando los USUARIOS puedan loguearse
         venta.setFechaVenta(LocalDateTime.parse(
-            ventaDTO.getFecha().length() == 16 ? ventaDTO.getFecha() + ":00" : ventaDTO.getFecha(),
-            DateTimeFormatter.ISO_LOCAL_DATE_TIME
-        ));
-        // Si tienes usuario logueado, setea aquí
-        // venta.setUsuario(...);
+                ventaDTO.getFecha().length() == 16 ? ventaDTO.getFecha() + ":00" : ventaDTO.getFecha(),
+                DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                
+        Long cajaId = (Long) session.getAttribute("cajaId");
+        if (cajaId != null) {
+            Caja caja = cajaRepository.findById(cajaId)
+                    .orElseThrow(() -> new IllegalStateException("Caja no encontrada"));
+            venta.setCaja(caja);
+        }
 
         // Mapear los items a DetalleVenta
         for (com.analistas.stella.model.domain.DetalleVentaDTO d : ventaDTO.getItems()) {
             DetalleVenta det = new DetalleVenta();
-            List<Producto> productos = productoService.buscarPorCodigoODescripcion(d.getCodigo()); // Debes tener este método
+            List<Producto> productos = productoService.buscarPorCodigoODescripcion(d.getCodigo()); // Debes tener este
+                                                                                                   // método
             if (productos != null && !productos.isEmpty()) {
                 det.setProducto(productos.get(0));
             } else {
@@ -97,9 +111,9 @@ public class VentaController {
             det.setDescuentoPorc(d.getDescuentoPorc());
             // Calcula el subtotal
             double base = d.getCantidad() * d.getPrecioUnitaFrio();
-            double desc = base * (d.getDescuentoPorc()/100);
+            double desc = base * (d.getDescuentoPorc() / 100);
             double neto = base - desc;
-            double ivaMonto = neto * (d.getIvaPorc()/100);
+            double ivaMonto = neto * (d.getIvaPorc() / 100);
             det.setSubtotal(neto + ivaMonto);
             det.setVenta(venta);
             venta.getDetalles().add(det);
@@ -123,17 +137,17 @@ public class VentaController {
         @GetMapping("/buscar")
         public List<ProductoDTO> buscar(@RequestParam String q) {
             return productoService.buscarPorCodigoODescripcion(q)
-                .stream()
-                .map(p -> {
-                    ProductoDTO dto = new ProductoDTO();
-                    dto.setId(p.getId());
-                    dto.setCodigo(p.getCodigoBarras());
-                    dto.setNombre(p.getNombre());
-                    dto.setPrecioMin(p.getPrecioMin() != null ? p.getPrecioMin().doubleValue() : null);
-                    dto.setPrecioBulto(p.getPrecioBulto() != null ? p.getPrecioBulto().doubleValue() : null);
-                    return dto;
-                })
-                .toList();
+                    .stream()
+                    .map(p -> {
+                        ProductoDTO dto = new ProductoDTO();
+                        dto.setId(p.getId());
+                        dto.setCodigo(p.getCodigoBarras());
+                        dto.setNombre(p.getNombre());
+                        dto.setPrecioMin(p.getPrecioMin() != null ? p.getPrecioMin().doubleValue() : null);
+                        dto.setPrecioBulto(p.getPrecioBulto() != null ? p.getPrecioBulto().doubleValue() : null);
+                        return dto;
+                    })
+                    .toList();
         }
     }
 

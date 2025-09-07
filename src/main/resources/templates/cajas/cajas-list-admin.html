@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout-dashboard}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo}"></title>
+    <style>
+        .container {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div layout:fragment="dashboard"> <!--Toda la información va adentro de este div, no afuera -->
+
+
+        <div class="row g-4">
+            <div class="col-5">
+                <h2 th:text="${titulo}"></h2>
+                <form th:action="@{/cajas/abrir}" method="post" class="mb-4">
+                    <div class="mb-2">
+                        <label>Monto inicial:</label>
+                        <input type="number" step="0.01" name="montoInicial" class="form-control" required>
+                    </div>
+
+                    <div class="mb-2">
+                        <label>Seleccionar caja:</label>
+                        <select name="cajaFisicaId" class="form-select" required>
+                            <option th:each="cajaFisica : ${cajasFisicas}" th:value="${cajaFisica.id}"
+                                th:text="${cajaFisica.nombre}"></option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">Abrir caja</button>
+                </form>
+            </div>
+            <div class="col-7">
+                <h2>Crear una nueva Caja</h2>
+                <!-- Formulario para crear nueva caja -->
+                <form th:action="@{/cajas/crear}" method="post" class="mb-3">
+                    <input type="text" name="nombre" class="form-control w-25 float-start me-2"
+                        placeholder="Nombre de la caja" required>
+                    <button type="submit" class="btn btn-primary">Crear</button>
+                </form>
+
+                <!-- Tabla de cajas físicas -->
+                <div class="table-responsive rounded">
+                    <table class="table table-bordered table-hover ">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="caja : ${cajasFisicas}">
+                                <td th:text="${caja.id}"></td>
+                                <td th:text="${caja.nombre}"></td>
+                                <td>
+                                    <form th:action="@{/cajas/eliminar/{id}(id=${caja.id})}" method="post">
+                                        <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card p-2">
+            <table id="tabla-cajas" class="table table-bordered table-responsive table-hover text-center mt-2">
+                <thead class="table-dark">
+                    <tr>
+                        <th>CAJA</th>
+                        <th>Cajero</th>
+                        <th>Apertura</th>
+                        <th>Cierre</th>
+                        <th>Monto inicial</th>
+                        <th>Monto final</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="caja : ${cajas}">
+                        <td th:text="${caja.cajaFisica.nombre}"></td>
+                        <td th:text="${caja.usuario != null ? caja.usuario.nombrecompleto : '?'}"></td>
+                        <td th:text="${#temporals.format(caja.apertura, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td th:text="${#temporals.format(caja.cierre, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td th:text="'$' + ${caja.montoInicial}"></td>
+                        <td th:text="'$' + (${caja.montoFinal} != null ? ${caja.montoFinal} : '0')"></td>
+                        <td th:text="${caja.abierta ? 'Abierta' : 'Cerrada'}"
+                            th:class="${caja.abierta ? 'text-bg-success' : 'text-bg-danger'}"></td>
+                        <td>
+                            <form th:action="@{/cajas/cerrar}" method="post" th:if="${caja.abierta}">
+                                <input type="hidden" name="cajaId" th:value="${caja.id}">
+                                <button class="btn btn-danger" type="submit">Cerrar Caja</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <!-- Mis JS -->
+    <script th:fragment="js" th:src="@{/js/cajas-list-admin.js}"></script>
+</body>
+
+</html>

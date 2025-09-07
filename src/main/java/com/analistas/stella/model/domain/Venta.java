@@ -61,6 +61,10 @@ public class Venta implements Serializable {
     @Column(length = 500)
     private String observaciones;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_caja")
+    private Caja caja;
+
     @PrePersist
     public void prePersist() {
         if (fechaVenta == null)

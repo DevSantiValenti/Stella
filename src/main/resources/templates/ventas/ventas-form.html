@@ -5,8 +5,8 @@
   <meta charset="UTF-8" />
   <title>Venta - Stella POS</title>
   <link rel="stylesheet" href="/css/ventas-form.css" />
-  <meta name="_csrf" th:content="${_csrf.token}"/>
-  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
 </head>
 
 <body>
@@ -18,12 +18,14 @@
     <!-- <input type="hidden" id="usuario" value="Nombre del Cajero"> -->
 
     <header class="app-header">
-      <h1><a th:href="@{/}">Stella POS</a> — Nueva Venta</h1>
+      <h1><a th:href="@{/dashboard}">Stella POS</a> — Nueva Venta</h1>
       <div class="sale-info">
         <div>
           <label>Caja: </label>
-          <input disabled value="X">
+          <input id="caja" type="text" th:value="${session.cajaNombre}" readonly>
         </div>
+
+
         <div>
           <label>Cajero:</label>
           <input disabled th:value="${nombreUsuario}" id="usuario">
@@ -112,6 +114,7 @@
           <input type="number" id="descGlobal" min="0" max="100" value="0" />
           <label>Observaciones</label>
           <textarea id="observaciones" rows="2" placeholder="Notas de la venta"></textarea>
+
         </div>
         <div class="right">
           <div class="line">

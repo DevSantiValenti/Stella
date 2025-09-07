@@ -18,71 +18,74 @@
         <h1 class="text-primary" align="center" th:text="${titulo}">Listado de Ofertas</h1>
 
         <div class="container mt-4">
-            <table id="tabla-ofertas" class="table table-striped table-bordered" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Banner</th>
-                        <th>Descripción</th>
-                        <th>Precio Promocional</th>
-                        <th>Descuento %</th>
-                        <th>Productos Incluidos</th>
-                        <th>Fecha Inicio</th>
-                        <th>Fecha Fin</th>
-                        <th>Opciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="oferta : ${ofertas}" th:class="${not oferta.activo} ? 'tachado' : ''">
-                        <td th:text="${oferta.id}"></td>
-                        <td>
-                            <img th:if="${oferta.imagenBanner != null}" th:src="@{${oferta.imagenBanner}}"
-                                alt="Imagen Oferta" height="80" />
-                            <span th:if="${oferta.imagenBanner == null}">No imagen</span>
-                        </td>
-                        <td th:text="${oferta.descripcion}"></td>
-                        <!-- <td th:text="'$ ' + ${oferta.precioPromocional}"></td> -->
-                        <td th:text="'$ ' + ${oferta.precioPromocional.intValue()}"></td>
+            <div class="card p-2">
+                <table id="tabla-ofertas" class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Banner</th>
+                            <th>Descripción</th>
+                            <th>Precio Promocional</th>
+                            <th>Descuento %</th>
+                            <th>Productos Incluidos</th>
+                            <th>Fecha Inicio</th>
+                            <th>Fecha Fin</th>
+                            <th>Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="oferta : ${ofertas}" th:class="${not oferta.activo} ? 'tachado' : ''">
+                            <td th:text="${oferta.id}"></td>
+                            <td>
+                                <img th:if="${oferta.imagenBanner != null}" th:src="@{${oferta.imagenBanner}}"
+                                    alt="Imagen Oferta" height="80" />
+                                <span th:if="${oferta.imagenBanner == null}">No imagen</span>
+                            </td>
+                            <td th:text="${oferta.descripcion}"></td>
+                            <!-- <td th:text="'$ ' + ${oferta.precioPromocional}"></td> -->
+                            <td th:text="'$ ' + ${oferta.precioPromocional.intValue()}"></td>
 
 
 
-                        <td
-                            th:text="${oferta.descuentoPorcentaje != null} ? ${oferta.descuentoPorcentaje} + '%' : '0%'">
-                        </td>
-                        <td>
-                            <ul>
-                                <li th:each="prod : ${oferta.productos}" th:text="${prod.nombre}"></li>
-                            </ul>
-                        </td>
-                        <td th:text="${#temporals.format(oferta.fechaInicio, 'dd/MM/yyyy')}"></td>
-                        <td th:text="${#temporals.format(oferta.fechaFin, 'dd/MM/yyyy')}"></td>
-                        <td>
-                            <a th:href="@{/ofertas/editar/{id}(id=${oferta.id})}"
-                                class="btn btn-sm btn-warning">Editar</a>
-                            <a th:href="@{/ofertas/deshabilitar/{id}(id=${oferta.id})}" class="btn btn-sm btn-danger"
-                                th:text="${oferta.activo} ? 'Deshabilitar' : 'Habilitar'">
-                            </a>
-                            <a href="#" class="btn btn-sm btn-danger btn-delete"
-                                th:attr="data-href=@{/ofertas/borrar/{id}(id=${oferta.id})}">
-                                Borrar
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th>#</th>
-                        <th>Banner</th>
-                        <th>Descripción</th>
-                        <th>Precio Promocional</th>
-                        <th>Descuento %</th>
-                        <th>Productos Incluidos</th>
-                        <th>Fecha Inicio</th>
-                        <th>Fecha Fin</th>
-                        <th>Opciones</th>
-                    </tr>
-                </tfoot>
-            </table>
+                            <td
+                                th:text="${oferta.descuentoPorcentaje != null} ? ${oferta.descuentoPorcentaje} + '%' : '0%'">
+                            </td>
+                            <td>
+                                <ul>
+                                    <li th:each="prod : ${oferta.productos}" th:text="${prod.nombre}"></li>
+                                </ul>
+                            </td>
+                            <td th:text="${#temporals.format(oferta.fechaInicio, 'dd/MM/yyyy')}"></td>
+                            <td th:text="${#temporals.format(oferta.fechaFin, 'dd/MM/yyyy')}"></td>
+                            <td>
+                                <a th:href="@{/ofertas/editar/{id}(id=${oferta.id})}"
+                                    class="btn btn-sm btn-warning">Editar</a>
+                                <a th:href="@{/ofertas/deshabilitar/{id}(id=${oferta.id})}"
+                                    class="btn btn-sm btn-danger"
+                                    th:text="${oferta.activo} ? 'Deshabilitar' : 'Habilitar'">
+                                </a>
+                                <a href="#" class="btn btn-sm btn-danger btn-delete"
+                                    th:attr="data-href=@{/ofertas/borrar/{id}(id=${oferta.id})}">
+                                    Borrar
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>#</th>
+                            <th>Banner</th>
+                            <th>Descripción</th>
+                            <th>Precio Promocional</th>
+                            <th>Descuento %</th>
+                            <th>Productos Incluidos</th>
+                            <th>Fecha Inicio</th>
+                            <th>Fecha Fin</th>
+                            <th>Opciones</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
 
             <div class="text-end mt-3">
                 <a th:href="@{/ofertas/nuevo}" class="btn btn-outline-primary">Nueva Oferta</a>

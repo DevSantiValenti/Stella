@@ -88,7 +88,8 @@
                 </li>
                 <li class="nav-item"><a th:href="@{/ventas/nuevo}" class="nav-link text-white">Ventas</a></li>
                 <li class="nav-item"><a th:href="@{/reportes}" class="nav-link text-white">Reportes</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white">Configuración</a></li>
+                <li class="nav-item"><a th:href="@{/cajas/listadoAdmin}" class="nav-link text-white">Cajas</a></li>
+                <!-- <li class="nav-item"><a href="#" class="nav-link text-white">Configuración</a></li> -->
                 <li class="nav-item"><a th:href="@{/}" class="nav-link text-white">Stella</a></li>
                 <form id="frmSalir" th:action="@{/logout}" method="post" class="mt-5">
                     <a id="salir" class="dropdown-item" href="#" onclick="$('#frmSalir').submit();">Cerrar

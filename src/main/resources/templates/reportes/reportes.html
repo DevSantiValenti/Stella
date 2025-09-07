@@ -57,36 +57,6 @@
     <div layout:fragment="dashboard"> <!--Toda la información va adentro de este div, no afuera -->
 
         <div class="container py-4">
-
-            <!-- Filtros -->
-            <!-- <div class="card shadow-sm mb-4">
-                <div class="card-body">
-                    <div class="row g-3 align-items-end">
-                        <div class="col-md-3">
-                            <label class="form-label">Desde</label>
-                            <input id="desde" type="date" class="form-control">
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Hasta</label>
-                            <input id="hasta" type="date" class="form-control">
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Sucursal</label>
-                            <select id="sucursal" class="form-select">
-                                <option value="todas">Todas</option>
-                                <option value="central">Central</option>
-                                <option value="barrio">Barrio</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 d-flex gap-2">
-                            <button id="btnAplicar" class="btn btn-primary w-100">Aplicar</button>
-                            <button id="btnHoy" class="btn btn-outline-secondary w-100">Hoy</button>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
-            <!-- KPIs -->
             <div class="row g-3">
                 <div class="col-md-4">
                     <div class="card kpi-card border-0 shadow-sm">
@@ -99,7 +69,7 @@
                                 </div>
                                 <!-- <span class="badge text-bg-success">+5.3%</span> -->
                             </div>
-                            <div class="text-muted small mt-2">vs período anterior</div>
+                            <div class="text-muted small mt-2">Todas las ventas</div>
                         </div>
                     </div>
                 </div>
@@ -161,7 +131,7 @@
             <!-- Gráficos fila 2 -->
             <h5 class="section-title">Rendimiento de productos</h5>
             <div class="row g-4">
-                <div class="col-lg-6">
+                <!-- <div class="col-lg-6">
                     <div class="card border-0 shadow-sm">
                         <div class="card-header bg-white d-flex justify-content-between align-items-center">
                             <span class="fw-semibold">Top 10 productos (unidades)</span>
@@ -173,11 +143,40 @@
                             </div>
                         </div>
                     </div>
+                </div> -->
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <span class="fw-semibold">Stock crítico</span>
+                            <button id="csvStock" class="btn btn-sm btn-ghost">Exportar CSV</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="tblStock" class="table table-hover align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Stock</th>
+                                            <th>Mínimo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="p : ${bajoStock}">
+                                            <td th:text="${p.nombre}"></td>
+                                            <td th:text="${p.stock}"></td>
+                                            <td th:text="${p.stockMin}"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- <small class="text-muted">*Datos demo: reemplazar con tu consulta de inventario.</small> -->
+                        </div>
+                    </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="card border-0 shadow-sm">
                         <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                            <span class="fw-semibold">Top categorías (importe)</span>
+                            <span class="fw-semibold">Top 10 categorías (importe)</span>
                             <button id="dlCategorias" class="btn btn-sm btn-ghost">Descargar PNG</button>
                         </div>
                         <div class="card-body">
@@ -207,8 +206,6 @@
                 </div>
             </div>
 
-
-
             <!-- Tablas -->
             <h5 class="section-title">Tablas</h5>
             <div class="row g-4">
@@ -235,38 +232,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-5">
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                            <span class="fw-semibold">Stock crítico</span>
-                            <button id="csvStock" class="btn btn-sm btn-ghost">Exportar CSV</button>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="tblStock" class="table table-hover align-middle">
-                                    <thead>
-                                        <tr>
-                                            <th>Producto</th>
-                                            <th>Stock</th>
-                                            <th>Mínimo</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr th:each="p : ${bajoStock}">
-                                            <td th:text="${p.nombre}"></td>
-                                            <td th:text="${p.stock}"></td>
-                                            <td th:text="${p.stockMin}"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- <small class="text-muted">*Datos demo: reemplazar con tu consulta de inventario.</small> -->
-                        </div>
-                    </div>
-                </div>
             </div>
 
-            <div class="text-center text-muted small mt-4">Reporte demo · reemplaza los arrays por tus endpoints</div>
         </div>
 
         <!-- Top productos vendidos -->
@@ -277,192 +244,10 @@
 
         <!-- Metodos de pago por importe -->
         <div id="metodoPagoData" th:attr="data-metodo-pago=${metodoPago}"></div>
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                // Obtenemos los datos embebidos en el HTML
-                const div = document.getElementById("topProductosData");
-                const topProductos = JSON.parse(div.dataset.top);
-
-                const tbody = document.querySelector("#tblTop tbody");
-                tbody.innerHTML = "";
-
-                topProductos.forEach((p, i) => {
-                    const tr = document.createElement("tr");
-                    tr.innerHTML = `
-                        <td>${i + 1}</td>
-                        <td>${p.nombre}</td>
-                        <td>${p.totalUnidades}</td>
-                        <td>$${p.totalImporte.toFixed(2)}</td>
-                        `;
-                    tbody.appendChild(tr);
-                });
-            });
-
-
-
-            // ======== Helpers ========
-            const $ = s => document.querySelector(s);
-            const fmt = (n) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(n);
-            const downloadPNG = (chart, filename) => {
-                const link = document.createElement('a');
-                link.href = chart.toBase64Image();
-                link.download = filename;
-                link.click();
-            };
-            const csvFromRows = (rows) => rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
-            const exportTableCSV = (table, filename) => {
-                const rows = [...table.querySelectorAll('tr')].map(tr => [...tr.children].map(td => td.innerText));
-                const blob = new Blob([csvFromRows(rows)], { type: 'text/csv;charset=utf-8;' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = filename;
-                link.click();
-            };
-
-            function renderCharts() {
-                const ventasDiv = document.getElementById("ventasDiariasData");
-                const labels = JSON.parse(ventasDiv.dataset.labels);
-                const data = JSON.parse(ventasDiv.dataset.data);
-
-                const chartVentas = document.getElementById('ventasDiarias');
-                new Chart(chartVentas, {
-                    type: 'line',
-                    data: {
-                        labels: labels.map(f => new Date(f).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit' })),
-                        datasets: [{
-                            label: 'Total vendido',
-                            data: data,
-                            fill: true,
-                            borderWidth: 2,
-                            tension: .3,
-                            backgroundColor: 'rgba(54,162,235,.15)',
-                            borderColor: 'rgb(54,162,235)',
-                            pointRadius: 3
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            tooltip: { callbacks: { label: ctx => `$${ctx.parsed.y.toFixed(2)}` } },
-                            legend: { display: false },
-                            title: { display: true, text: 'Ventas diarias ($)' }
-                        },
-                        scales: {
-                            y: { ticks: { callback: v => `$${v}` } }
-                        }
-                    }
-                });
-
-                // Método de pago (doughnut)
-                const metodoPagoDiv = document.getElementById("metodoPagoData");
-                const metodoPago = JSON.parse(metodoPagoDiv.dataset.metodoPago);
-
-                const chartPago = new Chart(document.getElementById('metodoPago'), {
-                    type: 'doughnut',
-                    data: {
-                        labels: metodoPago.map(m => m.metodo), // 👈 SIN .metodoPago
-                        datasets: [{
-                            data: metodoPago.map(m => m.total)
-                        }]
-                    },
-                    options: {
-                        plugins: {
-                            tooltip: {
-                                callbacks: {
-                                    label: ctx =>
-                                        `${ctx.label}: ${ctx.parsed.toLocaleString('es-ES', {
-                                            style: 'currency',
-                                            currency: 'ARS'
-                                        })}`
-                                }
-                            },
-                            title: {
-                                display: true,
-                                text: 'Distribución por método de pago'
-                            }
-                        },
-                        cutout: '60%'
-                    }
-                });
-
-                // Top productos (barra horizontal)
-                // chartTopProd?.destroy();
-                // chartTopProd = new Chart($('#topProductos'), {
-                //     type: 'bar',
-                //     data: {
-                //         labels: demo.topProductos.map(p => p.nombre),
-                //         datasets: [{
-                //             label: 'Unidades',
-                //             data: demo.topProductos.map(p => p.unidades),
-                //             borderWidth: 1
-                //         }]
-                //     },
-                //     options: {
-                //         indexAxis: 'y',
-                //         plugins: {
-                //             legend: { display: false },
-                //             title: { display: true, text: 'Top 10 productos por unidades' },
-                //             tooltip: { callbacks: { label: ctx => `${ctx.parsed.x} u.` } }
-                //         }
-                //     }
-                // });
-            }
-
-            // ======== Tablas ========
-            // function renderTablas() {
-            // Top vendidos
-            //         const tbTop = $('#tblTop tbody');
-            //         tbTop.innerHTML = '';
-            //         demo.topProductos.forEach((p, i) => {
-            //             const tr = document.createElement('tr');
-            //             tr.innerHTML = `
-            //   <td>${i + 1}</td>
-            //   <td>${p.nombre}</td>
-            //   <td>${p.unidades}</td>
-            //   <td>${fmt(p.importe)}</td>`;
-            //             tbTop.appendChild(tr);
-            //         });
-
-            // Stock crítico
-            //         const tbSt = $('#tblStock tbody');
-            //         tbSt.innerHTML = '';
-            //         demo.stockCritico.forEach(s => {
-            //             const tr = document.createElement('tr');
-            //             tr.innerHTML = `
-            //   <td>${s.producto}</td>
-            //   <td><span class="badge text-bg-danger">${s.stock}</span></td>
-            //   <td>${s.minimo}</td>`;
-            //             tbSt.appendChild(tr);
-            //         });
-            //     }
-
-
-            // Descargar PNG de los gráficos
-            $('#dlVentas').addEventListener('click', () => downloadPNG(chartVentas, 'ventas-diarias.png'));
-            $('#dlPago').addEventListener('click', () => downloadPNG(chartPago, 'metodo-pago.png'));
-            $('#dlTopProd').addEventListener('click', () => downloadPNG(chartTopProd, 'top-productos.png'));
-            $('#dlCategorias').addEventListener('click', () => downloadPNG(chartCats, 'categorias.png'));
-
-            // Exportar CSV de tablas
-            $('#csvTop').addEventListener('click', () => exportTableCSV($('#tblTop'), 'top_productos.csv'));
-            $('#csvStock').addEventListener('click', () => exportTableCSV($('#tblStock'), 'stock_critico.csv'));
-
-            // Init
-            (function init() {
-                // set rango por defecto a la semana del demo
-                // $('#desde').value = '2025-08-01';
-                // $('#hasta').value = '2025-08-07';
-                // refrescarKPIs();
-                renderCharts();
-                // renderTablas();
-            })();
-        </script>
-
-
+        
     </div>
-
     <!-- Mis JS -->
-    <script th:fragment="js"></script>
+    <script th:fragment="js" th:src="@{/js/reportes.js}"></script>
 </body>
 
 </html>

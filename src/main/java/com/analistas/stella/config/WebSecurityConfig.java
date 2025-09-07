@@ -34,16 +34,14 @@ public class WebSecurityConfig {
 
         // Query para obtener usuario + password
         manager.setUsersByUsernameQuery(
-            "SELECT nombrecompleto as username, contrasena as password, true as enabled " +
-            "FROM usuarios WHERE nombrecompleto = ?"
-        );
+                "SELECT nombrecompleto as username, contrasena as password, true as enabled " +
+                        "FROM usuarios WHERE nombrecompleto = ?");
 
         // Query para obtener roles/authorities
         manager.setAuthoritiesByUsernameQuery(
-            "SELECT u.nombrecompleto as username, r.nombre as authority " +
-            "FROM roles r INNER JOIN usuarios u ON u.rol_id = r.id " +
-            "WHERE u.nombrecompleto = ?"
-        );
+                "SELECT u.nombrecompleto as username, r.nombre as authority " +
+                        "FROM roles r INNER JOIN usuarios u ON u.rol_id = r.id " +
+                        "WHERE u.nombrecompleto = ?");
 
         return manager;
     }
@@ -66,20 +64,22 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-//     @Autowired
-//     public void configGlobal(AuthenticationManagerBuilder builder) throws Exception {
-//         builder
-//                 .jdbcAuthentication()
-//                 .dataSource(dataSource)
-//                 .usersByUsernameQuery(
-//                         "select nombrecompleto as username, contrasena as password, true as enabled " +
-//                                 "from usuarios " +
-//                                 "where nombrecompleto = ?")
-//                 .authoritiesByUsernameQuery(
-//                         "select u.nombrecompleto as username, r.nombre as authority " +
-//                                 "from roles r " +
-//                                 "inner join usuarios u on u.rol_id = r.id " +
-//                                 "where u.nombrecompleto = ?");
-//     }
+    // @Autowired
+    // public void configGlobal(AuthenticationManagerBuilder builder) throws
+    // Exception {
+    // builder
+    // .jdbcAuthentication()
+    // .dataSource(dataSource)
+    // .usersByUsernameQuery(
+    // "select nombrecompleto as username, contrasena as password, true as enabled "
+    // +
+    // "from usuarios " +
+    // "where nombrecompleto = ?")
+    // .authoritiesByUsernameQuery(
+    // "select u.nombrecompleto as username, r.nombre as authority " +
+    // "from roles r " +
+    // "inner join usuarios u on u.rol_id = r.id " +
+    // "where u.nombrecompleto = ?");
+    // }
 
 }

@@ -20,63 +20,68 @@
 
         <br>
         <div class="container mt-4">
-            <table id="tabla-productos" class="table table-striped table-bordered" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Imágen</th>
-                        <th>Nombre</th>
-                        <th>Precio Minorista</th>
-                        <th>Precio Bulto</th>
-                        <th>Stock</th>
-                        <th>Stock Mínimo</th>
-                        <th>Categoria</th>
-                        <th>Fecha de Vencimiento</th>
-                        <th>Opciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="p : ${productos}" th:class="${not p.activo} ? 'tachado' : ''">
-                        <td th:text="${p.id}"></td>
-                        <td>
-                            <img th:src="@{${p.linkImagen}}" alt="Foto" height="100px">
-                        </td>
-                        <td th:text="${p.nombre}"></td>
-                        <td th:text="'$' + ${p.precioMin}"></td>
-                        <!-- <td th:text="${'$ ' + #numbers.formatDecimal(p.precioMin, 0, 0)}"></td> -->
-                        <!-- <td th:text="${'$ ' + #numbers.formatDecimal(p.precioBulto, 0, 0)}"></td> -->
-                        <td th:text="'$' + ${p.precioBulto}"></td>
-                        <td th:text="${p.stock}"></td>
-                        <td th:text="${p.stockMin}"></td>
-                        <td th:text="${p.categoria.nombre}"></td>
-                        <td th:text="${#temporals.format(p.fechaVen, 'dd/MM/yyyy')}"></td>
-                        <td>
-                            <a th:href="@{/productos/editar/{id}(id=${p.id})}" class="btn btn-sm btn-warning">Editar</a>
-                            <a th:href="@{/productos/deshabilitar/{id}(id=${p.id})}" class="btn btn-sm btn-danger">
-                                <span th:text="${not p.activo} ? 'Habilitar' : 'Deshabilitar'"></span>
-                            </a>
-                            <a href="#" class="btn btn-sm btn-danger btn-delete"
-                                th:attr="data-href=@{/productos/borrar/{id}(id=${p.id})}">
-                                Borrar
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th>#</th>
-                        <th>Imágen</th>
-                        <th>Nombre</th>
-                        <th>Precio Minorista</th>
-                        <th>Precio Bulto</th>
-                        <th>Stock</th>
-                        <th>Stock Mínimo</th>
-                        <th>Categoria</th>
-                        <th>Fecha de Vencimiento</th>
-                        <th>Opciones</th>
-                    </tr>
-                </tfoot>
-            </table>
+            <div class="card p-2">
+
+                <table id="tabla-productos" class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Imágen</th>
+                            <th>Nombre</th>
+                            <th>Precio Minorista</th>
+                            <th>Precio Bulto</th>
+                            <th>Stock</th>
+                            <th>Stock Mínimo</th>
+                            <th>Categoria</th>
+                            <th>Fecha de Vencimiento</th>
+                            <th>Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="p : ${productos}" th:class="${not p.activo} ? 'tachado' : ''">
+                            <td th:text="${p.id}"></td>
+                            <td>
+                                <img th:src="@{${p.linkImagen}}" alt="Foto" height="100px">
+                            </td>
+                            <td th:text="${p.nombre}"></td>
+                            <td th:text="'$' + ${p.precioMin}"></td>
+                            <!-- <td th:text="${'$ ' + #numbers.formatDecimal(p.precioMin, 0, 0)}"></td> -->
+                            <!-- <td th:text="${'$ ' + #numbers.formatDecimal(p.precioBulto, 0, 0)}"></td> -->
+                            <td th:text="'$' + ${p.precioBulto}"></td>
+                            <td th:text="${p.stock}"></td>
+                            <td th:text="${p.stockMin}"></td>
+                            <td th:text="${p.categoria.nombre}"></td>
+                            <td th:text="${#temporals.format(p.fechaVen, 'dd/MM/yyyy')}"></td>
+                            <td>
+                                <a th:href="@{/productos/editar/{id}(id=${p.id})}"
+                                    class="btn btn-sm btn-warning">Editar</a>
+                                <a th:href="@{/productos/deshabilitar/{id}(id=${p.id})}" class="btn btn-sm btn-danger">
+                                    <span th:text="${not p.activo} ? 'Habilitar' : 'Deshabilitar'"></span>
+                                </a>
+                                <a href="#" class="btn btn-sm btn-danger btn-delete"
+                                    th:attr="data-href=@{/productos/borrar/{id}(id=${p.id})}">
+                                    Borrar
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>#</th>
+                            <th>Imágen</th>
+                            <th>Nombre</th>
+                            <th>Precio Minorista</th>
+                            <th>Precio Bulto</th>
+                            <th>Stock</th>
+                            <th>Stock Mínimo</th>
+                            <th>Categoria</th>
+                            <th>Fecha de Vencimiento</th>
+                            <th>Opciones</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
             <!-- Botón debajo de la tabla -->
             <div class="text-end mt-3">
                 <a th:href="@{/productos/nuevo}" class="btn btn-outline-primary">Nuevo Producto</a>

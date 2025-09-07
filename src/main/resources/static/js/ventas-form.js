@@ -202,6 +202,7 @@ function finalizarVenta() {
       mostrarAlerta('Venta registrada. N°: ' + data.numero + ' - ID: ' + data.id, 'success');
       // Construye el objeto venta con los datos necesarios para el ticket
       const ventaParaTicket = {
+        caja: $('caja').value,
         fecha: $('fechaVenta').value,
         numero: data.numero,
         vuelto: parseFloat(($('vuelto').textContent || '0').replace(',', '.')),
@@ -423,7 +424,7 @@ function imprimirTicket(venta, supermercado) {
   y += 4;
   doc.text('Venta N°: ' + venta.numero, 5, y);
   y += 4;
-  doc.text('CAJA X : ' + (venta.usuario || 'Cajero'), 5, y);
+  doc.text(venta.caja + ' : ' + (venta.usuario || 'Cajero'), 5, y);
   y += 4;
   doc.text('----------------------------------------', 5, y);
   y += 4;
