@@ -17,7 +17,7 @@
     <div layout:fragment="dashboard"> <!--Toda la información va adentro de este div, no afuera -->
         <div class="card shadow-lg">
             <div class="card-header bg-success text-white">
-                <h4>Nuevo Proveedor</h4>
+                <h4 th:text="${titulo}"></h4>
             </div>
             <div class="card-body">
                 <form th:action="@{/proveedores/guardar}" th:object="${proveedor}" method="post">

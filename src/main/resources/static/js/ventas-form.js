@@ -222,7 +222,7 @@ function finalizarVenta() {
         localidad: "QUITILIPI - Chaco",
         cuit: "20341614584"
       };
-      imprimirTicket(ventaParaTicket, datosSuper);
+      // imprimirTicket(ventaParaTicket, datosSuper); DESCOMENTAR ESTOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
       // cancelarVenta();
       carrito = [];
       renderTabla(); recalcular();
