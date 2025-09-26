@@ -62,10 +62,14 @@ public class CajaServiceImpl implements ICajaService {
                 .orElseThrow(() -> new IllegalStateException("La caja no está abierta o no existe"));
 
         caja.setCierre(LocalDateTime.now());
-
         
-        BigDecimal totalVentas = ventaRepository.calcularTotalPorCaja(caja.getId());
-        caja.setMontoFinal(caja.getMontoInicial().add(totalVentas));
+        // Calcular por todos los montos
+        // BigDecimal totalVentas = ventaRepository.calcularTotalPorCaja(caja.getId());
+
+        // Calcular solo dinero en EF
+        BigDecimal totalEfectivo = cajaRepository.calcularTotalPorMetodo(caja, "EFECTIVO");
+
+        caja.setMontoFinal(caja.getMontoInicial().add(totalEfectivo));
         caja.setAbierta(false);
         caja.setMontoDeclarado(montoDeclarado);
         caja.setComentarioCierre(comentarioCierre);
@@ -90,5 +94,10 @@ public class CajaServiceImpl implements ICajaService {
     @Override
     public Caja buscarPorId(Long id) {
         return cajaRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public BigDecimal calcularTotalPorMetodo(Caja caja, String metodoPago) {
+        return cajaRepository.calcularTotalPorMetodo(caja, metodoPago);
     }
 }

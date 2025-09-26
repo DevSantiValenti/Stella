@@ -127,7 +127,7 @@
 
           <!-- Botón "Cerrar Caja" (solo si hay caja abierta) -->
           <th:block th:if="${session.cajaNombre != null}">
-            <a th:href="@{/cajas/listadoAdmin}" class="ghost text-bg-warning">Cerrar Caja</a>
+            <a th:href="@{/cajas/cerrarCaja/{id}(id=${session.cajaId})}" class="ghost text-bg-warning">Cerrar Caja</a>
           </th:block>
         </div>
         <div class="right">
@@ -148,7 +148,10 @@
             <select id="metodoPago">
               <option value="EFECTIVO">Efectivo</option>
               <option value="DEBITO">Débito</option>
-              <option value="CREDITO">Crédito</option>
+              <option value="CREDITO1C">Crédito 1C</option>
+              <option value="CREDITO3C">Crédito 3C</option>
+              <option value="CREDITO6C">Crédito 6C</option>
+              <!-- <option value="CREDITO+6C">Crédito 12C</option> -->
               <option value="TRANSFERENCIA">Transferencia</option>
               <option value="CTA_CORRIENTE">Cuenta corriente</option>
             </select>

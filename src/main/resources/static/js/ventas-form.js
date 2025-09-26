@@ -17,6 +17,7 @@ window.addEventListener('DOMContentLoaded', () => {
   $('btnHold').addEventListener('click', holdVenta);
   $('btnFinalizar').addEventListener('click', finalizarVenta);
   $('ventaForm').addEventListener('submit', e => e.preventDefault());
+  $('metodoPago').addEventListener('change', recalcular);
 
   // Enter en código agrega foco a cantidad y/o agrega directo
   // $('codigo').addEventListener('keydown', (e)=>{
@@ -99,7 +100,7 @@ function renderTabla() {
 }
 
 function recalcular() {
-  let subSinIVA = 0, totalIVA = 0, total = 0, totalDescItems = 0;
+  let subSinIVA = 0, totalIVA = 0, totalDescItems = 0;
 
   carrito.forEach(it => {
     const base = it.cantidad * it.precio;
@@ -114,12 +115,27 @@ function recalcular() {
 
   const descGlobalPorc = parseFloat($('descGlobal').value || '0');
   const descGlobalMonto = (subSinIVA + totalIVA) * (descGlobalPorc / 100);
-  const totalFinal = subSinIVA + totalIVA - descGlobalMonto;
+
+  // total antes de recargo por financiación
+  const totalAntesRecargo = subSinIVA + totalIVA - descGlobalMonto;
+
+  // recargo según método de pago
+  const metodo = $('metodoPago').value;
+  let recargoPorc = 0;
+  if (metodo === 'CREDITO3C') recargoPorc = 0.10;
+  else if (metodo === 'CREDITO6C') recargoPorc = 0.20;
+
+  const recargoMonto = totalAntesRecargo * recargoPorc;
+  const totalFinal = totalAntesRecargo + recargoMonto;
 
   $('subTotal').textContent = fmt(subSinIVA);
   $('montoIVA').textContent = fmt(totalIVA);
   $('montoDesc').textContent = fmt(totalDescItems + descGlobalMonto);
-  $('total').textContent = fmt(totalFinal);
+
+  // guarda recargo en data-attribute por si lo necesitás luego
+  const totalEl = $('total');
+  totalEl.textContent = fmt(totalFinal);
+  totalEl.dataset.recargo = recargoMonto.toFixed(2);
 
   calcVuelto();
 }
@@ -158,7 +174,7 @@ function finalizarVenta() {
   const montoRecibido = parseFloat($('montoRecibido').value || '0');
   const total = parseFloat(($('total').textContent || '0').replace(',', '.'));
 
-  if (montoRecibido <= 0) {
+  if (montoRecibido < 0) {
     mostrarAlerta('Ingrese el monto recibido.', 'warning');
     $('montoRecibido').focus();
     return;

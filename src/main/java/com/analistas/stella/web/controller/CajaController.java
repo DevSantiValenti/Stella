@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class CajaController {
 
     @Autowired
-    private ICajaService cajaService;
+    ICajaService cajaService;
 
     @Autowired
     ICajaFisicaService cajaFisicaService;
@@ -51,6 +51,39 @@ public class CajaController {
 
         return "redirect:/ventas/nuevo";
     }
+
+    @GetMapping("/cerrarCaja/{id}")
+    public String getMethodName(Model model, @PathVariable Long id) {
+        Caja caja = cajaService.buscarPorId(id);
+
+        BigDecimal totalEfectivo = cajaService.calcularTotalPorMetodo(caja, "EFECTIVO");
+        BigDecimal totalTransferencia = cajaService.calcularTotalPorMetodo(caja, "TRANSFERENCIA");
+        BigDecimal totalCredito1 = cajaService.calcularTotalPorMetodo(caja, "CREDITO1C");
+        BigDecimal totalCredito3 = cajaService.calcularTotalPorMetodo(caja, "CREDITO3C");
+        BigDecimal totalCredito6 = cajaService.calcularTotalPorMetodo(caja, "CREDITO6C");
+        BigDecimal totalDebito = cajaService.calcularTotalPorMetodo(caja, "DEBITO");
+        BigDecimal totalCuentaCorriente = cajaService.calcularTotalPorMetodo(caja, "CTA_CORRIENTE");
+
+        // Calculo del total de ventas de todos los medios de pago:
+        BigDecimal totalVentas = ventaService.calcularTotalVentasPorCaja(id);
+        model.addAttribute("total", totalVentas);
+
+
+
+        // Cantidades por metodo de pago
+        model.addAttribute("totalEfectivo", totalEfectivo);
+        model.addAttribute("totalTransferencia", totalTransferencia);
+        model.addAttribute("totalCredito", totalCredito1.add(totalCredito3).add(totalCredito6));
+        model.addAttribute("totalDebito", totalDebito);
+        model.addAttribute("totalCuentaCorriente", totalCuentaCorriente);
+
+        model.addAttribute("montoInicial", caja.getMontoInicial());
+
+        model.addAttribute("caja", caja);
+        model.addAttribute("titulo", "Cerrar Venta");
+        return "cajas/cerrar-caja";
+    }
+    
 
     @PostMapping("/cerrar")
     public String cerrarCaja(@RequestParam Long cajaId, @RequestParam BigDecimal montoDeclarado,

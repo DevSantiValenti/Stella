@@ -34,7 +34,7 @@ public class Caja {
     // private BigDecimal totalVueltos;
     private BigDecimal montoDeclarado; // Lo que el cajero cuenta
     private BigDecimal diferencia; // montoDeclarado - (montoInicial + totalVentas - totalVueltos)
-    private String comentarioCierre;
+    private String comentarioCierre; //Comentario opcional al cerrar la caja
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario")

@@ -17,5 +17,5 @@ public interface ICajaService {
 
     public Caja buscarPorId(Long id);
 
-    
+    public BigDecimal calcularTotalPorMetodo(Caja caja, String metodoPago);
 }

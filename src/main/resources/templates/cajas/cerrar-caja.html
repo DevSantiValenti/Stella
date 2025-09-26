@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout-dashboard}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo}"></title>
+    <style>
+        .container {
+            margin-left: 20px;
+            max-width: 600px;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        .totales {
+            margin-bottom: 20px;
+        }
+
+        .totales p {
+            margin: 5px 0;
+            font-weight: bold;
+        }
+
+        .displayGrid {
+            display: grid;
+            width: 70vw;
+            grid-template-columns: auto auto;
+        }
+
+        .col{
+            background-color: aliceblue;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px;
+            box-shadow: 0px 0px 7px rgb(34, 56, 226);
+        }
+    </style>
+</head>
+
+<body>
+    <div layout:fragment="dashboard">
+        <div class="container">
+            <div class="displayGrid">
+                <div class="col"><!-- Mostrar los totales por método de pago -->
+                    <div class="totales">
+                        <p>Monto en caja inicial: $<span id="montoInicial" th:text="${montoInicial}">0.00</span></p>
+                        <p class="fs-2">Efectivo: $<span id="totalEfectivo" th:text="${totalEfectivo}">0.00</span></p>
+                        <p>Transferencia: $<span th:text="${totalTransferencia}">0.00</span></p>
+                        <p>Tarjeta Crédito: $<span th:text="${totalCredito}">0.00</span></p>
+                        <p>Tarjeta Débito: $<span th:text="${totalDebito}">0.00</span></p>
+                        <p>Cuenta Corriente: $<span th:text="${totalCuentaCorriente}">0.00</span></p>
+                        <hr>
+                        <p class="fs-2">Total ventas: $<span th:text="${total}">0.00</span></p>
+
+                        <p class="fs-2">Monto esperado en Caja:
+                            $<span id="montoEsperado" th:text="${totalEfectivo + montoInicial}">0.00</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="col"> <!-- Formulario de cierre -->
+                    <form th:action="@{/cajas/cerrar}" method="post">
+                        <input type="hidden" name="cajaId" th:value="${caja.id}">
+
+                        <div class="mb-3">
+                            <label for="montoDeclarado" class="form-label">Monto contado en caja (efectivo)</label>
+                            <input type="number" step="0.01" name="montoDeclarado" id="montoDeclarado"
+                                class="form-control" placeholder="Ingrese monto contado" required>
+                        </div>
+
+                        <!-- Aquí mostramos la diferencia -->
+                        <div class="mb-3">
+                            <label class="form-label">Diferencia</label>
+                            <p id="diferenciaTexto" class="fw-bold text-info">Ingrese un monto...</p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="comentarioCierre" class="form-label">Comentario (opcional)</label>
+                            <textarea name="comentarioCierre" id="comentarioCierre" class="form-control"
+                                placeholder="Escriba un comentario si lo desea"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-danger w-100">Cerrar Caja</button>
+                    </form>
+                </div>
+            </div>
+            <!-- <div class="card"> -->
+
+
+
+            <!-- </div> -->
+        </div>
+
+
+        <!-- Mis JS -->
+        <script th:fragment="js"></script>
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            document.addEventListener('DOMContentLoaded', function () {
+                const inputEfectivo = document.getElementById('montoDeclarado');
+                const diferenciaTexto = document.getElementById('diferenciaTexto');
+                const montoEsperadoEl = document.getElementById('montoEsperado');
+
+                // función robusta para parsear números que soporta:
+                //  - "1.234,56"  (puntos miles, coma decimales)
+                //  - "1234.56"   (puntos decimales)
+                //  - "$1.234,56" (con símbolo)
+                function parseNumber(str) {
+                    if (str === null || str === undefined) return 0;
+                    // si ya es number
+                    if (typeof str === 'number') return str;
+                    const s = String(str).trim();
+                    // quitar símbolos de moneda y espacios
+                    let cleaned = s.replace(/\s+/g, '').replace(/[^\d.,-]/g, '');
+                    // si tiene coma y punto, asumimos que punto es miles y coma decimal -> eliminar puntos y cambiar coma por punto
+                    if (cleaned.indexOf('.') !== -1 && cleaned.indexOf(',') !== -1) {
+                        cleaned = cleaned.replace(/\./g, '').replace(/,/g, '.');
+                    } else {
+                        // si solo tiene coma, la convertimos a punto
+                        if (cleaned.indexOf(',') !== -1 && cleaned.indexOf('.') === -1) {
+                            cleaned = cleaned.replace(/,/g, '.');
+                        }
+                        // si solo tiene puntos y más de 1 punto, probablemente sean miles -> eliminar puntos
+                        if ((cleaned.match(/\./g) || []).length > 1) {
+                            cleaned = cleaned.replace(/\./g, '');
+                        }
+                    }
+                    const num = parseFloat(cleaned);
+                    return isNaN(num) ? 0 : num;
+                }
+
+                // obtener monto esperado desde el span (renderizado por Thymeleaf)
+                const montoEsperado = parseNumber(montoEsperadoEl ? montoEsperadoEl.textContent : 0);
+
+                function actualizar() {
+                    const contado = parseNumber(inputEfectivo.value);
+                    // si no hay nada escrito mostramos mensaje por defecto
+                    if (inputEfectivo.value === '' || isNaN(contado)) {
+                        diferenciaTexto.textContent = 'Ingrese un monto...';
+                        diferenciaTexto.className = 'fw-bold text-info';
+                        return;
+                    }
+
+                    const diferencia = contado - montoEsperado;
+
+                    if (diferencia > 0.000001) {
+                        diferenciaTexto.textContent = 'Sobrante: $' + diferencia.toFixed(2);
+                        diferenciaTexto.className = 'fw-bold text-success';
+                    } else if (diferencia < -0.000001) {
+                        // mostramos la magnitud positiva cuando falta dinero
+                        diferenciaTexto.textContent = 'Falta: $' + Math.abs(diferencia).toFixed(2);
+                        diferenciaTexto.className = 'fw-bold text-danger';
+                    } else {
+                        diferenciaTexto.textContent = 'Encuadre perfecto ✔';
+                        diferenciaTexto.className = 'fw-bold text-info';
+                    }
+                }
+
+                // si el campo existe, escuchamos input
+                if (inputEfectivo) {
+                    inputEfectivo.addEventListener('input', actualizar);
+                }
+            });
+            /*]]>*/
+        </script>
+</body>
+
+</html>

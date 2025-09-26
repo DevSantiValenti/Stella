@@ -75,6 +75,7 @@
             <table id="tabla-cajas" class="table table-bordered table-responsive table-hover text-center mt-2">
                 <thead class="table-dark">
                     <tr>
+                        <th>ID</th>
                         <th>CAJA</th>
                         <th>Cajero</th>
                         <th>Apertura</th>
@@ -85,11 +86,11 @@
                         <th>Diferencia</th>
                         <th>Comentarios</th>
                         <th>Estado</th>
-                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="caja : ${cajas}">
+                        <td th:text="${caja.id}"></td>
                         <td th:text="${caja.cajaFisica.nombre}"></td>
                         <td th:text="${caja.usuario != null ? caja.usuario.nombrecompleto : '?'}"></td>
                         <td th:text="${#temporals.format(caja.apertura, 'dd/MM/yyyy HH:mm')}"></td>
@@ -97,33 +98,15 @@
                         <td th:text="'$' + ${caja.montoInicial}"></td>
                         <td th:text="'$' + (${caja.montoFinal} != null ? ${caja.montoFinal} : '0')"></td>
                         <td th:text="'$' + (${caja.montoDeclarado != null} ? ${caja.montoDeclarado} : '0')"></td>
-                        <td th:text="${caja.diferencia > 0} ? 'Saldo positivo: $' + (${caja.diferencia != null} ? ${caja.diferencia} : '0') : 'Saldo negativo: $' + (${caja.diferencia != null} ? ${caja.diferencia} : '0')"
-                            th:class="${caja.diferencia > 0} ? 'text-bg-success' : 'text-bg-danger'"></td>
+                        <td th:text="${caja.diferencia > 0} ? 'Saldo positivo: $' + (${caja.diferencia} != null ? ${caja.diferencia} : '0') 
+                                    : (${caja.diferencia < 0} ? 'Saldo negativo: $' + (${caja.diferencia} != null ? ${caja.diferencia} : '0') 
+                                    : 'Encuadre perfecto')" th:class="${caja.diferencia > 0} ? 'text-bg-success' 
+                                    : (${caja.diferencia < 0} ? 'text-bg-danger' : 'text-bg-info')">
+                        </td>
+
                         <td th:text="${caja.comentarioCierre}"></td>
                         <td th:text="${caja.abierta ? 'Abierta' : 'Cerrada'}"
                             th:class="${caja.abierta ? 'text-bg-success' : 'text-bg-danger'}"></td>
-                        <!-- <td>
-                            <form th:action="@{/cajas/cerrar}" method="post" th:if="${caja.abierta}">
-                                <input type="hidden" name="cajaId" th:value="${caja.id}">
-                                <button class="btn btn-danger" type="submit">Cerrar Caja</button>
-                            </form>
-                        </td> -->
-                        <td>
-                            <form th:action="@{/cajas/cerrar}" method="post" th:if="${caja.abierta}">
-                                <input type="hidden" name="cajaId" th:value="${caja.id}">
-
-                                <div class="mb-2">
-                                    <input type="number" step="0.01" name="montoDeclarado" class="form-control"
-                                        placeholder="Monto contado" required>
-                                </div>
-                                <div class="mb-2">
-                                    <input type="text" name="comentarioCierre" class="form-control"
-                                        placeholder="Comentario (opcional)">
-                                </div>
-
-                                <button class="btn btn-danger w-100" type="submit">Cerrar Caja</button>
-                            </form>
-                        </td>
                     </tr>
                 </tbody>
             </table>

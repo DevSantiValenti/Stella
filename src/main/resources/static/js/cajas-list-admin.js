@@ -6,8 +6,8 @@ $(document).ready(() => {
         lengthMenu: [10, 25, 50, 100],
         columns: [
             null,
-            // {orderable: false},
             null,
+            // {orderable: false},
             null,
             null,
             null,
