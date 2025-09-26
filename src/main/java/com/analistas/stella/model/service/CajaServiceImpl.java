@@ -25,15 +25,19 @@ public class CajaServiceImpl implements ICajaService {
     private IVentaRepository ventaRepository;
 
     @Autowired
+    IVentaService ventaService;
+
+    @Autowired
     ICajaFisicaRepository cajaFisicaRepository;
 
     @Autowired
     IUsuarioService usuarioService;
 
     public Caja abrirCaja(BigDecimal montoInicial, Long cajaFisicaId) {
-        
-        //Buscar la caja fisica:
-        CajaFisica cajaFisica = cajaFisicaRepository.findById(cajaFisicaId).orElseThrow(() -> new IllegalArgumentException("Caja física no encontrada"));
+
+        // Buscar la caja fisica:
+        CajaFisica cajaFisica = cajaFisicaRepository.findById(cajaFisicaId)
+                .orElseThrow(() -> new IllegalArgumentException("Caja física no encontrada"));
 
         if (cajaRepository.findByCajaFisicaAndAbiertaTrue(cajaFisica).isPresent()) {
             throw new IllegalStateException("Ya existe una caja abierta");
@@ -42,7 +46,6 @@ public class CajaServiceImpl implements ICajaService {
         String username = SecurityUtils.getCurrentUsername();
         Usuario usuario2 = usuarioService.findByNombrecompleto(username);
 
-
         Caja caja = new Caja();
         caja.setApertura(LocalDateTime.now());
         caja.setMontoInicial(montoInicial);
@@ -50,19 +53,27 @@ public class CajaServiceImpl implements ICajaService {
         caja.setAbierta(true);
         // 🔗 Relacionar la sesión con la caja física
         caja.setCajaFisica(cajaFisica);
-        
+
         return cajaRepository.save(caja);
     }
 
-    public Caja cerrarCaja(Long cajaId) {
+    public Caja cerrarCaja(Long cajaId, BigDecimal montoDeclarado, String comentarioCierre) {
         Caja caja = cajaRepository.findByIdAndAbiertaTrue(cajaId)
-            .orElseThrow(() -> new IllegalStateException("La caja no está abierta o no existe"));
+                .orElseThrow(() -> new IllegalStateException("La caja no está abierta o no existe"));
 
         caja.setCierre(LocalDateTime.now());
 
+        
         BigDecimal totalVentas = ventaRepository.calcularTotalPorCaja(caja.getId());
         caja.setMontoFinal(caja.getMontoInicial().add(totalVentas));
         caja.setAbierta(false);
+        caja.setMontoDeclarado(montoDeclarado);
+        caja.setComentarioCierre(comentarioCierre);
+
+        // Calcular diferencia
+        BigDecimal diferencia = caja.getMontoFinal().subtract(caja.getMontoDeclarado());
+        diferencia = diferencia.negate();
+        caja.setDiferencia(diferencia);
 
         return cajaRepository.save(caja);
     }
@@ -71,4 +82,13 @@ public class CajaServiceImpl implements ICajaService {
         return (List<Caja>) cajaRepository.findAll();
     }
 
+    @Override
+    public void guardar(Caja caja) {
+        cajaRepository.save(caja);
+    }
+
+    @Override
+    public Caja buscarPorId(Long id) {
+        return cajaRepository.findById(id).orElse(null);
+    }
 }

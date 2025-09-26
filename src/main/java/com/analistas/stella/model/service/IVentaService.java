@@ -3,6 +3,7 @@ package com.analistas.stella.model.service;
 import com.analistas.stella.model.domain.MetodoPagoDTO;
 import com.analistas.stella.model.domain.Venta;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -34,4 +35,8 @@ public interface IVentaService {
 
     // Importe por metodos de pago
     public List<MetodoPagoDTO> obtenerTotalesPorMetodoPago();
+
+    // Calculos de la caja
+    public BigDecimal calcularTotalVentasPorCaja(Long cajaId);
+    public BigDecimal calcularTotalVueltosPorCaja(Long cajaId);
 }

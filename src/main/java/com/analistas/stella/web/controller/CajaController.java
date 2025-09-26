@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.analistas.stella.model.domain.Caja;
 import com.analistas.stella.model.service.ICajaFisicaService;
 import com.analistas.stella.model.service.ICajaService;
+import com.analistas.stella.model.service.IVentaService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -27,6 +28,9 @@ public class CajaController {
 
     @Autowired
     ICajaFisicaService cajaFisicaService;
+
+    @Autowired
+    IVentaService ventaService;
 
     @GetMapping("/listadoAdmin")
     public String listar(Model model) {
@@ -49,15 +53,15 @@ public class CajaController {
     }
 
     @PostMapping("/cerrar")
-    public String cerrarCaja(@RequestParam Long cajaId, HttpSession session) {
+    public String cerrarCaja(@RequestParam Long cajaId, @RequestParam BigDecimal montoDeclarado,
+            @RequestParam(required = false) String comentarioCierre, HttpSession session) {
         // Cerrar caja por ID
-        cajaService.cerrarCaja(cajaId);
+        cajaService.cerrarCaja(cajaId, montoDeclarado, comentarioCierre);
 
         session.removeAttribute("cajaId");
         session.removeAttribute("cajaNombre");
         return "redirect:/cajas/listadoAdmin";
     }
-
 
     // CajaFisica
     @PostMapping("/crear")
@@ -71,4 +75,7 @@ public class CajaController {
         cajaFisicaService.eliminarCaja(id);
         return "redirect:/cajas/listadoAdmin";
     }
+
+    // Probando lo de cerrar caja con cambio
+
 }

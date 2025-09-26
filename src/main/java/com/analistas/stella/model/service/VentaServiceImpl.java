@@ -6,6 +6,7 @@ import com.analistas.stella.model.repository.IVentaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -109,6 +110,23 @@ public class VentaServiceImpl implements IVentaService {
     @Override
     public List<MetodoPagoDTO> obtenerTotalesPorMetodoPago() {
         return ventaRepo.obtenerTotalesPorMetodoPago();
+    }
+
+    // Calculos de la caja:
+    @Override
+    public BigDecimal calcularTotalVentasPorCaja(Long cajaId) {
+        List<Venta> ventas = ventaRepo.findByCajaIdAndFechaVentaBetween(cajaId);
+        return ventas.stream()
+            .map(v -> BigDecimal.valueOf(v.getTotal()))
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    @Override
+    public BigDecimal calcularTotalVueltosPorCaja(Long cajaId) {
+        List<Venta> ventas = ventaRepo.findByCajaIdAndFechaVentaBetween(cajaId);
+        return ventas.stream()
+            .map(v -> BigDecimal.valueOf(v.getVuelto()))
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
 }

@@ -7,6 +7,16 @@
   <link rel="stylesheet" href="/css/ventas-form.css" />
   <meta name="_csrf" th:content="${_csrf.token}" />
   <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  <style>
+    .left a.ghost {
+      margin-top: 10px;
+      text-decoration: none;
+      padding: 5px;
+      border-radius: 5px;
+      background-color: red;
+      text-align: center;
+    }
+  </style>
 </head>
 
 <body>
@@ -115,6 +125,10 @@
           <label>Observaciones</label>
           <textarea id="observaciones" rows="2" placeholder="Notas de la venta"></textarea>
 
+          <!-- Botón "Cerrar Caja" (solo si hay caja abierta) -->
+          <th:block th:if="${session.cajaNombre != null}">
+            <a th:href="@{/cajas/listadoAdmin}" class="ghost text-bg-warning">Cerrar Caja</a>
+          </th:block>
         </div>
         <div class="right">
           <div class="line">

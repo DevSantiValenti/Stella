@@ -81,6 +81,9 @@
                         <th>Cierre</th>
                         <th>Monto inicial</th>
                         <th>Monto final</th>
+                        <th>Monto en caja</th>
+                        <th>Diferencia</th>
+                        <th>Comentarios</th>
                         <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
@@ -93,12 +96,32 @@
                         <td th:text="${#temporals.format(caja.cierre, 'dd/MM/yyyy HH:mm')}"></td>
                         <td th:text="'$' + ${caja.montoInicial}"></td>
                         <td th:text="'$' + (${caja.montoFinal} != null ? ${caja.montoFinal} : '0')"></td>
+                        <td th:text="'$' + (${caja.montoDeclarado != null} ? ${caja.montoDeclarado} : '0')"></td>
+                        <td th:text="${caja.diferencia > 0} ? 'Saldo positivo: $' + (${caja.diferencia != null} ? ${caja.diferencia} : '0') : 'Saldo negativo: $' + (${caja.diferencia != null} ? ${caja.diferencia} : '0')"
+                            th:class="${caja.diferencia > 0} ? 'text-bg-success' : 'text-bg-danger'"></td>
+                        <td th:text="${caja.comentarioCierre}"></td>
                         <td th:text="${caja.abierta ? 'Abierta' : 'Cerrada'}"
                             th:class="${caja.abierta ? 'text-bg-success' : 'text-bg-danger'}"></td>
-                        <td>
+                        <!-- <td>
                             <form th:action="@{/cajas/cerrar}" method="post" th:if="${caja.abierta}">
                                 <input type="hidden" name="cajaId" th:value="${caja.id}">
                                 <button class="btn btn-danger" type="submit">Cerrar Caja</button>
+                            </form>
+                        </td> -->
+                        <td>
+                            <form th:action="@{/cajas/cerrar}" method="post" th:if="${caja.abierta}">
+                                <input type="hidden" name="cajaId" th:value="${caja.id}">
+
+                                <div class="mb-2">
+                                    <input type="number" step="0.01" name="montoDeclarado" class="form-control"
+                                        placeholder="Monto contado" required>
+                                </div>
+                                <div class="mb-2">
+                                    <input type="text" name="comentarioCierre" class="form-control"
+                                        placeholder="Comentario (opcional)">
+                                </div>
+
+                                <button class="btn btn-danger w-100" type="submit">Cerrar Caja</button>
                             </form>
                         </td>
                     </tr>
@@ -107,7 +130,9 @@
         </div>
 
     </div>
+    <script>
 
+    </script>
     <!-- Mis JS -->
     <script th:fragment="js" th:src="@{/js/cajas-list-admin.js}"></script>
 </body>

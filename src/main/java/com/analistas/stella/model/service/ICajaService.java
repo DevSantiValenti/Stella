@@ -9,7 +9,13 @@ public interface ICajaService {
 
     public Caja abrirCaja(BigDecimal montoInicial,Long cajaFisicaId);
 
-    public Caja cerrarCaja(Long cajaId);
+    public Caja cerrarCaja(Long cajaId, BigDecimal montoDeclarado, String comentarioCierre);
 
     public List<Caja> listarCajas();
+
+    public void guardar(Caja caja);
+
+    public Caja buscarPorId(Long id);
+
+    
 }

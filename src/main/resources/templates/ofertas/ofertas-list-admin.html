@@ -36,9 +36,13 @@
                     <tbody>
                         <tr th:each="oferta : ${ofertas}" th:class="${not oferta.activo} ? 'tachado' : ''">
                             <td th:text="${oferta.id}"></td>
-                            <td>
+                            <!-- <td>
                                 <img th:if="${oferta.imagenBanner != null}" th:src="@{${oferta.imagenBanner}}"
                                     alt="Imagen Oferta" height="80" />
+                                <span th:if="${oferta.imagenBanner == null}">No imagen</span>
+                            </td> -->
+                            <td>
+                                <img th:if="${oferta.imagenBanner != null}" th:src="@{${oferta.imagenBanner}}" alt="Foto" height="100px">
                                 <span th:if="${oferta.imagenBanner == null}">No imagen</span>
                             </td>
                             <td th:text="${oferta.descripcion}"></td>

@@ -30,6 +30,12 @@ public class Caja {
 
     private BigDecimal montoFinal;
 
+    // private BigDecimal totalVentas;
+    // private BigDecimal totalVueltos;
+    private BigDecimal montoDeclarado; // Lo que el cajero cuenta
+    private BigDecimal diferencia; // montoDeclarado - (montoInicial + totalVentas - totalVueltos)
+    private String comentarioCierre;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario")
     private Usuario usuario; // puedes vincularlo con Usuario si quieres
