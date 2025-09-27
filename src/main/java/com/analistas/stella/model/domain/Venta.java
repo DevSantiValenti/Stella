@@ -65,6 +65,9 @@ public class Venta implements Serializable {
     @JoinColumn(name = "id_caja")
     private Caja caja;
 
+    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PagoVenta> pagos = new ArrayList<>();
+
     @PrePersist
     public void prePersist() {
         if (fechaVenta == null)

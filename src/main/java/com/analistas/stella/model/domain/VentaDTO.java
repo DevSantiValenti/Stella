@@ -18,4 +18,5 @@ public class VentaDTO {
     private Double vuelto;
     private String observaciones;
     private List<DetalleVentaDTO> items;
+    private List<MetodoPagoDTO2> pagos;
 }

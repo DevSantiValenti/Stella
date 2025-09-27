@@ -144,23 +144,30 @@
             <span>Total</span><strong id="total">0.00</strong>
           </div>
           <div class="pay">
-            <label>Método de pago</label>
-            <select id="metodoPago">
+            <!-- <label>Método de pago</label> -->
+            <!-- <select id="metodoPago">
               <option value="EFECTIVO">Efectivo</option>
               <option value="DEBITO">Débito</option>
               <option value="CREDITO1C">Crédito 1C</option>
               <option value="CREDITO3C">Crédito 3C</option>
               <option value="CREDITO6C">Crédito 6C</option>
-              <!-- <option value="CREDITO+6C">Crédito 12C</option> -->
               <option value="TRANSFERENCIA">Transferencia</option>
               <option value="CTA_CORRIENTE">Cuenta corriente</option>
             </select>
-            <label>Recibido</label>
-            <input type="number" class="form-control" required id="montoRecibido" min="0" step="0.01" />
+
+            <label for="montoRecibido">Monto recibido</label>
+            <input type="number" id="montoRecibido" min="0" step="0.01" placeholder="Ingrese el monto recibido" /> -->
+
 
             <div class="line">
               <span>Vuelto</span><strong id="vuelto">0.00</strong>
             </div>
+            <br>
+            <!-- <label>Formas de pago</label> -->
+            <div id="paymentsContainer"></div>
+            <!-- boton mas chico -->
+            <button type="button" id="btnAddPayment" class="ghost" style="padding:6px 10px;font-size:0.9rem">Agregar
+              forma de pago</button>
           </div>
           <div class="actions">
             <button id="btnHold" class="ghost" type="button">Poner en espera</button>

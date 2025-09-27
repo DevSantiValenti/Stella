@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpSession;
 import com.analistas.stella.config.SecurityUtils;
 import com.analistas.stella.model.domain.Caja;
 import com.analistas.stella.model.domain.DetalleVenta;
+import com.analistas.stella.model.domain.PagoVenta;
+import com.analistas.stella.model.domain.MetodoPagoDTO2; // tu DTO clase
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -81,8 +83,7 @@ public class VentaController {
         venta.setTotal(ventaDTO.getTotal());
         venta.setVuelto(ventaDTO.getVuelto());
         venta.setRecibido(ventaDTO.getRecibido());
-        // venta.setUsuario(usuarioService.buscarPorId(3L));
-        venta.setUsuario(usuario); // Cambiar esto para cuando los USUARIOS puedan loguearse
+        venta.setUsuario(usuario);
         venta.setFechaVenta(LocalDateTime.parse(
                 ventaDTO.getFecha().length() == 16 ? ventaDTO.getFecha() + ":00" : ventaDTO.getFecha(),
                 DateTimeFormatter.ISO_LOCAL_DATE_TIME));
@@ -117,6 +118,19 @@ public class VentaController {
             det.setSubtotal(neto + ivaMonto);
             det.setVenta(venta);
             venta.getDetalles().add(det);
+        }
+
+        // Mapear pagos (si vienen) a PagoVenta y agregarlos a la venta
+        if (ventaDTO.getPagos() != null && !ventaDTO.getPagos().isEmpty()) {
+            for (MetodoPagoDTO2 p : ventaDTO.getPagos()) {
+                PagoVenta pago = new PagoVenta();
+                pago.setMetodoPago(p.getMetodoPago() != null ? p.getMetodoPago() : p.getMetodoPago());
+                pago.setMonto(p.getMonto() != null ? p.getMonto() : 0.0);
+                pago.setVenta(venta);
+                venta.getPagos().add(pago);
+            }
+            // opcional: para compatibilidad con campos antiguos, setear metodoPago principal
+            venta.setMetodoPago(venta.getPagos().get(0).getMetodoPago());
         }
 
         ventaService.guardar(venta);
