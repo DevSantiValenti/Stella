@@ -31,10 +31,15 @@ public interface IVentaRepository extends CrudRepository<Venta, Long> {
         @Query("SELECT AVG(v.total) FROM Venta v WHERE DATE(v.fechaVenta) = CURRENT_DATE")
         Double ticketPromedioHoy();
 
-        // Importe total por categoria:
-        @Query("SELECT v.metodoPago AS metodo, SUM(v.total) AS total " +
-                        "FROM Venta v " +
-                        "GROUP BY v.metodoPago")
+        // Importe total por categoria(toma segun metodoPago de Venta):
+        // @Query("SELECT v.metodoPago AS metodo, SUM(v.total) AS total " +
+        //                 "FROM Venta v " +
+        //                 "GROUP BY v.metodoPago")
+        // List<MetodoPagoDTO> obtenerTotalesPorMetodoPago();
+        // Lo toma de PagoVenta
+        @Query("SELECT p.metodoPago AS metodo, SUM(p.monto) AS total " +
+                        "FROM PagoVenta p " +
+                        "GROUP BY p.metodoPago")
         List<MetodoPagoDTO> obtenerTotalesPorMetodoPago();
 
         // Calcular por caja

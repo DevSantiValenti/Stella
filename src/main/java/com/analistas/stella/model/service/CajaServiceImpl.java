@@ -13,7 +13,6 @@ import com.analistas.stella.model.domain.CajaFisica;
 import com.analistas.stella.model.domain.Usuario;
 import com.analistas.stella.model.repository.ICajaFisicaRepository;
 import com.analistas.stella.model.repository.ICajaRepository;
-import com.analistas.stella.model.repository.IVentaRepository;
 
 @Service
 public class CajaServiceImpl implements ICajaService {
@@ -21,8 +20,8 @@ public class CajaServiceImpl implements ICajaService {
     @Autowired
     private ICajaRepository cajaRepository;
 
-    @Autowired
-    private IVentaRepository ventaRepository;
+    // @Autowired
+    // private IVentaRepository ventaRepository;
 
     @Autowired
     IVentaService ventaService;
