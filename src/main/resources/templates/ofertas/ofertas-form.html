@@ -11,11 +11,20 @@
             margin-left: 20px;
         }
     </style>
-
+     <script>
+        $(document).ready(function () {
+            $('#productos').select2({
+                placeholder: "Escribe para buscar productos",
+                allowClear: true,
+                width: 'resolve'
+            });
+        });
+    </script>
 
 </head>
 
 <body>
+   
     <div layout:fragment="dashboard">
         <div class="card shadow-lg">
             <div class="card-header bg-primary text-white">
@@ -102,7 +111,7 @@
             </div>
         </div>
     </div>
-
+    
     <script th:fragment="js"></script>
 </body>
 

@@ -87,7 +87,7 @@ public class VentaController {
         venta.setFechaVenta(LocalDateTime.parse(
                 ventaDTO.getFecha().length() == 16 ? ventaDTO.getFecha() + ":00" : ventaDTO.getFecha(),
                 DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-                
+
         Long cajaId = (Long) session.getAttribute("cajaId");
         if (cajaId != null) {
             Caja caja = cajaRepository.findById(cajaId)
@@ -107,6 +107,24 @@ public class VentaController {
                 continue;
             }
             det.setCantidad(d.getCantidad().intValue());
+
+            Producto producto = productos.get(0);
+
+            // Descontar los productos
+            int stockActual = producto.getStock() != null ? producto.getStock() : 0;
+            int cantidadVendida = d.getCantidad().intValue();
+
+            if (stockActual < cantidadVendida) {
+                // Si no hay suficiente stock, podrías lanzar una excepción o ajustar el valor
+                throw new IllegalStateException(
+                        "No hay suficiente stock para el producto: " + producto.getNombre());
+            }
+
+            producto.setStock(stockActual - cantidadVendida);
+
+            // 💾 Guardar el producto actualizado
+            productoService.guardar(producto);
+
             det.setPrecioUnitario(d.getPrecioUnitaFrio());
             det.setIvaPorc(d.getIvaPorc());
             det.setDescuentoPorc(d.getDescuentoPorc());
@@ -129,7 +147,8 @@ public class VentaController {
                 pago.setVenta(venta);
                 venta.getPagos().add(pago);
             }
-            // opcional: para compatibilidad con campos antiguos, setear metodoPago principal
+            // opcional: para compatibilidad con campos antiguos, setear metodoPago
+            // principal
             venta.setMetodoPago(venta.getPagos().get(0).getMetodoPago());
         }
 

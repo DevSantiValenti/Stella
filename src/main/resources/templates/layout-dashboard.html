@@ -32,43 +32,7 @@
     <!-- DataTables CSS -->
     <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 
-    <style>
-        ul .nav-item {
-
-            margin-bottom: 5px;
-            border-radius: 5px;
-            transition: 0.4s ease;
-
-        }
-
-        ul .nav-item:hover {
-            background: #363380;
-            background: linear-gradient(45deg, rgba(54, 51, 128, 1) 0%, rgba(9, 84, 171, 1) 24%, rgba(8, 122, 209, 1) 43%, rgba(4, 144, 224, 1) 58%, rgba(2, 161, 240, 1) 73%, rgba(0, 212, 255, 1) 85%);
-            transform: scale(1.05);
-        }
-
-        #salir {
-            transition: .4s ease;
-            border-radius: 5px;
-            padding: 5px;
-        }
-
-        #salir:hover {
-            background: #f00202;
-            background: linear-gradient(45deg, rgba(240, 2, 2, 1) 20%, rgba(126, 1, 1, 1) 52%, rgba(0, 0, 0, 1) 84%);
-            transform: scale(1.05);
-        }
-
-        nav {
-            background: #020024;
-            background: radial-gradient(circle, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 46%, rgba(0, 212, 255, 1) 100%);
-        }
-
-        #hijo {
-            background: #ebebeb;
-            background: linear-gradient(66deg, rgba(235, 235, 235, 1) 30%, rgba(134, 144, 158, 1) 100%);
-        }
-    </style>
+    <link rel="stylesheet" href="/css/layout-dash-css.css">
 </head>
 
 <body>
@@ -163,14 +127,18 @@
 
     <!-- Para que se cierren los Alert Bootstrap -->
     <script>
-        // Mejor pasar la función directamente
-        setInterval(cerrar, 3000);
+        
+        // Ejecuta cada 3 segundos, pero sin romper si no hay alertas xd
+        setInterval(() => {
+            const alertas = $(".alert");
+            if (alertas && alertas.length > 0) {
+                alertas.delay(500).slideUp(500, function () {
+                    $(this).hide();
+                });
+            }
+        }, 3000);
+    </script>
 
-        function cerrar() {
-            $(".alert").delay(500).slideUp(500, function () {
-                $(this).hide(); // acá sí funciona "this" porque usamos function normal
-            });
-        }
     </script>
 
     <script>

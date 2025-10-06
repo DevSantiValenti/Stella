@@ -79,9 +79,9 @@ public class ReporteController {
         model.addAttribute("data", new ObjectMapper().writeValueAsString(data));
 
 
-        // Encontrar los top 10 productos más vendidos:
-        List<TopProductoDTO> top10 = detalleVentaRepository.findTopProductos(PageRequest.of(0, 10));
-        model.addAttribute("topProductos", new ObjectMapper().writeValueAsString(top10));
+        // Encontrar los top 20 productos más vendidos:
+        List<TopProductoDTO> top20 = detalleVentaRepository.findTopProductos(PageRequest.of(0, 20));
+        model.addAttribute("topProductos", new ObjectMapper().writeValueAsString(top20));
 
         // Encontrar top 10 categorias:
         model.addAttribute("top10Categorias", categoriaService.obtenerTop10Categorias());

@@ -7,50 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${titulo}"></title>
     <!-- Chart.js -->
+     <link rel="stylesheet" href="/css/reportes.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
-
-    <style>
-        body {
-            background: #f7f8fb;
-        }
-
-        .section-title {
-            margin: 24px 0 12px;
-        }
-
-        .kpi-card {
-            transition: transform .15s ease, box-shadow .15s;
-        }
-
-        .kpi-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
-        }
-
-        .chart-container {
-            position: relative;
-            margin: 16px auto;
-            max-width: 900px;
-        }
-
-        canvas {
-            width: 100% !important;
-            height: auto !important;
-        }
-
-        .table thead th {
-            background: #f1f3f8;
-        }
-
-        .btn-ghost {
-            background: #fff;
-            border: 1px solid #e5e7eb;
-        }
-
-        .container {
-            margin-left: 20px;
-        }
-    </style>
 </head>
 
 <body>
@@ -131,19 +89,6 @@
             <!-- Gráficos fila 2 -->
             <h5 class="section-title">Rendimiento de productos</h5>
             <div class="row g-4">
-                <!-- <div class="col-lg-6">
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                            <span class="fw-semibold">Top 10 productos (unidades)</span>
-                            <button id="dlTopProd" class="btn btn-sm btn-ghost">Descargar PNG</button>
-                        </div>
-                        <div class="card-body">
-                            <div class="chart-container">
-                                <canvas id="topProductos"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
                 <div class="col-lg-6">
                     <div class="card border-0 shadow-sm">
                         <div class="card-header bg-white d-flex justify-content-between align-items-center">
@@ -177,11 +122,11 @@
                     <div class="card border-0 shadow-sm">
                         <div class="card-header bg-white d-flex justify-content-between align-items-center">
                             <span class="fw-semibold">Top 10 categorías (importe)</span>
-                            <button id="dlCategorias" class="btn btn-sm btn-ghost">Descargar PNG</button>
+                            <button id="csvCategorias" class="btn btn-sm btn-ghost">Exportar CSV</button>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-hover align-middle">
+                                <table id="tblCategorias" class="table table-hover align-middle">
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -212,7 +157,7 @@
                 <div class="col-lg-7">
                     <div class="card border-0 shadow-sm">
                         <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                            <span class="fw-semibold">Productos más vendidos</span>
+                            <span class="fw-semibold">Top 20 Productos más vendidos</span>
                             <button id="csvTop" class="btn btn-sm btn-ghost">Exportar CSV</button>
                         </div>
                         <div class="card-body">
