@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <title>Dashboard POS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Icono de pestaña -->
+    <link rel="icon" type="image/png" th:href="@{/img/stella.jpg}">
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Select2 CSS -->
@@ -53,6 +56,8 @@
                 <li class="nav-item"><a th:href="@{/proveedores/listar}" class="nav-link text-white">Proveedores</a>
                 </li>
                 <li class="nav-item"><a th:href="@{/ventas/nuevo}" class="nav-link text-white">Ventas</a></li>
+                <li class="nav-item"><a th:href="@{/ventas/listadoAdmin}" class="nav-link text-white">Listado de
+                        Ventas</a></li>
                 <li class="nav-item"><a th:href="@{/reportes}" class="nav-link text-white">Reportes</a></li>
                 <li class="nav-item"><a th:href="@{/cajas/listadoAdmin}" class="nav-link text-white">Cajas</a></li>
                 <!-- <li class="nav-item"><a href="#" class="nav-link text-white">Configuración</a></li> -->
@@ -127,7 +132,7 @@
 
     <!-- Para que se cierren los Alert Bootstrap -->
     <script>
-        
+
         // Ejecuta cada 3 segundos, pero sin romper si no hay alertas xd
         setInterval(() => {
             const alertas = $(".alert");

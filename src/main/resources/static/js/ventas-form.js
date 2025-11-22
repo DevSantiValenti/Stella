@@ -353,7 +353,7 @@ function buildPayload() {
   // Asignación de pagos hasta cubrir total (mantiene comportamiento previo)
   const pagosAsignados = allocatePayments(pagos, total);
   const recibidoEnviado = pagosAsignados.reduce((s, p) => s + (p.monto || 0), 0);
-  const vueltoReal = Number(Math.max(0, ( (pagos.length>0 ? (pagos.reduce((s,p)=>s+(p.monto||0),0)) : recibido) - recibidoEnviado )).toFixed(2));
+  const vueltoReal = Number(Math.max(0, ((pagos.length > 0 ? (pagos.reduce((s, p) => s + (p.monto || 0), 0)) : recibido) - recibidoEnviado)).toFixed(2));
 
   return {
     fecha: $('fechaVenta') ? $('fechaVenta').value : new Date().toISOString(),
@@ -497,7 +497,7 @@ function buildPayload() {
   // Asignación de pagos hasta cubrir total (mantiene comportamiento previo)
   const pagosAsignados = allocatePayments(pagos, total);
   const recibidoEnviado = pagosAsignados.reduce((s, p) => s + (p.monto || 0), 0);
-  const vueltoReal = Number(Math.max(0, ( (pagos.length>0 ? (pagos.reduce((s,p)=>s+(p.monto||0),0)) : recibido) - recibidoEnviado )).toFixed(2));
+  const vueltoReal = Number(Math.max(0, ((pagos.length > 0 ? (pagos.reduce((s, p) => s + (p.monto || 0), 0)) : recibido) - recibidoEnviado)).toFixed(2));
 
   return {
     fecha: $('fechaVenta') ? $('fechaVenta').value : new Date().toISOString(),

@@ -10,6 +10,8 @@
 
 <body>
     <!-- From Uiverse.io by mahiatlinux -->
+    <h1 style="text-align: center;"><ins>Iniciar Sesión</ins></h1>
+
     <form class="form" th:action="@{/login}" method="post">
         <div class="flex-column">
             <label>Email </label>
@@ -42,15 +44,14 @@
 
         <div class="flex-row">
         </div>
-        <button type="submit" class="button-submit">Sign In</button>
+        <button type="submit" class="button-submit">Ingresar</button>
         </div>
+
+        <a th:href="@{/}" class="btn">Volver</a>
     </form>
-    <!-- <form class="form" th:action="@{/login}" method="post">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-        <input type="text" name="username" required />
-        <input type="password" name="password" required />
-        <button type="submit">Sign In</button>
-    </form> -->
+
+    <!-- <button th:href="@{/home}" class="btn">Volver</button> -->
+
 </body>
 
 </html>

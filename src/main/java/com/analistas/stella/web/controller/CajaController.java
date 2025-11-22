@@ -68,8 +68,6 @@ public class CajaController {
         BigDecimal totalVentas = ventaService.calcularTotalVentasPorCaja(id);
         model.addAttribute("total", totalVentas);
 
-
-
         // Cantidades por metodo de pago
         model.addAttribute("totalEfectivo", totalEfectivo);
         model.addAttribute("totalTransferencia", totalTransferencia);

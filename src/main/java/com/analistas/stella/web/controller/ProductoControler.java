@@ -66,7 +66,7 @@ public class ProductoControler {
         model.addAttribute("productos", productoService.buscarTodo());
         
 
-        return "/productos/productos-list-admin";
+        return "productos/productos-list-admin";
     }
 
     @GetMapping("/nuevo")

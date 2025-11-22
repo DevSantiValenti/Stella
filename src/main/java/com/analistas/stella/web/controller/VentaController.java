@@ -48,10 +48,10 @@ public class VentaController {
     @Autowired
     IUsuarioService usuarioService;
 
-    @GetMapping("/lista")
+    @GetMapping("/listadoAdmin")
     public String listar(Model model) {
         model.addAttribute("ventas", ventaService.listar());
-        return "ventas/lista";
+        return "ventas/ventas-list-admin";
     }
 
     @GetMapping("/nuevo")

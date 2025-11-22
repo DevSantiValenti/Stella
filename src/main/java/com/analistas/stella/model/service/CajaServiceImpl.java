@@ -3,6 +3,7 @@ package com.analistas.stella.model.service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,6 @@ public class CajaServiceImpl implements ICajaService {
 
     @Autowired
     private ICajaRepository cajaRepository;
-
-    // @Autowired
-    // private IVentaRepository ventaRepository;
 
     @Autowired
     IVentaService ventaService;
@@ -98,5 +96,15 @@ public class CajaServiceImpl implements ICajaService {
     @Override
     public BigDecimal calcularTotalPorMetodo(Caja caja, String metodoPago) {
         return cajaRepository.calcularTotalPorMetodo(caja, metodoPago);
+    }
+
+    @Override
+    public Caja buscarCajaAbiertaPorUsuario(Usuario usuario) {
+        return cajaRepository.findByUsuarioAndAbiertaTrue(usuario);
+    }
+
+    @Override
+    public Optional<Caja> buscaarCajaAbiertaConFetch(String username) {
+        return cajaRepository.findCajaAbiertaConFetch(username);
     }
 }

@@ -58,7 +58,7 @@ public class OfertaController {
         model.addAttribute("titulo", "Listado de Ofertas");
         model.addAttribute("ofertas", ofertaService.buscarTodos());
 
-        return "/ofertas/ofertas-list-admin";
+        return "ofertas/ofertas-list-admin";
     }
 
     @PostMapping("/guardar")

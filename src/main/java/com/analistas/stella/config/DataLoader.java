@@ -36,7 +36,7 @@ public class DataLoader implements CommandLineRunner {
             u.setNombrecompleto("user");
             u.setCorreo("santivalenti@gmail.com");
             u.setRol(rolService.buscarPorId(1L));
-            u.setContrasena(passwordEncoder.encode("123456")); // 👈 hash automático
+            u.setContrasena(passwordEncoder.encode("123456")); // hash automático
             u.setFechaAlta(LocalDate.now());
             usuarioRepository.save(u);
             // System.out.println("✅ Usuario inicial creado: user / 123456");

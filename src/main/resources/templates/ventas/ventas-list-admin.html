@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout-dashboard}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo}"></title>
+    <style>
+        .container {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div layout:fragment="dashboard"> <!--Toda la información va adentro de este div, no afuera -->
+        <h1><ins>Listado de Ventas: </ins></h1>
+
+        <div class="card p-2">
+            <table id="tabla-ventas" class="table table-striped table-responsive table-bordered" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Usuario</th>
+                        <th>Cliente</th>
+                        <th>Fecha Venta</th>
+                        <th>Método Pago</th>
+                        <th>Producto - Cantidad</th>
+                        <th>Total</th>
+                        <th>Recibido</th>
+                        <th>Vuelto</th>
+                        <th>Observaciones</th>
+                        <th>Caja</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="v : ${ventas}">
+                        <td th:text="${v.id}"></td>
+                        <td th:text="${v.usuario.nombrecompleto}"></td>
+                        <td th:text="${v.docCliente != null ? v.docCliente : ' - '}"></td>
+                        <td th:text="${#temporals.format(v.fechaVenta, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td>
+                            <ul>
+                                <li th:each="p : ${v.pagos}" th:text="${p.metodoPago + ' - $' + p.monto}">
+                                </li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li th:each="d : ${v.detalles}" th:text="${d.producto.nombre + ' - ' + d.cantidad}">
+                                </li>
+                            </ul>
+                        </td>
+                        <td th:text="${v.total}"></td>
+                        <td th:text="${v.recibido}"></td>
+                        <td th:text="${v.vuelto}"></td>
+                        <td th:text="${v.observaciones}"></td>
+                        <td th:text="${v.caja != null ? v.caja.cajaFisica.nombre : '—'}"></td>
+
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>#</th>
+                        <th>Usuario</th>
+                        <th>Cliente</th>
+                        <th>Fecha Venta</th>
+                        <th>Método Pago</th>
+                        <th>Producto - Cantidad</th>
+                        <th>Total</th>
+                        <th>Recibido</th>
+                        <th>Vuelto</th>
+                        <th>Observaciones</th>
+                        <th>Caja</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="container mt-4">
+
+        </div>
+    </div>
+
+    <!-- Mis JS -->
+    <script th:fragment="js" th:src="@{/js/ventas-list-admin.js}"></script>
+</body>
+
+</html>
