@@ -12,4 +12,6 @@ public interface ICategoriaService {
 
     // Obtener las mejores 10 categorias
     public List<CategoriaVentaDTO> obtenerTop10Categorias();
+
+    public Categoria buscarPorId(Long id);
 }

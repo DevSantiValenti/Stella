@@ -30,4 +30,9 @@ public class CategoriaServiceImpl implements ICategoriaService {
         return detalleVentaRepository.findTopCategorias(PageRequest.of(0, 10));
     }
 
+    @Override
+    public Categoria buscarPorId(Long id) {
+        return categoriaRepository.findById(id).orElse(null);
+    }
+
 }
